@@ -1,0 +1,25 @@
+body {
+    padding-top: 60px;
+}
+.text-right {
+    text-align: right;
+}
+.text-center {
+    text-align: center;
+}
+.date-select {
+    text-align: right;
+    padding: 0px;
+}
+.date-form {
+    margin: 20px 0px 10px 0;
+}
+.day{
+    margin: 20px 0px 10px 0;
+}
+textarea {
+   resize: none;
+}
+td,th {
+    vertical-align: top;
+}

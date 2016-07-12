@@ -1,0 +1,15 @@
+[07-Jul-2016 08:46:53 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/ubuntu/workspace/web1.0/setDate.php on line 26
+[07-Jul-2016 08:46:53 UTC] PHP Stack trace:
+[07-Jul-2016 08:46:53 UTC] PHP   1. {main}() /home/ubuntu/workspace/web1.0/views/index.php:0
+[07-Jul-2016 08:46:53 UTC] PHP   2. require_once() /home/ubuntu/workspace/web1.0/views/index.php:2
+[11-Jul-2016 01:39:55 UTC] PHP Warning:  require_once(prizeItems.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/web1.0/getWinNumber.php on line 7
+[11-Jul-2016 01:39:55 UTC] PHP Stack trace:
+[11-Jul-2016 01:39:55 UTC] PHP   1. {main}() /home/ubuntu/workspace/web1.0/views/index.php:0
+[11-Jul-2016 01:39:55 UTC] PHP   2. require_once() /home/ubuntu/workspace/web1.0/views/index.php:3
+[11-Jul-2016 01:39:55 UTC] PHP Fatal error:  require_once(): Failed opening required 'prizeItems.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/web1.0/getWinNumber.php on line 7
+[11-Jul-2016 01:39:55 UTC] PHP Stack trace:
+[11-Jul-2016 01:39:55 UTC] PHP   1. {main}() /home/ubuntu/workspace/web1.0/views/index.php:0
+[11-Jul-2016 01:39:55 UTC] PHP   2. require_once() /home/ubuntu/workspace/web1.0/views/index.php:3
+[11-Jul-2016 01:53:20 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/ubuntu/workspace/web1.0/views/index.php on line 122
+[11-Jul-2016 01:53:20 UTC] PHP Stack trace:
+[11-Jul-2016 01:53:20 UTC] PHP   1. {main}() /home/ubuntu/workspace/web1.0/views/index.php:0
