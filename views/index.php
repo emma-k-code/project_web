@@ -191,11 +191,6 @@
                         </div>
                     </div>
                 </form>
-                <div class="progress" style="width: 100%;">
-                    <div type="hidden" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                        60%
-                    </div>
-                </div>
                 <table class="invoiceNumber col-lg-12">
                     <caption><b>結果：</b></caption>
                     <thead>
@@ -210,7 +205,7 @@
                     </tbody>
                 </table>
                 <div class="bs-example">
-                    <ul class="pagination">
+                    <ul class="pagination" id="">
                         <li class="disabled"><a href="#">&laquo;</a></li>
                         <li class="active"><a href="#">1</a></li>
                         <li><a href="#">2</a></li>

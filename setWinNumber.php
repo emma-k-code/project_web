@@ -3,10 +3,8 @@ header("content-type: text/html; charset=utf-8");
 
 // 選擇的期別
 $dateSelect = $_GET['date']; 
-
 // 取得獎金設定
 require 'getPrizeMoney.php';
-
 // 取得開獎號碼
 require 'getWinNumber.php';
 

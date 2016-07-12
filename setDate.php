@@ -1,6 +1,7 @@
 <?php
     header("content-type: text/html; charset=utf-8");
     
+    // 期別固定設為四個
     $date[] = date("Y-m",strtotime($today."-5 month"));
     $date[] = date("Y-m",strtotime($today."-3 month"));
     $date[] = date("Y-m",strtotime($today."-1 month"));
