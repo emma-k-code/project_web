@@ -46,6 +46,7 @@
                 </button>
                 <a class="navbar-brand" href="index.php">發票對獎網站</a>
             </div>
+            <span class="nav navbar-brand navbar-right">使用者名稱</span>
         </div>
         <!-- /.container -->
     </nav>

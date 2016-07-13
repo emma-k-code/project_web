@@ -23,3 +23,7 @@ textarea {
 td,th {
     vertical-align: top;
 }
+#confirmMessage {
+    color: red;
+    display: none;
+}
