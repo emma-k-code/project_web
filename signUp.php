@@ -12,6 +12,17 @@ require "config.php";
 $db = new PDO($dbConnect, $dbUser, $dbPw);
 $db->exec("set names utf8");
 
+// 搜尋資料庫中email是否已經存在
+$result = $db->query("select * from members where memberEmail = '$email'");
+
+// 如果email已存在
+if ( $result->rowCount() != 0) {
+  // 結束連線
+  $db = null;
+  echo "exist";
+  exit;
+}
+
 // 將資料寫入members資料庫
 $sql = "INSERT INTO members(memberName,memberPW,memberEmail) VALUES ('$userName','$password','$email');";
 $sth = $db->prepare($sql);
