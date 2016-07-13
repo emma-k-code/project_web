@@ -43,9 +43,14 @@
     $(document).ready(init);
     
     function init() {
+        // 選擇期別
     	$("#invoiceDate").change(invoiceDateChange);
+    	// 比對發票號碼
     	$("#bCheckInvoiceNumber").click(checkInvoiceNumber);
+    	// 上傳檔案
     	$('#bUploadNumberFile').change(checkFile);
+    	// 領獎注意事項
+    	$("#bWinningInfo").click(winningInfo);
     	invoiceDateChange();
     }
     
@@ -57,6 +62,15 @@
     
     function setInvoiceDate(date) {
         $("#dateLabel").text(date);
+    }
+    
+    function setInvoice(date) {
+        $.get("../setWinNumber.php?date=" + date, function(data){
+    		$("#invoiceNumberContent").html(data);
+    	});
+    	$.get("../setWinPeriod.php?date=" + date, function(data){
+    		$("#invoiceContent").html(data);
+    	});
     }
     
     function checkFile() {
@@ -77,29 +91,49 @@
          $('#bUploadNumberFile').val("");
     }
     
-    function setInvoice(date) {
-        $.get("../setWinNumber.php?date=" + date, function(data){
-    		$("#invoiceNumberContent").html(data);
-    	});
-    	$.get("../setWinPeriod.php?date=" + date, function(data){
-    		$("#invoiceContent").html(data);
-    	});
-    }
-    
     function checkInvoiceNumber() {
-        var $number = $("#enterNumber").val().replace("\n",",");
-        if ($number.replace(",","").length==0){
+        // 格式統一
+        var number = $("#enterNumber").val().replace("\n",",");
+        if (number.replace(",","").length==0){
             return;
         }
-        var $url = "../checkNumber.php?number=" + $number + "&date=" + $("#invoiceDate option:selected").text();
-        $.get($url, function(data){
-            if (data=="") {
-                alert("資料錯誤");
-                return;
-            }
-    		$("#memberEnterNumber").prepend(data);
-    	});
+        // 比對發票
+        setCheckNumber(number,$("#invoiceDate option:selected").text());
+        // 清空文字方塊內容
     	$("#enterNumber").val("");
+    }
+    
+    // function  toCheck(number) {
+    //     var $url = "../checkNumber.php?number=" + number + "&date=" + $("#invoiceDate option:selected").text();
+    //     $.get($url, function(data){
+    //         if (data=="") {
+    //             alert("資料錯誤");
+    //             return;
+    //         }
+    //         setCheckNumber(data);
+    // 	});
+    // }
+    
+    function  setCheckNumber(number,date) {
+        var formData = new FormData();                  
+        formData.append('number', number);  
+        formData.append('date', date);  
+        
+        $.ajax({
+            url: '../setCheckNumber.php', 
+            dataType: 'json', 
+            contentType: false,
+            processData: false,
+            data: formData,                         
+            type: 'post',
+            success: function(php_script_response){
+                $("#memberEnterNumber").prepend(php_script_response);
+            }
+        });
+    }
+    
+    function winningInfo() {
+        $("#pWinning").toggle();
     }
 	
 </script>
@@ -120,7 +154,7 @@
                 </button>
                 <a class="navbar-brand" href="index.php">發票對獎網站</a>
             </div>
-            <span class="nav navbar-brand navbar-right">使用者名稱</span>
+            <span class="nav navbar-brand navbar-right"><?php echo $_COOKIE['userName']; ?></span>
         </div>
         <!-- /.container -->
     </nav>
@@ -170,7 +204,20 @@
                     <h4 id="invoiceContent"></h4>
                 </div>
                 <div class="col-lg-12 text-right">
-                    <button type="button" class="btn btn-link">領獎注意事項</button>
+                    <span class="btn btn-link" id="bWinningInfo">領獎注意事項</span>
+                </div>
+                <div class="panel panel-info col-lg-12" id="pWinning">
+                  <div class="panel-body">
+                   <p>
+                    1.領獎期間自105年06月06日起至105年09月05日止，請於郵局公告之兌獎營業時間內辦理，中獎人填妥領獎收據並在收據上粘貼0.4%印花稅票【中五獎(含)以上者】，攜帶國民身分證（非本國國籍人士得以護照、居留證等文件替代）及中獎統一發票收執聯兌領獎金。中特別獎、特獎、頭獎者請向各直轄市及各縣、市經指定之郵局領取獎金；中二獎、三獎、四獎、五獎、六獎者請向各地郵局兌獎。（各地郵局延時營業窗口及夜間郵局均不辦理兌獎業務。）<br>
+        			<br>2.統一發票收執聯未依規定載明金額者，不得領獎。<br>
+        			<br>3.統一發票買受人為政府機關、公營事業、公立學校、部隊及營業人者，不得領獎。<br>
+        			<br>4.中四獎(含)以上者，依規定應由發獎單位扣繳20%所得稅款。<br>
+        			<br>5.中獎之統一發票，每張按其最高中獎獎別限領1個獎金。<br>
+        			<br>6.其他有關領獎事項均依「統一發票給獎辦法」規定辦理。<br>
+        			<br>7.若有任何兌獎疑義，請洽詢服務專線電話：(02)2396-1651<br>
+        			<br>8.本期無實體電子發票中獎號碼，公告於財政部稅務入口網站：<a href="http://invoice.etax.nat.gov.tw/">http://invoice.etax.nat.gov.tw/</a></p>
+                  </div>
                 </div>
                 <h5>資料來源：<a href="http://invoice.etax.nat.gov.tw/" target="_blank">財政部</a></h5>
 
@@ -181,11 +228,8 @@
                     <div class="form-group col-lg-12">
                         <label for="comment">輸入發票:</label>
                         <textarea class="form-control" rows="5" id="enterNumber" placeholder="可在號碼間加入,或直接換行進行批次對獎"></textarea>
-                        <div class="form-group col-lg-8">
+                        <div class="form-group col-lg-10">
                             <input type="file" id="bUploadNumberFile">
-                        </div>
-                        <div class="form-group col-lg-2">
-                            <button type="submit" class="btn btn-default">儲存</button>
                         </div>
                         <div class="form-group col-lg-2">
                             <button type="button" id="bCheckInvoiceNumber" class="btn btn-default">送出</button>
@@ -217,12 +261,20 @@
                     </ul>
                 </div>
                 <div class="col-lg-6">
-                    <button type="button" class="btn btn-link" onclick="self.location.href='member.php'">已儲存發票號碼</button>
+                    <button type="button" class="btn btn-link" onclick="self.location.href='../checkMember.php'">已儲存發票號碼</button>
                 </div>
                 <div class="form-group col-lg-6 text-right">
 
-                    <form role="form" action="login.php">
-                        <button type="submit" class="btn btn-default">登入</button>
+                    <form role="form" method="POST" action="../checkMember.php">
+                        <button name="bLog" type="submit" class="btn btn-default">
+                            <?php 
+                                if (isset($_COOKIE['member'])) {
+                                    echo "登出";
+                                }else {
+                                    echo "登入";
+                                }
+                            ?>
+                        </button>
                     </form>
                 </div>
 

@@ -24,7 +24,7 @@ if ( $result->rowCount() != 0) {
 }
 
 // 將資料寫入members資料庫
-$sql = "INSERT INTO members(memberName,memberPW,memberEmail) VALUES ('$userName','$password','$email');";
+$sql = "INSERT INTO members(memberName,memberPW,memberEmail) VALUES ('$userName',MD5('$password'),'$email');";
 $sth = $db->prepare($sql);
 $sth->execute();
 

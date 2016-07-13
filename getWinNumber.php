@@ -2,7 +2,7 @@
     header("content-type: text/html; charset=utf-8");
 
     class cWinNumber {
-      public $showDate;
+      public $showData;
       
       function searchData($dateSelect){
         // 取得資料庫設定
@@ -20,25 +20,24 @@
         if ( $result->rowCount() == 0) {
           // 結束連線
           $db = null;
-          return $showDate=null;
+          return $showData=null;
         }
         
         $pItems = new cPrizeItems();
-        $showDate = $pItems->aPrizeItems; // 準備輸出的資料
+        $showData = $pItems->aPrizeItems; // 準備輸出的資料
 
         // 3. 處理查詢結果
         while ($row = $result->fetch())
         {
-          $showDate[$row['winPrize']][] = $row['winNumber'];
+          $showData[$row['winPrize']][] = $row['winNumber'];
         }
         
         // 4. 結束連線
         $db = null;
         
-        return $showDate;
+        return $showData;
       }
+      
     }
-    
-    
     
 ?>

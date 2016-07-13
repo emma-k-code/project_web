@@ -11,9 +11,10 @@ require "config.php";
 $db = new PDO($dbConnect, $dbUser, $dbPw);
 $db->exec("set names utf8");
 
-// 2. 執行 SQL 敘述
-$result = $db->query("select * from members where memberEmail = '$email' AND memberPW = '$password'");
+// 搜尋並比對資料庫中的會員資料
+$result = $db->query("select * from members where memberEmail = '$email' AND memberPW = MD5('$password')");
 
+// 如果搜尋結果為0
 if ( $result->rowCount() == 0) {
   // 結束連線
   $db = null;
@@ -27,7 +28,12 @@ while ($row = $result->fetch())
   $userName = $row['memberName'];
 }
 
+// 會員名稱
 setcookie("userName",$userName);
+
+// 會員資料 進行加密
+$member = MD5($email).MD5($password);
+setcookie("member",$member);
 
 // 4. 結束連線
 $db = null;

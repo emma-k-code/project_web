@@ -27,3 +27,6 @@ td,th {
     color: red;
     display: none;
 }
+#pWinning {
+    display: none;
+}

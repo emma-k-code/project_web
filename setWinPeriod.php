@@ -2,7 +2,7 @@
 header("content-type: text/html; charset=utf-8");
 
 // 選擇的期別
-$dateSelect = $_GET['date']; 
+$dateSelect = trim($_GET['date']); 
 
 // 取得獎金設定
 require 'getPrizeMoney.php';

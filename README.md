@@ -6,9 +6,9 @@
 依選擇期別顯示中獎號碼<br>
 可於文字方塊輸入號碼進行對獎<br>
 顯示對獎結果<br>
+登入/註冊<br>
 <h4><b>未完成</b></h4>
 對獎結果增加換頁功能-尚未進行<br>
-登入/註冊-進行中<br>
 儲存會員的發票號碼-尚未進行<br>
 <hr>
 <h3>[PHP功能]</h3>
@@ -24,3 +24,6 @@
 上傳檔案並傳入首頁的文字方塊-uploadNumberFile.php<br>
 將註冊資料寫入資料庫-signUp.php<br>
 進行登入確認-signIn.php<br>
+確認是否已登入-checkMember.php<br>
+比對發票號碼-checkNumber.php<br>
+依格式輸出比對結果-setCheckNumber.php<br>
