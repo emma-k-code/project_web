@@ -22,4 +22,5 @@
 將搜尋出的中獎號碼傳入首頁-setWinNumber.php<br>
 搜尋資料庫中的兌獎期限並傳入首頁-setWinPeriod.php<br>
 上傳檔案並傳入首頁的文字方塊-uploadNumberFile.php<br>
-將註冊寫入資料庫-signUp.php<br>
+將註冊資料寫入資料庫-signUp.php<br>
+進行登入確認-signIn.php<br>

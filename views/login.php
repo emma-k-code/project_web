@@ -34,7 +34,8 @@
         
         function init() {
     	    $("#passwordsignup_confirm").change(confirmPassword);
-    	    $("#bSignUp").click(submitUserData);
+    	    $("#bSignUp").click(signUpUserData);
+    	    $("#bLogin").click(loginUserData);
         }
         
         function confirmPassword(){
@@ -45,7 +46,7 @@
             }
         }
         
-        function submitUserData() {
+        function signUpUserData() {
             if ($("#passwordsignup_confirm").val()!=$("#passwordsignup").val()) {
                 return;
             }
@@ -60,7 +61,31 @@
                 data: formData,                         
                 type: 'post',
                 success: function(php_script_response){
-                    document.location.href="login.php";
+                    if (php_script_response=="exist") {
+                        alert("此Email已註冊過");
+                    }else {
+                        document.location.href="login.php";
+                    }
+                }
+            });
+        }
+        
+        function loginUserData() {
+            var formData = new FormData();                  
+            formData.append('email', $("#email").val()); 
+            formData.append('password', $("#password").val());
+            $.ajax({
+                url: '../signIn.php', 
+                contentType: false,
+                processData: false,
+                data: formData,                         
+                type: 'post',
+                success: function(php_script_response){
+                    if (php_script_response=="notFound") {
+                        alert("資料錯誤");
+                    }else {
+                        document.location.href="index.php";
+                    }
                 }
             });
         }
@@ -96,11 +121,11 @@
                     <a class="hiddenanchor" id="tologin"></a>
                     <div id="wrapper">
                         <div id="login" class="animate form">
-                            <form method="POST" autocomplete="on">
+                            <form id="loginForm" autocomplete="on">
                                 <h1>Log in</h1>
                                 <p>
                                     <label for="username" class="uname" data-icon="u"> Your email </label>
-                                    <input id="username" name="username" required="required" type="text" placeholder="mymail@mail.com" />
+                                    <input id="email" name="username" required="required" type="text" placeholder="mymail@mail.com" />
                                 </p>
                                 <p>
                                     <label for="password" class="youpasswd" data-icon="p"> Your password </label>
@@ -111,7 +136,7 @@
                                     <label for="loginkeeping">Keep me logged in</label>
                                 </p>
                                 <p class="login button">
-                                    <input type="submit" value="Login" />
+                                    <input id="bLogin" type="button" value="Login" />
                                 </p>
                                 <p class="change_link">
                                     Not a member yet ?
