@@ -55,13 +55,27 @@
     
     function setInvoice() {
         var date = $(this).text();
-        $("#invoiceContent").html(date);
-        $.get("../setWinNumber.php?date=" + date, function(data){
-    		$("#invoiceNumberContent").html(data);
+        $.get("../setMemberNumber.php?date=" + date, function(data){
+    		setMemberNumber(data);
     	});
-    // 	$.get("../setWinPeriod.php?date=" + date, function(data){
-    // 		$("#invoiceContent").html(data);
-    // 	});
+    	$.get("../setWinPeriod.php?date=" + date, function(data){
+    		$("#invoiceContent").html(data);
+    	});
+    }
+    
+    function setMemberNumber(data) {
+        var tableData = JSON.parse(data);
+        
+        for (var i = 0; i < tableData.length; i++ ) {
+            var row = $("<tr>");
+            row.append("<th>" + tableData[i].mDate + "</th>");
+            row.append("<td>" + tableData[i].mNumber + "</td>");
+            row.append("<td>" + tableData[i].mResult + "</td>");
+            row.append("<td>" + tableData[i].money + "</td>");
+            row.append("</tr>");
+            
+            $("#memberNumber").prepend(row);
+        }
     }
     </script>
 </head>
@@ -120,17 +134,13 @@
                 <table class="invoiceNumber col-lg-12">
                     <thead>
                         <tr>
+                            <th>期別</th>
                             <th>發票號碼</th>
                             <th>結果</th>
                             <th>金額</th>
                         </tr>
                     </thead>
-                    <tbody id="invoiceNumberContent">
-                        <tr>
-                            <th>18498950</th>
-                            <td>特別獎</td>
-                            <td>1,000 萬</td>
-                        </tr>
+                    <tbody id="memberNumber">
                     </tbody>
                 </table>
                 <div class="text-center">

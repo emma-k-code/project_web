@@ -28,4 +28,7 @@
 確認是否已登入-checkMember.php<br>
 比對發票號碼-checkNumber.php<br>
 呼叫checkNumber.php將結果以json格式回傳-setCheckNumber.php<br>
-儲存會員發票-addMemberNumber.php<br>
+儲存會員發票號碼-addMemberNumber.php<br>
+搜尋資料庫中的會員發票號碼-getMemberNumber.php<br>
+將搜尋出的會員發票號碼傳入會員頁--setMemberNumber.php<br>
+檢查帳密取得會員Email-getMemberEmail.php<br>
