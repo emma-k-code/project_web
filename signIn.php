@@ -26,13 +26,14 @@ if ( $result->rowCount() == 0) {
 while ($row = $result->fetch())
 {
   $userName = $row['memberName'];
+  $userPw = $row['memberPW'];
 }
 
 // 會員名稱
 setcookie("userName",$userName);
 
 // 會員資料 進行加密
-$member = MD5($email).MD5($password);
+$member = MD5($email).MD5($userPw);
 setcookie("member",$member);
 
 // 4. 結束連線

@@ -9,7 +9,7 @@
 登入/註冊<br>
 <h4><b>未完成</b></h4>
 對獎結果增加換頁功能-尚未進行<br>
-儲存會員的發票號碼-尚未進行<br>
+儲存會員的發票號碼-進行中<br>
 <hr>
 <h3>[PHP功能]</h3>
 儲存獎別設定-prizeItems.php<br>
@@ -26,4 +26,5 @@
 進行登入確認-signIn.php<br>
 確認是否已登入-checkMember.php<br>
 比對發票號碼-checkNumber.php<br>
-依格式輸出比對結果-setCheckNumber.php<br>
+呼叫checkNumber.php將結果以json格式回傳-setCheckNumber.php<br>
+儲存會員發票-addMemberNumber.php<br>

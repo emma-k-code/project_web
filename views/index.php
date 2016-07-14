@@ -52,6 +52,12 @@
     	// 領獎注意事項
     	$("#bWinningInfo").click(winningInfo);
     	invoiceDateChange();
+    	
+    	// 如果有登入會員 顯示儲存按鈕
+    	if ($("#sUserName").text()!="") {
+    	    $("#bSaveNumber").show();
+    	}
+    	
     }
     
     function invoiceDateChange() {
@@ -98,38 +104,48 @@
             return;
         }
         // 比對發票
-        setCheckNumber(number,$("#invoiceDate option:selected").text());
+        toCheck(number,$("#invoiceDate option:selected").text());
         // 清空文字方塊內容
     	$("#enterNumber").val("");
     }
     
-    // function  toCheck(number) {
-    //     var $url = "../checkNumber.php?number=" + number + "&date=" + $("#invoiceDate option:selected").text();
-    //     $.get($url, function(data){
-    //         if (data=="") {
-    //             alert("資料錯誤");
-    //             return;
-    //         }
-    //         setCheckNumber(data);
-    // 	});
-    // }
-    
-    function  setCheckNumber(number,date) {
-        var formData = new FormData();                  
-        formData.append('number', number);  
-        formData.append('date', date);  
-        
-        $.ajax({
-            url: '../setCheckNumber.php', 
-            dataType: 'json', 
-            contentType: false,
-            processData: false,
-            data: formData,                         
-            type: 'post',
-            success: function(php_script_response){
-                $("#memberEnterNumber").prepend(php_script_response);
+    function  toCheck(number,date) {
+        var $url = "../setCheckNumber.php?number=" + number + "&date=" + date;
+        $.get($url, function(data){
+            if (data=="") {
+                alert("資料錯誤");
+                return;
             }
-        });
+            
+            // 繪出結果
+            setCheckNumber(data);
+            // 儲存發票
+            saveCheckNumber(data);
+    	});
+    }
+    
+    function  setCheckNumber(data) {
+        var tableData = JSON.parse(data);
+        
+        for (var i = 0; i < tableData.length; i++ ) {
+            var row = $("<tr>");
+            row.append("<th>" + tableData[i].date + "</th>");
+            row.append("<td>" + tableData[i].number + "</td>");
+            row.append("<td>" + tableData[i].prize + "</td>");
+            row.append("<td>" + tableData[i].money + "</td>");
+            row.append("</tr>");
+            
+            $("#checkedNumber").prepend(row);
+        }
+        
+        
+    }
+    
+    function saveCheckNumber(data) {
+        
+        $.get("../addMemberNumber.php?data=" + data, function(data){
+    		$("#enterNumber").val(data);
+    	});
     }
     
     function winningInfo() {
@@ -154,7 +170,7 @@
                 </button>
                 <a class="navbar-brand" href="index.php">發票對獎網站</a>
             </div>
-            <span class="nav navbar-brand navbar-right"><?php echo $_COOKIE['userName']; ?></span>
+            <span id="sUserName" class="nav navbar-brand navbar-right"><?php echo $_COOKIE['userName']; ?></span>
         </div>
         <!-- /.container -->
     </nav>
@@ -246,19 +262,21 @@
                             <th>金額</th>
                         </tr>
                     </thead>
-                    <tbody id="memberEnterNumber">
+                    <tbody id="checkedNumber">
                     </tbody>
                 </table>
-                <div class="bs-example">
-                    <ul class="pagination" id="">
-                        <li class="disabled"><a href="#">&laquo;</a></li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">&raquo;</a></li>
-                    </ul>
+                <div class="col-lg-12">
+                    <div class="bs-example">
+                        <ul class="pagination" id="checkNumberPage">
+                            <li class="disabled"><a href="#">&laquo;</a></li>
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li><a href="#">&raquo;</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="col-lg-6">
                     <button type="button" class="btn btn-link" onclick="self.location.href='../checkMember.php'">已儲存發票號碼</button>

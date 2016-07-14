@@ -6,7 +6,7 @@ class cCheckNumber {
         // 取得資料庫設定
         require "config.php";
         // 取得獎金設定
-        require 'getPrizeMoney.php';
+        require "getPrizeMoney.php";
         
         // 1. 連接資料庫伺服器
         $db = new PDO($dbConnect, $dbUser, $dbPw);
@@ -21,12 +21,10 @@ class cCheckNumber {
           exit;
         }
         
-        global $showData;
-        
         // 將資料寫入$showData陣列 全預設為未中獎
         foreach ($enterNumber as $num) {
             if (strlen($num)>=3) {
-                $showData[$num] = array('date'=>$dateSelect,'prize'=>"未中獎",'money'=>"0");
+                $showData[] = array("number"=>$num,"date"=>$dateSelect,"prize"=>"未中獎","money"=>"0");
             }
         }
         
@@ -34,9 +32,9 @@ class cCheckNumber {
         while ($row = $result->fetch()) {
             
             foreach ($showData as $key=>$value) {
-                if ($key == $row['winNumber']) {
-                    $showData[$key]['prize'] = $row['winPrize'];
-                    $showData[$key]['money'] = $money[$row['winPrize']];
+                if ($showData[$key]["number"] == $row["winNumber"]) {
+                    $showData[$key]["prize"] = $row["winPrize"];
+                    $showData[$key]["money"] = $money[$row["winPrize"]];
                 }
             }
         }
@@ -44,7 +42,7 @@ class cCheckNumber {
         // 4. 結束連線
         $db = null;
         
-        return json_encode($showData);
+        return $showData;
         
     }
 }

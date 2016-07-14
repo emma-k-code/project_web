@@ -1,7 +1,12 @@
 <?php
 
     header("content-type: text/html; charset=utf-8");
- 
+    
+    // 判斷是否已登入
+    if (isset($_COOKIE['userName']) & isset($_COOKIE['member'])) {
+        // 檢查帳密 
+        checkMemberEmail($_COOKIE['userName'],$_COOKIE['member']);
+    }
     
     function checkMemberEmail($userName,$member){
         // 取得資料庫設定
@@ -20,26 +25,26 @@
             $check = MD5($row['memberEmail']).MD5($row['memberPW']);
             
             if ($member == $check) {
-                global $userEmail;
                 $userEmail = $row['memberEmail'];
+                saveNumber($userEmail);
+                
+                $db = null;
+                return;
             }
         }
+        
+        $db = null;
     }
     
-    function saveNumber() {
-        // 取得資料庫設定
-        require_once "config.php";
+    function saveNumber($userEmail) {
+        
+        $addData = json_decode($_GET['data']);
         
         // 1. 連接資料庫伺服器
         $db = new PDO($dbConnect, $dbUser, $dbPw);
         $db->exec("set names utf8");
         
-        // 將資料寫入winningPeriod資料庫
-        $sql = "INSERT INTO winningPeriod(winDate,winPs) VALUES ('$invoiceDate','$invoicePs');";
-        $sth = $db->prepare($sql);
-        $sth->execute();
-        
-        // 將資料寫入winningNumbers資料庫
+        // 將資料寫入membersNumbers資料庫
         $sql = 'INSERT INTO winningNumbers(winDate,winPrize,winNumber) VALUES (:data,:prize,:number);';
         $sth = $db->prepare($sql);
         
@@ -56,6 +61,8 @@
         
         // 4. 結束連線
         $db = null;
+        
+        echo var_dump($addNumber);
     }
     
     
