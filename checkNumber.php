@@ -21,10 +21,10 @@ class cCheckNumber {
           exit;
         }
         
-        // 將資料寫入$showData陣列 全預設為未中獎
+        // 將資料寫入$showData陣列 
         foreach ($enterNumber as $num) {
             if (strlen($num)>=3) {
-                $showData[] = array("number"=>$num,"date"=>$dateSelect,"prize"=>"未中獎","money"=>"0");
+                $showData[] = array("number"=>$num,"numDate"=>$dateSelect,"prize"=>"未中獎","money"=>"0");
             }
         }
         

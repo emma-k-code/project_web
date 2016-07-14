@@ -33,3 +33,6 @@ td,th {
 #checkNumberPage {
     display: inline;
 }
+#bSaveNumber {
+    display: none;
+}

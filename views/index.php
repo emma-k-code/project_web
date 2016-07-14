@@ -51,6 +51,9 @@
     	$('#bUploadNumberFile').change(checkFile);
     	// 領獎注意事項
     	$("#bWinningInfo").click(winningInfo);
+    	// 儲存發票號碼
+    	$("#bSaveNumber").click(saveNumber);
+    	
     	invoiceDateChange();
     	
     	// 如果有登入會員 顯示儲存按鈕
@@ -103,6 +106,12 @@
         if (number.replace(",","").length==0){
             return;
         }
+        
+        if ($("#invoiceNumberContent").text()=="尚無資料") {
+            alert("尚未開獎");
+            return;
+        }
+        
         // 比對發票
         toCheck(number,$("#invoiceDate option:selected").text());
         // 清空文字方塊內容
@@ -119,8 +128,9 @@
             
             // 繪出結果
             setCheckNumber(data);
-            // 儲存發票
-            saveCheckNumber(data);
+            // 儲存結果
+            saveNumber(data);
+            
     	});
     }
     
@@ -129,7 +139,7 @@
         
         for (var i = 0; i < tableData.length; i++ ) {
             var row = $("<tr>");
-            row.append("<th>" + tableData[i].date + "</th>");
+            row.append("<th>" + tableData[i].numDate + "</th>");
             row.append("<td>" + tableData[i].number + "</td>");
             row.append("<td>" + tableData[i].prize + "</td>");
             row.append("<td>" + tableData[i].money + "</td>");
@@ -141,11 +151,46 @@
         
     }
     
-    function saveCheckNumber(data) {
+    function saveNumber(data) {
+        var sendAddDate = JSON.parse(data);
         
-        $.get("../addMemberNumber.php?data=" + data, function(data){
-    		$("#enterNumber").val(data);
-    	});
+        var formData = new FormData();
+        
+        for (var i = 0; i < sendAddDate.length; i++ ) {
+            var row = $("<tr>");
+            row.append("<th>" + sendAddDate[i].numDate + "</th>");
+            row.append("<td>" + sendAddDate[i].number + "</td>");
+            row.append("<td>" + sendAddDate[i].prize + "</td>");
+            row.append("<td>" + sendAddDate[i].money + "</td>");
+            row.append("</tr>");
+            
+        }
+        
+                          
+        formData.append('file', fileData);        
+        $.ajax({
+            url: '../uploadNumberFile.php', 
+            dataType: 'text', 
+            contentType: false,
+            processData: false,
+            data: formData,                         
+            type: 'post',
+            success: function(php_script_response){
+                $("#enterNumber").val(php_script_response);
+            }
+         });
+    }
+    
+    function saveCheckedNumber() {
+        var checkedRow = $("#checkedNumber").find("tr");
+        for (var i =0; i < checkedRow.length; i++) {
+            var td = $(checkedRow[i]).find("td:eq(0)").text();
+             $("#enterNumber").val(td);
+        }
+       
+    //     $.get("../addMemberNumber.php?data=" + data, function(data){
+    // 		$("#enterNumber").val(data);
+    // 	});
     }
     
     function winningInfo() {
@@ -244,8 +289,11 @@
                     <div class="form-group col-lg-12">
                         <label for="comment">輸入發票:</label>
                         <textarea class="form-control" rows="5" id="enterNumber" placeholder="可在號碼間加入,或直接換行進行批次對獎"></textarea>
-                        <div class="form-group col-lg-10">
+                        <div class="form-group col-lg-8">
                             <input type="file" id="bUploadNumberFile">
+                        </div>
+                        <div class="form-group col-lg-2">
+                            <button type="button" id="bSaveNumber" class="btn btn-default">儲存</button>
                         </div>
                         <div class="form-group col-lg-2">
                             <button type="button" id="bCheckInvoiceNumber" class="btn btn-default">送出</button>
