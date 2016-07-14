@@ -36,3 +36,6 @@ td,th {
 #bSaveNumber {
     display: none;
 }
+#saveMessage {
+    display: none;
+}

@@ -41,20 +41,19 @@
     
     function saveNumber($userEmail,$db) {
         
-        $addData = json_decode($_POST['data']);
+        $date = $_POST['numDate'];
+        $number = $_POST['number'];
+        $prize = $_POST['prize'];
         
         // 將資料寫入membersNumbers資料庫
         $sql = "INSERT INTO membersNumbers(mDate,mNumber,mResult,memberEmail) VALUES (:date,:number,:prize,:mail)";
         $sth = $db->prepare($sql);
         
-        // foreach ($addData as $value)
-        // {
-	       // $sth->bindParam(':date',$value->numDate);
-        //     $sth->bindParam(':number',$value->number);
-        //     $sth->bindParam(':prize',$value->prize);
-        //     $sth->bindParam(':mail',$userEmail);
-        //     $sth->execute();
-        // }
+        $sth->bindParam(':date',$date);
+        $sth->bindParam(':number',$number);
+        $sth->bindParam(':prize',$prize);
+        $sth->bindParam(':mail',$userEmail);
+        $sth->execute();
         
         // 4. 結束連線
         $db = null;
