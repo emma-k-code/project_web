@@ -24,7 +24,6 @@
         $prize = $_POST['prize'];
         // 取得資料庫設定
         require "config.php";
-        
         // 1. 連接資料庫伺服器
         $db = new PDO($dbConnect, $dbUser, $dbPw);
         $db->exec("set names utf8");

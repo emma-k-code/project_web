@@ -15,7 +15,14 @@
         $db->exec("set names utf8");
         
         // 搜尋membersNumbers中的資料
-        $result = $db->query("select mDate,mNumber,mResult from membersNumbers where memberEmail = '$userEmail' AND mDate = '$dateSelect'");
+        if ($dateSelect=="全部") {
+          $result = $db->query("select mDate,mNumber,mResult from membersNumbers where memberEmail = '$userEmail' ORDER BY mDate ");
+        }else {
+          $result = $db->query("select mDate,mNumber,mResult from membersNumbers where memberEmail = '$userEmail' AND mDate = '$dateSelect'");
+        }
+        
+        
+        
         
         if ( $result->rowCount() == 0) {
           // 結束連線
@@ -28,7 +35,9 @@
         {
           if ($row['mResult']=="未中獎") {
               $mMoney = "0";
-          }else {
+          }elseif($row['mResult']=="未開獎") {
+              $mMoney = "";
+          }else{
               $mMoney = $money[$row['mResult']];
           }
           $showData[] = array("mDate"=>$row['mDate'],"mNumber"=>$row['mNumber'],"mResult"=>$row['mResult'],"money"=>$mMoney);

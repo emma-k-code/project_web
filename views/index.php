@@ -161,7 +161,6 @@
             
             $("#checkedNumber").prepend(row);
         }
-        
     }
     
     function saveNumber(number) {
@@ -172,45 +171,40 @@
             formData.append('number', addNumbers[i]);
             formData.append('prize', "未開獎");
             
-            $.ajax({
-                url: '../addMemberNumber.php', 
-                dataType: 'text', 
-                contentType: false,
-                processData: false,
-                data: formData,                         
-                type: 'post',
-                success: function(php_script_response){
-                    saveSuccessShow();
-                }
-             });
+            sendAddDate(formData);
         }
     }
     
     function saveCheckedNumber(data) {
-        var sendAddDate = JSON.parse(data);
+        var addData = JSON.parse(data);
         
-        for (var i = 0; i < sendAddDate.length; i++ ) {
+        for (var i = 0; i < addData.length; i++ ) {
             var formData = new FormData();
-            formData.append('numDate', sendAddDate[i].numDate);
-            formData.append('number', sendAddDate[i].number);
-            formData.append('prize', sendAddDate[i].prize);
+            formData.append('numDate', addData[i].numDate);
+            formData.append('number', addData[i].number);
+            formData.append('prize', addData[i].prize);
             
-            $.ajax({
-                url: '../addMemberNumber.php', 
-                dataType: 'text', 
-                contentType: false,
-                processData: false,
-                data: formData,                         
-                type: 'post',
-                success: function(php_script_response){
-                    saveSuccessShow();
-                }
-             });
+            sendAddDate(formData);
             
         }
     }
     
+    function sendAddDate(formData) {
+        $.ajax({
+            url: '../addMemberNumber.php', 
+            dataType: 'text', 
+            contentType: false,
+            processData: false,
+            data: formData,                         
+            type: 'post',
+            success: function(php_script_response){
+                saveSuccessShow();
+            }
+        });
+    }
+    
     function saveSuccessShow() {
+        $("#saveMessage").alert('open');
         $("#saveMessage").fadeTo(1000, 500).slideUp(500, function(){
             $("#saveMessage").alert('close');
         });

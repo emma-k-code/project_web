@@ -47,6 +47,8 @@
     	$("#bWinningInfo").click(winningInfo);
     	// 選擇期別
     	$("a").click(setInvoice);
+    	
+    	sendData("全部");
     }
     
     function winningInfo() {
@@ -54,7 +56,13 @@
     }
     
     function setInvoice() {
+        
+        $("#memberNumber").html("尚無資料");
         var date = $(this).text();
+        sendData(date);
+    }
+    
+    function sendData(date) {
         $.get("../setMemberNumber.php?date=" + date, function(data){
     		setMemberNumber(data);
     	});
@@ -65,6 +73,9 @@
     
     function setMemberNumber(data) {
         var tableData = JSON.parse(data);
+        
+        // 清空表格
+        $("#memberNumber").html("");
         
         for (var i = 0; i < tableData.length; i++ ) {
             var row = $("<tr>");
