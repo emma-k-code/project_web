@@ -23,7 +23,7 @@ class cCheckNumber {
         
         // 將資料寫入$showData陣列 
         foreach ($enterNumber as $num) {
-            if (strlen($num)>=3) {
+            if (is_numeric($num) & strlen($num)>=3 & strlen($num)<=8) {
                 $showData[] = array("number"=>$num,"numDate"=>$dateSelect,"prize"=>"未中獎","money"=>"0");
             }
         }

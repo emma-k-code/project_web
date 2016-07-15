@@ -10,7 +10,7 @@
 儲存會員的發票號碼<br>
 查詢會員的發票號碼<br>
 <h4><b>未完成</b></h4>
-對獎結果增加換頁功能-尚未進行<br>
+對獎結果增加換頁功能-進行中<br>
 <hr>
 <h3>[PHP功能]</h3>
 儲存獎別設定-prizeItems.php<br>
@@ -32,3 +32,4 @@
 搜尋資料庫中的會員發票號碼-getMemberNumber.php<br>
 將搜尋出的會員發票號碼傳入會員頁--setMemberNumber.php<br>
 檢查帳密取得會員Email-getMemberEmail.php<br>
+取得cookie中的會員名稱-getCookie.php<br>
