@@ -1,3 +1,15 @@
+<?php
+ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../session'));
+session_start();
+
+$userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
+
+if ($_SESSION['login']==1) {
+    unset($_SESSION['login']);
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -50,31 +62,14 @@
     	
     	// 取得下拉式選單中的期別
     	getInvoiceDate();
-    	// 設置會員名稱
-    	setUserName();
     	// 設置登入或登出按鈕
     	setLoginButton();
     	
     	// 載入時先執行一次選擇期別
     	invoiceDateChange();
     	
-    }
-    
-    function setUserName() {
-        $.ajax({
-            url: '../getCookie.php', 
-            async: false,
-            contentType: false,
-            processData: false,                   
-            type: 'get',
-            success: function(data){
-                if (data=="") {
-                    $("#sUserName").text("guset");
-                    return;
-                }
-                $("#sUserName").text(data);
-            }
-         });
+    	$("#checkNumberPage").hide();
+    	
     }
     
     function setLoginButton() {
@@ -216,13 +211,15 @@
             
             $("#checkedNumber").prepend(row);
             
-            if ($("#checkedNumber tr").length>10) {
-               $("#checkedNumber tr").hide();
-            }
         }
         
+        printNumberPage();
+    }
+    
+    function printNumberPage() {
+        $("#checkNumberPage").hide();
         if ($("#checkedNumber tr").length>10) {
-            $("#numberPages").show();
+            $("#checkNumberPage").show();
         }
     }
     
@@ -294,9 +291,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">發票對獎網站</a>
+                <a class="navbar-brand" href="index.php">發票對獎網站</a>
             </div>
-            <span id="sUserName" class="nav navbar-brand navbar-right"></span>
+            <span id="sUserName" class="nav navbar-brand navbar-right"><?php echo $userName; ?></span>
         </div>
         <!-- /.container -->
     </nav>

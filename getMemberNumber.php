@@ -16,7 +16,7 @@
         
         // 搜尋membersNumbers中的資料
         if ($dateSelect=="全部") {
-          $result = $db->query("select mDate,mNumber,mResult from membersNumbers where memberEmail = '$userEmail' ORDER BY mDate ");
+          $result = $db->query("select mDate,mNumber,mResult from membersNumbers where memberEmail = '$userEmail' ORDER BY mDate");
         }else {
           $result = $db->query("select mDate,mNumber,mResult from membersNumbers where memberEmail = '$userEmail' AND mDate = '$dateSelect'");
         }

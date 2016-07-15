@@ -83,9 +83,9 @@
     {
         foreach ($pNumbers as $num)
         {
-	        $sth->bindParam(':data',$invoiceDate);
-            $sth->bindParam(':prize',$key);
-            $sth->bindParam(':number',$num);
+	        $sth->bindParam(':data',$pNumbers[]);
+            $sth->bindParam(':prize',$pNumbers[]);
+            $sth->bindParam(':number',$pNumbers[]);
             $sth->execute();
         }
     }

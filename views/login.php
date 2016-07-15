@@ -1,3 +1,30 @@
+<?php
+ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../session'));
+session_start();
+if (isset($_POST['bLogin'])) {
+    require "../signIn.php";
+    
+    $email = $_POST['username'];
+    $password = $_POST["password"];
+    
+    // 取得會員名稱及加密後的密碼
+    $user = signIn($email,$password);
+    
+    // 會員名稱
+    setcookie("userName",$user["username"],time()+3600, "/web1.0");
+    
+    // 會員資料 進行加密
+    $member = MD5($email).MD5($user["password"]);
+    setcookie("member",$member,time()+3600, "/web1.0");
+    
+    // 存SESSION
+    $_SESSION['userName'] = $user["username"];
+    $_SESSION['member'] = $member;
+    $_SESSION['login'] = "1";
+    header("location: index.php");
+}
+?>
+
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6 lt8"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7 lt8"> <![endif]-->
@@ -64,27 +91,7 @@
                     if (php_script_response=="exist") {
                         alert("此Email已註冊過");
                     }else {
-                        document.location.href="login.html";
-                    }
-                }
-            });
-        }
-        
-        function loginUserData() {
-            var formData = new FormData();                  
-            formData.append('email', $("#email").val()); 
-            formData.append('password', $("#password").val());
-            $.ajax({
-                url: '../signIn.php', 
-                contentType: false,
-                processData: false,
-                data: formData,                         
-                type: 'post',
-                success: function(php_script_response){
-                    if (php_script_response=="notFound") {
-                        alert("資料錯誤");
-                    }else {
-                        document.location.href="index.html";
+                        document.location.href="login.php";
                     }
                 }
             });
@@ -106,7 +113,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                <a class="navbar-brand" href="index.html">發票對獎網站</a>
+                <a class="navbar-brand" href="index.php">發票對獎網站</a>
             </div>
         </div>
         <!-- /.container -->
@@ -121,7 +128,7 @@
                     <a class="hiddenanchor" id="tologin"></a>
                     <div id="wrapper">
                         <div id="login" class="animate form">
-                            <form id="loginForm" autocomplete="on">
+                            <form id="loginForm" method="POST" autocomplete="on">
                                 <h1>Log in</h1>
                                 <p>
                                     <label for="username" class="uname" data-icon="u"> Your email </label>
@@ -136,7 +143,7 @@
                                     <label for="loginkeeping">Keep me logged in</label>
                                 </p>
                                 <p class="login button">
-                                    <input id="bLogin" type="button" value="Login" />
+                                    <input id="bLogin" name="bLogin" type="submit" value="Login" />
                                 </p>
                                 <p class="change_link">
                                     Not a member yet ?

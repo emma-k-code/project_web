@@ -18,7 +18,7 @@ class cCheckNumber {
         if ( $result->rowCount() == 0) {
           // 結束連線
           $db = null;
-          exit;
+          return;
         }
         
         // 將資料寫入$showData陣列 
@@ -46,10 +46,5 @@ class cCheckNumber {
         
     }
 }
-
-
-
-
-
 
 ?>

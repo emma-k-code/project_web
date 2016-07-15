@@ -103,7 +103,7 @@
         
         $("#memberNumber").html("尚無資料");
         
-        $.get("../setMemberNumber.php?date=" + date, function(data){
+        $.get("../setMemberNumber.php?date=" + date , function(data){
     		setMemberNumber(data);
     	});
     	$.get("../setWinPeriod.php?date=" + date, function(data){
@@ -144,7 +144,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">發票對獎網站</a>
+                <a class="navbar-brand" href="index.php">發票對獎網站</a>
             </div>
             <span id="sUserName" class="nav navbar-brand navbar-right"></span>
         </div>
@@ -190,8 +190,12 @@
                 </table>
                 <div class="text-center">
                     <h4 id="invoiceContent"></h4>
+                    <div class="bs-example">
+                        <ul class="pagination" id="memberNumberPage">
+                            
+                        </ul>
+                    </div>
                 </div>
-                
 
             </div>
 
