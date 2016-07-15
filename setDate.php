@@ -20,8 +20,10 @@
             $dateMonth = $dateYM[1] . "-" . substr($dateYM[1]+1+100,1,2) . "月";
         }
         
-        $setDate[] = $dateYear . $dateMonth;
+        $setDate[] = array("dateYM"=>$dateYear . $dateMonth);
         
     }
+    
+    echo json_encode($setDate);
     
 ?>

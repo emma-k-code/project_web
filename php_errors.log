@@ -32,3 +32,12 @@
 [13-Jul-2016 02:59:31 UTC] PHP Stack trace:
 [13-Jul-2016 02:59:31 UTC] PHP   1. {main}() /home/ubuntu/workspace/web1.0/views/login.php:0
 [13-Jul-2016 02:59:31 UTC] PHP   2. session_start() /home/ubuntu/workspace/web1.0/views/login.php:2
+[15-Jul-2016 01:37:33 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/ubuntu/workspace/web1.0/views/member.php on line 144
+[15-Jul-2016 01:37:33 UTC] PHP Stack trace:
+[15-Jul-2016 01:37:33 UTC] PHP   1. {main}() /home/ubuntu/workspace/web1.0/views/member.php:0
+[15-Jul-2016 01:37:56 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/ubuntu/workspace/web1.0/views/member.php on line 144
+[15-Jul-2016 01:37:56 UTC] PHP Stack trace:
+[15-Jul-2016 01:37:56 UTC] PHP   1. {main}() /home/ubuntu/workspace/web1.0/views/member.php:0
+[15-Jul-2016 01:38:07 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/ubuntu/workspace/web1.0/views/member.php on line 144
+[15-Jul-2016 01:38:07 UTC] PHP Stack trace:
+[15-Jul-2016 01:38:07 UTC] PHP   1. {main}() /home/ubuntu/workspace/web1.0/views/member.php:0
