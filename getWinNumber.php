@@ -10,10 +10,6 @@
         // 取得獎別設定
         require "prizeItems.php";
     
-        // 1. 連接資料庫伺服器
-        $db = new PDO($dbConnect, $dbUser, $dbPw);
-        $db->exec("set names utf8");
-        
         // 2. 執行 SQL 敘述
         $result = $db->query("select winPrize,winNumber from winningNumbers where winDate = '$dateSelect'");
         
@@ -23,8 +19,7 @@
           return $showData=null;
         }
         
-        $pItems = new cPrizeItems();
-        $showData = $pItems->aPrizeItems; // 準備輸出的資料
+        $showData = $aPrizeItems; // 準備輸出的資料
 
         // 3. 處理查詢結果
         while ($row = $result->fetch())

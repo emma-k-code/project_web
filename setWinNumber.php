@@ -3,10 +3,8 @@ header("content-type: text/html; charset=utf-8");
 
 // 選擇的期別
 $dateSelect =  trim($_GET['date']); 
-// 選擇的頁次
-$pageSelect =  trim($_GET['page']); 
 // 取得獎金設定
-require 'getPrizeMoney.php';
+require "prizeMoney.php";
 // 取得開獎號碼
 require 'getWinNumber.php';
 
@@ -28,7 +26,7 @@ foreach ($showData as $value) {
       echo $num . "<br>";
     }
     echo "</td>";
-    echo "<td>" . $money[array_search($value,$showData)] . "</td>";
+    echo "<td>" . $aPrizeMoney[array_search($value,$showData)] . "</td>";
     echo "</tr>";
 }
 
