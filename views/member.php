@@ -52,11 +52,15 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
     	$("#bWinningInfo").click(winningInfo);
     	// 選擇期別
     	$("#dateList").on("click","a",setInvoice);
+    	// 選擇頁次
+    	$("#checkNumberPage").on("click","li",changePage);
     	
     	// 取得期別
     	getInvoiceDate();
     	
-    	sendData("全部");
+    	sendData("全部","1");
+    	
+    	getPage("全部");
     }
     
     function getInvoiceDate() {
@@ -89,18 +93,19 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
         removeListActive();
         var date = $(this).text();
         $(this).addClass("active");
-        sendData(date);
+        sendData(date,"1");
+        getPage(date);
     }
     
     function removeListActive() {
         $("#dateList a").removeClass("active");
     }
     
-    function sendData(date) {
+    function sendData(date,page) {
         
         $("#memberNumber").html("尚無資料");
         
-        $.get("../setMemberNumber.php?date=" + date , function(data){
+        $.get("../setMemberNumber.php?date=" + date + "&page=" + page , function(data){
     		setMemberNumber(data);
     	});
     	$.get("../setWinPeriod.php?date=" + date, function(data){
@@ -125,6 +130,30 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
             $("#memberNumber").prepend(row);
         }
     }
+    
+    function getPage(date) {
+    	$.get("../getMemberNumberCount.php?date=" + date, function(data){
+    		pringPage(data);
+    	});
+    }
+    
+    function pringPage(data) {
+        $("#checkNumberPage").html("");
+        
+        $("#checkNumberPage").append("<li class='active'><a href='#'>1</a></li>");
+        for (var i = 2; i <= data; i++) {
+            $("#checkNumberPage").append("<li><a href='#'>" +i+ "</a></li>");
+        }
+    }
+    
+    function changePage() {
+        $("#checkNumberPage li").removeClass("active");
+        var page = $(this).text();
+        $(this).addClass("active");
+        
+        sendData($("#dateList .active").text(),page)
+    }
+    
     </script>
 </head>
 
@@ -188,8 +217,7 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
                 <div class="text-center">
                     <h4 id="invoiceContent"></h4>
                     <div class="bs-example">
-                        <ul class="pagination" id="memberNumberPage">
-                            
+                        <ul class="pagination" id="checkNumberPage">
                         </ul>
                     </div>
                 </div>

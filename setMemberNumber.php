@@ -8,6 +8,8 @@ require 'getMemberNumber.php';
 
 // 選擇的期別
 $dateSelect =  trim($_GET['date']); 
+// 選擇的頁次
+$pageSelect =  trim($_GET['page']); 
 
 // 檢查帳密 取得email
 $checkResult = new cGetMemberEmail();
@@ -15,13 +17,13 @@ $userEmail = $checkResult->checkMemberEmail();
 
 // 如果有email
 if (isset($userEmail)) {
-    searchMemberNumber($dateSelect,$userEmail);
+    searchMemberNumber($dateSelect,$userEmail,$pageSelect);
 }
 
-function searchMemberNumber($dateSelect,$userEmail) {
+function searchMemberNumber($dateSelect,$userEmail,$pageSelect) {
     // 取得搜尋結果
     $getMemberNum = new cMemberNumber();
-    $showData = $getMemberNum->searchData($dateSelect,$userEmail);
+    $showData = $getMemberNum->searchData($dateSelect,$userEmail,$pageSelect);
     
     if (!isset($showData)){
         echo "尚無資料";

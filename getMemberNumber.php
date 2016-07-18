@@ -4,17 +4,21 @@
     class cMemberNumber {
       public $showData;
       
-      function searchData($dateSelect,$userEmail){
+      function searchData($dateSelect,$userEmail,$pageSelect){
         // 取得資料庫設定
         require "config.php";
         // 取得獎金設定
         require "prizeMoney.php";
         
+        $limit = $pageSelect * 10;
+        
+        $start = $limit - 9 ;
+        
         // 搜尋membersNumbers中的資料
         if ($dateSelect=="全部") {
-          $result = $db->query("select mDate,mNumber,mResult from membersNumbers where memberEmail = '$userEmail' ORDER BY mDate");
+          $result = $db->query("select mDate,mNumber,mResult from membersNumbers where memberEmail = '$userEmail' ORDER BY mDate LIMIT $start, $limit");
         }else {
-          $result = $db->query("select mDate,mNumber,mResult from membersNumbers where memberEmail = '$userEmail' AND mDate = '$dateSelect'");
+          $result = $db->query("select mDate,mNumber,mResult from membersNumbers where memberEmail = '$userEmail' AND mDate = '$dateSelect' LIMIT $start, $limit");
         }
         
         if ( $result->rowCount() == 0) {

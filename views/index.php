@@ -10,9 +10,11 @@ if ($_SESSION['login']==1) {
     // 自動對獎
     require "../autoCheckNumber.php";
     
-    foreach ($showData as $value) {
-        foreach ($value as $data) {
-            $showText = $showText . $data['numDate']."-".$data['number']."-".$data['prize']."<br>";
+    if (isset($showData)){
+        foreach ($showData as $value) {
+            foreach ($value as $data) {
+                $showText = $showText . $data['numDate']."-".$data['number']."-".$data['prize']."<br>";
+            }
         }
     }
 }
@@ -271,6 +273,9 @@ if ($_SESSION['login']==1) {
     }
     
     function saveSuccessShow() {
+        if ($("#sUserName").text()=="guset") {
+            return;
+        }
         $("#saveMessage").fadeTo(1000, 500).slideUp(500, function(){
             $("#saveMessage").hide();
         });

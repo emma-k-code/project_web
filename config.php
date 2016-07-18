@@ -1,6 +1,6 @@
 <?php
     
-    $dbConnect = "mysql:host=localhost;dbname=test;port=443";
+    $dbConnect = "mysql:host=localhost;dbname=project;port=443";
     $dbUser = "root";
     $dbPw = "";
     
