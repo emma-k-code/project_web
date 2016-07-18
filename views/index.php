@@ -6,6 +6,16 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
 
 if ($_SESSION['login']==1) {
     unset($_SESSION['login']);
+    
+    // 自動對獎
+    require "../autoCheckNumber.php";
+    
+    foreach ($showData as $value) {
+        foreach ($value as $data) {
+            $showText = $showText . $data['numDate']."-".$data['number']."-".$data['prize']."<br>";
+        }
+    }
+    
 }
 
 ?>
@@ -67,6 +77,8 @@ if ($_SESSION['login']==1) {
     	
     	// 載入時先執行一次選擇期別
     	invoiceDateChange();
+    	
+    	if ($("#autoCheckMessage span").text()=="") $("#autoCheckMessage").hide();
     	
     	$("#checkNumberPage").hide();
     	
@@ -276,6 +288,7 @@ if ($_SESSION['login']==1) {
     }
 	
 </script>
+
 </head>
 
 <body>
@@ -300,6 +313,11 @@ if ($_SESSION['login']==1) {
 
     <!-- Page Content -->
     <div class="container">
+        <div id="autoCheckMessage" class="alert alert-info">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>自動對獎結果：</strong> <br>
+          <span><?php echo $showText; ?></span>
+        </div>
         <div class="row">
             <div class="col-lg-4">
                 <h3>
@@ -402,7 +420,7 @@ if ($_SESSION['login']==1) {
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <button type="button" class="btn btn-link" onclick="self.location.href='../checkMember.php'">已儲存發票號碼</button>
+                    <button type="button" class="btn btn-link" onclick="self.location.href='member.php'">已儲存發票號碼</button>
                 </div>
                 <div class="form-group col-lg-6 text-right">
 

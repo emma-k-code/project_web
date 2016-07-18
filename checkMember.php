@@ -17,13 +17,5 @@ if (isset($_POST['bLog'])) {
         header("location:views/login.php");
     }
     
-}else {
-    if (isset($_COOKIE['userName']) & isset($_COOKIE['member'])) {
-        // 前往會員儲存號碼頁面
-        header("location:views/member.php");
-    }else {
-        // 前往登入頁面
-        header("location:views/login.php");
-    }
 }
 ?>

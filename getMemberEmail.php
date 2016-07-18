@@ -1,6 +1,7 @@
 <?php
-
 header("content-type: text/html; charset=utf-8");
+ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../session'));
+session_start();
 
 class cGetMemberEmail {
     
@@ -15,8 +16,8 @@ class cGetMemberEmail {
         $db = new PDO($dbConnect, $dbUser, $dbPw);
         $db->exec("set names utf8");
         
-        $userName = $_COOKIE['userName'];
-        $member = $_COOKIE['member'];
+        $userName = $_SESSION['userName'];
+        $member = $_SESSION['member'];
     
         // 搜尋members資料庫中的資料
         $result = $db->query("select memberEmail,memberPW from members where memberName = '$userName'");

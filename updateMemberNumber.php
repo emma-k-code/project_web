@@ -5,7 +5,7 @@
     class cUpdateMemberNumber {
         function update($email,$checkedData) {
             // 取得資料庫設定
-            require_once "config.php";
+            require "config.php";
             
             // 1. 連接資料庫伺服器
             $db = new PDO($dbConnect, $dbUser, $dbPw);
@@ -15,11 +15,11 @@
             $sql = "UPDATE membersNumbers SET mDate=(:date),mNumber=(:number),mResult=(:prize) WHERE memberEmail = '$email' AND mDate=(:date) AND mNumber=(:number);";
             $sth = $db->prepare($sql);
             
-            foreach ($checkedData as $key=>$pNumbers)
+            foreach ($checkedData as $value)
             {
-    	        $sth->bindParam(':date',$invoiceDate);
-                $sth->bindParam(':prize',$key);
-                $sth->bindParam(':number',$num);
+    	        $sth->bindParam(':date',$value["numDate"]);
+                $sth->bindParam(':prize',$value["prize"]);
+                $sth->bindParam(':number',$value["number"]);
                 $sth->execute();
             }
             

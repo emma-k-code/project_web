@@ -9,9 +9,9 @@
 登入/註冊<br>
 儲存會員的發票號碼<br>
 查詢會員的發票號碼<br>
+自動對開獎發票功能<br>
 <h4><b>未完成</b></h4>
 對獎結果增加換頁功能-暫停中<br>
-自動對位開獎發票功能-進行中<br>
 <hr>
 <h3>[PHP功能]</h3>
 儲存獎別設定-prizeItems.php<br>
@@ -35,3 +35,4 @@
 檢查帳密取得會員Email-getMemberEmail.php<br>
 自動檢查未對獎發票-autoCheckNumber.php<br>
 取得未對獎發票號碼-getNoCheckNumber.php<br>
+更新資料庫中會員的發票號碼-updateMemberNumber.php<br>
