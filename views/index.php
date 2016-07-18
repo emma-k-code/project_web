@@ -4,9 +4,9 @@ session_start();
 
 $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
 
+// 如果是剛登入
 if ($_SESSION['login']==1) {
     unset($_SESSION['login']);
-    
     // 自動對獎
     require "../autoCheckNumber.php";
     
@@ -15,7 +15,6 @@ if ($_SESSION['login']==1) {
             $showText = $showText . $data['numDate']."-".$data['number']."-".$data['prize']."<br>";
         }
     }
-    
 }
 
 ?>
@@ -74,11 +73,11 @@ if ($_SESSION['login']==1) {
     	getInvoiceDate();
     	// 設置登入或登出按鈕
     	setLoginButton();
+    	// 設置自動對獎結果
+    	setAutoCheckMessage();
     	
     	// 載入時先執行一次選擇期別
     	invoiceDateChange();
-    	
-    	if ($("#autoCheckMessage span").text()=="") $("#autoCheckMessage").hide();
     	
     	$("#checkNumberPage").hide();
     	
@@ -171,7 +170,6 @@ if ($_SESSION['login']==1) {
         var number = $("#enterNumber").val().replace(/\n/g,",");
         if (number.replace(",","").length==0){
             $("#enterNumber").focus();
-            return;
         }
         
         // 比對發票號碼 或儲存 如果有登入會員會自動儲存
@@ -182,18 +180,13 @@ if ($_SESSION['login']==1) {
             }
             saveNumber(number);
         }else {
-            checkInvoiceNumber(number);
+            toCheck(number,$("#invoiceDate option:selected").text());
         }
         
         // 清空文字方塊內容
     	$("#enterNumber").val("");
     }
-    
-    function checkInvoiceNumber(number) {
-        // 比對發票
-        toCheck(number,$("#invoiceDate option:selected").text());
-    }
-    
+
     function toCheck(number,date) {
         var $url = "../setCheckNumber.php?number=" + number + "&date=" + date;
         $.get($url, function(data){
@@ -238,7 +231,7 @@ if ($_SESSION['login']==1) {
     function saveNumber(number) {
         var addNumbers = number.split(",");
         for (var i = 0; i < addNumbers.length; i++) {
-            if ((!(isNaN(addNumbers[i]))) & (addNumbers[i].length <=3) & (addNumbers[i].length >=8)) {
+            if ((!(isNaN(addNumbers[i]))) & (addNumbers[i].length >=3) & (addNumbers[i].length <=8)) {
                 var formData = new FormData();
                 formData.append('numDate', $("#invoiceDate option:selected").text());
                 formData.append('number', addNumbers[i]);
@@ -279,12 +272,16 @@ if ($_SESSION['login']==1) {
     
     function saveSuccessShow() {
         $("#saveMessage").fadeTo(1000, 500).slideUp(500, function(){
-            $("#saveMessage").alert('close');
+            $("#saveMessage").hide();
         });
     }
     
     function winningInfo() {
         $("#pWinning").toggle();
+    }
+    
+    function setAutoCheckMessage() {
+        if ($("#autoCheckMessage span").text()=="") $("#autoCheckMessage").hide();
     }
 	
 </script>
@@ -363,7 +360,7 @@ if ($_SESSION['login']==1) {
                 <div class="panel panel-info col-lg-12" id="pWinning">
                   <div class="panel-body">
                    <p>
-                    1.領獎期間自105年06月06日起至105年09月05日止，請於郵局公告之兌獎營業時間內辦理，中獎人填妥領獎收據並在收據上粘貼0.4%印花稅票【中五獎(含)以上者】，攜帶國民身分證（非本國國籍人士得以護照、居留證等文件替代）及中獎統一發票收執聯兌領獎金。中特別獎、特獎、頭獎者請向各直轄市及各縣、市經指定之郵局領取獎金；中二獎、三獎、四獎、五獎、六獎者請向各地郵局兌獎。（各地郵局延時營業窗口及夜間郵局均不辦理兌獎業務。）<br>
+                    1.請於郵局公告之兌獎營業時間內辦理，中獎人填妥領獎收據並在收據上粘貼0.4%印花稅票【中五獎(含)以上者】，攜帶國民身分證（非本國國籍人士得以護照、居留證等文件替代）及中獎統一發票收執聯兌領獎金。中特別獎、特獎、頭獎者請向各直轄市及各縣、市經指定之郵局領取獎金；中二獎、三獎、四獎、五獎、六獎者請向各地郵局兌獎。（各地郵局延時營業窗口及夜間郵局均不辦理兌獎業務。）<br>
         			<br>2.統一發票收執聯未依規定載明金額者，不得領獎。<br>
         			<br>3.統一發票買受人為政府機關、公營事業、公立學校、部隊及營業人者，不得領獎。<br>
         			<br>4.中四獎(含)以上者，依規定應由發獎單位扣繳20%所得稅款。<br>

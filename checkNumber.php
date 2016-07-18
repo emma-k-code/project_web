@@ -6,11 +6,7 @@ class cCheckNumber {
         // 取得資料庫設定
         require "config.php";
         // 取得獎金設定
-        require "getPrizeMoney.php";
-        
-        // 1. 連接資料庫伺服器
-        $db = new PDO($dbConnect, $dbUser, $dbPw);
-        $db->exec("set names utf8");
+        require "prizeMoney.php";
         
         // 2. 執行 SQL 敘述
         $result = $db->query("select winPrize,winNumber from winningNumbers where winDate = '$dateSelect'");
@@ -23,6 +19,7 @@ class cCheckNumber {
         
         // 將資料寫入$showData陣列 
         foreach ($enterNumber as $num) {
+            // 判斷格式是否為數字 & 大於等於3碼 & 小於等於8碼
             if (is_numeric($num) & strlen($num)>=3 & strlen($num)<=8) {
                 $showData[] = array("number"=>$num,"numDate"=>$dateSelect,"prize"=>"未中獎","money"=>"0");
             }
@@ -34,7 +31,7 @@ class cCheckNumber {
             foreach ($showData as $key=>$value) {
                 if ($showData[$key]["number"] == $row["winNumber"]) {
                     $showData[$key]["prize"] = $row["winPrize"];
-                    $showData[$key]["money"] = $money[$row["winPrize"]];
+                    $showData[$key]["money"] = $aPrizeMoney[$row["winPrize"]];
                 }
             }
         }

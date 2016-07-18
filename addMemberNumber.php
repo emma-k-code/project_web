@@ -1,9 +1,11 @@
 <?php
+ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../session'));
+session_start();
 
     header("content-type: text/html; charset=utf-8");
     
     // 判斷是否已登入
-    if (isset($_COOKIE['userName']) & isset($_COOKIE['member'])) {
+    if (isset($_SESSION['userName']) & isset($_SESSION['member'])) {
         
         // 取得會員的Email
         require "getMemberEmail.php";
@@ -11,22 +13,16 @@
         // 檢查帳密 取得email
         $checkResult = new cGetMemberEmail();
         $userEmail = $checkResult->checkMemberEmail();
+        
         if (isset($userEmail)) {
-            saveNumber($userEmail);
+            saveNumber($userEmail,$_POST['numDate'],$_POST['number'],$_POST['prize']);
         }
         
     }
     
-    function saveNumber($userEmail) {
-        
-        $date = $_POST['numDate'];
-        $number = $_POST['number'];
-        $prize = $_POST['prize'];
+    function saveNumber($userEmail,$date,$number,$prize) {
         // 取得資料庫設定
         require "config.php";
-        // 1. 連接資料庫伺服器
-        $db = new PDO($dbConnect, $dbUser, $dbPw);
-        $db->exec("set names utf8");
         
         // 將資料寫入membersNumbers資料庫
         $sql = "INSERT INTO membersNumbers(mDate,mNumber,mResult,memberEmail) VALUES (:date,:number,:prize,:mail)";

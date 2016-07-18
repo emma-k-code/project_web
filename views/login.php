@@ -2,6 +2,12 @@
 ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../session'));
 session_start();
 if (isset($_POST['bLogin'])) {
+    login();
+    header("location:index.php");
+}
+
+function login() {
+    // 取的資料庫中的會員資料
     require "../signIn.php";
     
     $email = $_POST['username'];
@@ -21,7 +27,6 @@ if (isset($_POST['bLogin'])) {
     $_SESSION['userName'] = $user["username"];
     $_SESSION['member'] = $member;
     $_SESSION['login'] = "1";
-    header("location: index.php");
 }
 ?>
 

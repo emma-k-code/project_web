@@ -55,20 +55,8 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
     	
     	// 取得期別
     	getInvoiceDate();
-    	// 設置會員名稱
-    	setUserName();
     	
     	sendData("全部");
-    }
-    
-    function setUserName() {
-        $.get("../getCookie.php", function(data){
-            if (data=="") {
-                $("#sUserName").text("guset");
-                return;
-            }
-            $("#sUserName").text(data);
-    	});
     }
     
     function getInvoiceDate() {
@@ -155,7 +143,7 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
                 </button>
                 <a class="navbar-brand" href="index.php">發票對獎網站</a>
             </div>
-            <span id="sUserName" class="nav navbar-brand navbar-right"></span>
+            <span id="sUserName" class="nav navbar-brand navbar-right"><?php echo $_SESSION['userName']; ?></span>
         </div>
         <!-- /.container -->
     </nav>
@@ -171,7 +159,7 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
             <div class="panel panel-info col-lg-12" id="pWinning">
               <div class="panel-body">
                <p>
-                1.領獎期間自105年06月06日起至105年09月05日止，請於郵局公告之兌獎營業時間內辦理，中獎人填妥領獎收據並在收據上粘貼0.4%印花稅票【中五獎(含)以上者】，攜帶國民身分證（非本國國籍人士得以護照、居留證等文件替代）及中獎統一發票收執聯兌領獎金。中特別獎、特獎、頭獎者請向各直轄市及各縣、市經指定之郵局領取獎金；中二獎、三獎、四獎、五獎、六獎者請向各地郵局兌獎。（各地郵局延時營業窗口及夜間郵局均不辦理兌獎業務。）<br>
+                1.請於郵局公告之兌獎營業時間內辦理，中獎人填妥領獎收據並在收據上粘貼0.4%印花稅票【中五獎(含)以上者】，攜帶國民身分證（非本國國籍人士得以護照、居留證等文件替代）及中獎統一發票收執聯兌領獎金。中特別獎、特獎、頭獎者請向各直轄市及各縣、市經指定之郵局領取獎金；中二獎、三獎、四獎、五獎、六獎者請向各地郵局兌獎。（各地郵局延時營業窗口及夜間郵局均不辦理兌獎業務。）<br>
     			<br>2.統一發票收執聯未依規定載明金額者，不得領獎。<br>
     			<br>3.統一發票買受人為政府機關、公營事業、公立學校、部隊及營業人者，不得領獎。<br>
     			<br>4.中四獎(含)以上者，依規定應由發獎單位扣繳20%所得稅款。<br>

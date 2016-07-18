@@ -6,10 +6,6 @@ function signIn($email,$password) {
   // 取得資料庫設定
   require "config.php";
   
-  // 1. 連接資料庫伺服器
-  $db = new PDO($dbConnect, $dbUser, $dbPw);
-  $db->exec("set names utf8");
-  
   // 搜尋並比對資料庫中的會員資料
   $result = $db->query("select * from members where memberEmail = '$email' AND memberPW = MD5('$password')");
   
