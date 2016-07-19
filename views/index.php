@@ -189,7 +189,7 @@ if ($_SESSION['login']==1) {
     }
 
     function toCheck(number,date) {
-        var $url = "../setCheckNumber.php?number=" + number + "&date=" + date;
+        var $url = "Data/checkNumber?number=" + number + "&date=" + date;
         $.get($url, function(data){
             if (data=="") {
                 alert("資料錯誤");
@@ -255,7 +255,7 @@ if ($_SESSION['login']==1) {
     
     function sendAddDate(formData) {
         $.ajax({
-            url: '../addMemberNumber.php', 
+            url: 'Data/addMemberNumber', 
             dataType: 'text', 
             contentType: false,
             processData: false,
