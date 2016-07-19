@@ -90,6 +90,15 @@ class DataController extends Controller {
         $addNumber = $this->model("addMemberNumber");
         $addNumber->saveNumber($db,$email,$date,$number,$prize);
     }
+    
+    function checkMember() {
+        // 按下按鈕的值
+		$button = $_POST['bLog'];
+        
+        // 輸出檔案內容
+        $data = $this->model("checkMember");
+        echo $data->$button();
+    }
 }
 
 ?>

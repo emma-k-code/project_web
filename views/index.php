@@ -85,10 +85,10 @@ if ($_SESSION['login']==1) {
     
     function setLoginButton() {
         if ($("#sUserName").text()=="guset") {
-            $("#bLog").text("登入");
+            $("#bLog").text("Login");
             return;
         }
-        $("#bLog").text("登出");
+        $("#bLog").text("Logout");
     }
     
     function getInvoiceDate() {
@@ -437,7 +437,7 @@ if ($_SESSION['login']==1) {
                 </div>
                 <div class="form-group col-lg-6 text-right">
 
-                    <form role="form" method="POST" action="../checkMember.php">
+                    <form role="form" method="POST" action="Data/checkMember">
                         <button id="bLog" name="bLog" type="submit" class="btn btn-default">
                         </button>
                     </form>
