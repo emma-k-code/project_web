@@ -1,0 +1,80 @@
+body {
+    padding-top: 60px;
+}
+.text-right {
+    text-align: right;
+}
+.text-center {
+    text-align: center;
+}
+.date-select {
+    text-align: right;
+    padding: 0px;
+}
+.date-form {
+    margin: 20px 0px 10px 0;
+}
+.day{
+    margin: 20px 0px 10px 0;
+}
+textarea {
+   resize: none;
+}
+td,th {
+    vertical-align: top;
+}
+#confirmMessage {
+    color: red;
+    display: none;
+}
+#pWinning {
+    display: none;
+}
+#checkNumberPage {
+    display: inline;
+}
+#bSaveNumber {
+    display: none;
+}
+#saveMessage {
+    display: none;
+}
+.checkedNumberTable {
+	border-collapse: collapse;
+	margin-bottom: 3em;
+	background: #fff;
+}
+
+.checkedNumberTable td,
+th {
+	padding: 0.75em 1.5em;
+	text-align: left;
+}
+
+.checkedNumberTable td.err {
+	background-color: #e992b9;
+	color: #fff;
+	font-size: 0.75em;
+	text-align: center;
+	line-height: 1;
+}
+
+.checkedNumberTable th {
+	background-color: #31bc86;
+	font-weight: bold;
+	color: #fff;
+	white-space: nowrap;
+}
+
+.checkedNumberTable tbody th {
+	background-color: #2ea879;
+}
+
+.checkedNumberTable tbody tr:nth-child(2n-1) {
+	background-color: #f5f5f5;
+	transition: all .125s ease-in-out;
+}
+
+.checkedNumberTable tbody tr:hover {
+	background-color: rgba(129, 208, 177, .3);
+}
