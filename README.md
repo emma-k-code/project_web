@@ -23,3 +23,6 @@
 自動檢查未對獎發票-autoCheckNumber.php<br>
 取得未對獎發票號碼-getNoCheckNumber.php<br>
 更新資料庫中會員的發票號碼-updateMemberNumber.php<br>
+
+新增檔案
+取得會員發票號碼總數-getMemberNumberCount.php

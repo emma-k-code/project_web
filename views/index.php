@@ -54,7 +54,6 @@ if ($_SESSION['login']==1) {
     
     <!-- jQuery Version 1.11.1 -->
     <script src="js/jquery.js"></script>
-    
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
     
@@ -70,6 +69,8 @@ if ($_SESSION['login']==1) {
     	$('#bUploadNumberFile').change(checkFile);
     	// 檢查按鈕 判斷是否送出比對或直接儲存
     	$("#bCheckInvoiceNumber").click(checkButton);
+    	// 選擇頁次
+    	$("#checkNumberPage").on("click","li",changePage);
     	
     	// 取得下拉式選單中的期別
     	getInvoiceDate();
@@ -80,9 +81,6 @@ if ($_SESSION['login']==1) {
     	
     	// 載入時先執行一次選擇期別
     	invoiceDateChange();
-    	
-    	$("#checkNumberPage").hide();
-    	
     }
     
     function setLoginButton() {
@@ -220,16 +218,12 @@ if ($_SESSION['login']==1) {
             
             $("#checkedNumber").prepend(row);
             
+            if ($("#checkedNumber tr").length > 10) {
+                $("#checkedNumber tr").eq(10).hide();
+            }
+            
         }
-        
-        printNumberPage();
-    }
-    
-    function printNumberPage() {
-        $("#checkNumberPage").hide();
-        if ($("#checkedNumber tr").length>10) {
-            $("#checkNumberPage").show();
-        }
+        pringPage();
     }
     
     function saveNumber(number) {
@@ -289,6 +283,29 @@ if ($_SESSION['login']==1) {
     
     function setAutoCheckMessage() {
         if ($("#autoCheckMessage span").text()=="") $("#autoCheckMessage").hide();
+    }
+    
+    function pringPage() {
+        $("#checkNumberPage").html("");
+        
+        page = Math.ceil($("#checkedNumber tr").length / 10);
+        
+        $("#checkNumberPage").append("<li class='active'><a href='#'>1</a></li>");
+        for (var i = 2; i <= page; i++) {
+            $("#checkNumberPage").append("<li><a href='#'>" +i+ "</a></li>");
+        }
+        
+    }
+    
+    function changePage() {
+        $("#checkNumberPage li").removeClass("active");
+        var start = ($(this).text()*10) - 10;
+        $(this).addClass("active");
+        $("#checkedNumber tr").hide();
+        
+        for (var i = start; i<= (start+10); i++) {
+            $("#checkedNumber tr").eq(i).show();
+        }
     }
 	
 </script>
@@ -397,7 +414,7 @@ if ($_SESSION['login']==1) {
                 <div id="saveMessage" class="alert alert-success fade in col-lg-12">
                     <strong>已儲存發票號碼</strong>
                 </div>
-                <table class="invoiceNumber col-lg-12">
+                <table class="checkedNumberTable col-lg-12">
                     <caption><b>結果：</b></caption>
                     <thead>
                         <tr>
@@ -413,13 +430,6 @@ if ($_SESSION['login']==1) {
                 <div class="col-lg-12">
                     <div class="bs-example">
                         <ul class="pagination" id="checkNumberPage">
-                            <li class="disabled"><a href="#">&laquo;</a></li>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="#">&raquo;</a></li>
                         </ul>
                     </div>
                 </div>
