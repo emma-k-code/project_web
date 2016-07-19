@@ -146,7 +146,6 @@ if ($_SESSION['login']==1) {
         formData.append('file', fileData);        
         $.ajax({
             url: 'Data/uploadNumberFile', 
-            dataType: 'text', 
             contentType: false,
             processData: false,
             data: formData,                         

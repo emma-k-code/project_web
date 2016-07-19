@@ -40,6 +40,15 @@ class DataController extends Controller {
         
     }
     
+    function uploadNumberFile() {
+        // 選擇的檔案
+		$file = $_FILES ["file"];
+        
+        // 輸出檔案內容
+        $data = $this->model("uploadNumberFile");
+        echo $data->processFile($file);
+    }
+    
 }
 
 ?>
