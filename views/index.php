@@ -131,6 +131,7 @@ if ($_SESSION['login']==1) {
     
     function setInvoice(date) {
         $("#dateLabel").text(date);
+        $("#invoiceNumberContent").html("Loading...");
         $.get("../setWinNumber.php?date=" + date, function(data){
     		$("#invoiceNumberContent").html(data);
     	});
@@ -141,6 +142,7 @@ if ($_SESSION['login']==1) {
     }
     
     function checkFile() {
+        $("#enterNumber").val("Loading...");
         var fileData = $('#bUploadNumberFile').prop('files')[0];
         var formData = new FormData();                  
         formData.append('file', fileData);        

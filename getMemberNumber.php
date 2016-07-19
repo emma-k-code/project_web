@@ -10,9 +10,8 @@
         // 取得獎金設定
         require "prizeMoney.php";
         
-        $limit = $pageSelect * 10;
-        
-        $start = $limit - 9 ;
+        $limit = 10;
+        $start = ($pageSelect * 10)  - $limit ;
         
         // 搜尋membersNumbers中的資料
         if ($dateSelect=="全部") {

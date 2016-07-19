@@ -103,7 +103,7 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
     
     function sendData(date,page) {
         
-        $("#memberNumber").html("尚無資料");
+        $("#memberNumber").html("Loading...");
         
         $.get("../setMemberNumber.php?date=" + date + "&page=" + page , function(data){
     		setMemberNumber(data);
@@ -114,10 +114,14 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
     }
     
     function setMemberNumber(data) {
-        var tableData = JSON.parse(data);
-        
         // 清空表格
         $("#memberNumber").html("");
+        
+        if (data == "尚無資料") {
+            $("#memberNumber").html("尚無資料");
+            return;
+        }
+        var tableData = JSON.parse(data);
         
         for (var i = 0; i < tableData.length; i++ ) {
             var row = $("<tr>");
@@ -144,6 +148,7 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
         for (var i = 2; i <= data; i++) {
             $("#checkNumberPage").append("<li><a href='#'>" +i+ "</a></li>");
         }
+        
     }
     
     function changePage() {
@@ -216,8 +221,8 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
                 </table>
                 <div class="text-center">
                     <h4 id="invoiceContent"></h4>
-                    <div class="bs-example">
-                        <ul class="pagination" id="checkNumberPage">
+                    <div class="bs-example col-lg-12 text-center">
+                        <ul class="pagination text-center" id="checkNumberPage">
                         </ul>
                     </div>
                 </div>

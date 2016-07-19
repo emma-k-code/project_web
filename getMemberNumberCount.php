@@ -37,7 +37,7 @@
         // 4. 結束連線
         $db = null;
         
-        $page = floor($result->rowCount() / 10) + 1;
+        $page = ceil($result->rowCount() / 10);
         
         echo $page;
     }
