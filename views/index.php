@@ -328,7 +328,7 @@ if ($_SESSION['login'] == "1") {
         <div id="autoCheckMessage" class="alert alert-info">
           <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
           <strong>自動對獎結果：</strong> <br>
-          <span><?php echo $showText; ?></span>
+          <span><?php echo $_GET['message']; ?></span>
         </div>
         <div class="row">
             <div class="col-lg-4">

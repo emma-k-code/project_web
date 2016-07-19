@@ -163,7 +163,7 @@ class DataController extends Controller {
                 $checkedData = $check->check($db,$value,$key,$prizeMoney->aPrizeMoney); // 取得對獎結果
                 if ($checkedData!="") {
                     // 進行資料庫資料更新
-                    $update->update($db,$userEmail,$checkedData);
+                    echo $update->update($db,$userEmail,$checkedData);
                     $showData[] = $checkedData;
                 }
             }
@@ -172,8 +172,9 @@ class DataController extends Controller {
             $showText = $setShow->printResult($showData);
             
         }
+        echo $showText;
         
-        header("location: ../Home");
+        // header("location: ../Home?message=$showText");
         
     }
     

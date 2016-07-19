@@ -5,7 +5,7 @@ class getNoCheckNumber {
     function check($db,$email) {
         
         // 執行 SQL 敘述
-        $result = $db->query("select mDate,mNumber from membersNumbers where mResult = '未開獎' AND memberEmail = '$email' ");
+        $result = $db->query("select mNumID,mDate,mNumber from membersNumbers where mResult = '未開獎' AND memberEmail = '$email' ");
         
         if ( $result->rowCount() == 0) {
           // 結束連線
