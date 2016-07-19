@@ -4,7 +4,7 @@ ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../s
 session_start();
 
 if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
-    header("location: login.php");
+    header("location: Login");
 }
 ?>
 <!DOCTYPE html>
@@ -65,7 +65,7 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
     
     function getInvoiceDate() {
         $.ajax({
-            url: '../setDate.php', 
+            url: 'Data/getDate', 
             async: false,
             contentType: false,
             processData: false,                   
@@ -105,10 +105,10 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
         
         $("#memberNumber").html("Loading...");
         
-        $.get("../setMemberNumber.php?date=" + date + "&page=" + page , function(data){
+        $.get("Data/setMemberNumber?date=" + date + "&page=" + page , function(data){
     		setMemberNumber(data);
     	});
-    	$.get("../setWinPeriod.php?date=" + date, function(data){
+    	$.get("Data/setWinPeriod?date=" + date, function(data){
     		$("#invoiceContent").html(data);
     	});
     }
@@ -136,8 +136,8 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
     }
     
     function getPage(date) {
-    	$.get("../getMemberNumberCount.php?date=" + date, function(data){
-    		pringPage(data);
+    	$.get("Data/getMemberNumberCount?date=" + date, function(data){
+    		pringPage(Math.ceil(data/10));
     	});
     }
     

@@ -24,6 +24,8 @@ class App {
             $url = rtrim($_GET['url'],"/");
             $url = explode("/",$url);
             return $url;
+        }else {
+            header("location: Home");
         }
     }
 }

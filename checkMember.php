@@ -4,8 +4,7 @@ session_start();
 
 class checkMember {
     function Login() {
-        // 前往登入頁面
-        header("location:Member");
+        return "Login";
     }
     function Logout() {
         // 刪除cookie
@@ -13,8 +12,8 @@ class checkMember {
         setcookie("member",$member,time()-3600);
         // 刪除session
         session_destroy();
-        //前往首頁頁面
-        header("location:Home");
+        
+        return "Home";
     }
 }
 ?>

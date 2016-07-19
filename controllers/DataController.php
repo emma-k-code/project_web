@@ -95,9 +95,136 @@ class DataController extends Controller {
         // 按下按鈕的值
 		$button = $_POST['bLog'];
         
-        // 輸出檔案內容
+        // 登出或登入
         $data = $this->model("checkMember");
-        echo $data->$button();
+        // 前往首頁或登入頁
+        header("location: ../{$data->$button()}");
+    }
+    
+    function signUp() {
+        // 接收的註冊資料
+        $userName = $_POST['userName'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        
+        // 資料庫設定
+        $config = $this->model("config");
+        $db = $config->getDB();
+        
+        // 寫入註冊資料
+        $signUp = $this->model("signUp");
+        $signUp->insertMember($db,$userName,$email,$password);
+    }
+    
+    function signIn() {
+        // 接收的登入資料
+        $email = $_POST['username'];
+        $password = $_POST["password"];
+        
+        // 資料庫設定
+        $config = $this->model("config");
+        $db = $config->getDB();
+        
+        // 比對會員資料
+        $signIn = $this->model("signIn");
+        // 登入成功進入首頁 否則前往登入頁
+        $toPage = $signIn->check($db,$email,$password);
+        
+        header("location: ../$toPage");
+    }
+    
+    // bug
+    function autoCheckNumber() {
+        // 會員資料
+        $userName = $_SESSION['userName'];
+        $member = $_SESSION['member'];
+        
+        // 資料庫設定
+        $config = $this->model("config");
+        $db = $config->getDB();
+        // 獎金設定
+        $prizeMoney = $this->model("prizeMoney");
+        
+        // 取得資料庫中的email
+        $getEmail = $this->model("getMemberEmail");
+        $email = $getEmail->checkMemberEmail($db,$userName,$member);
+        
+        // 取得資料庫中尚未對獎的發票
+        $getNoCheckNumber = $this->model("getNoCheckNumber");
+        $noCheckNumber = $getNoCheckNumber->check($db,$email);
+        
+        if (isset($noCheckNumber)) {
+            // 比對發票
+            $check = $this->model("checkNumber");
+            // 更新資料庫中的會員發票
+            $update = $this->model("updateMemberNumber");
+            
+            foreach ($noCheckNumber as $key=>$value) {
+                $checkedData = $check->check($db,$value,$key,$prizeMoney->aPrizeMoney); // 取得對獎結果
+                if ($checkedData!="") {
+                    // 進行資料庫資料更新
+                    $update->update($db,$userEmail,$checkedData);
+                    $showData[] = $checkedData;
+                }
+            }
+            
+            $setShow = $this->model("setAutoCheck");
+            $showText = $setShow->printResult($showData);
+            
+        }
+        
+        header("location: ../Home");
+        
+    }
+    
+    function setMemberNumber() {
+        // 選擇的期別
+        $dateSelect =  trim($_GET['date']); 
+        // 選擇的頁次
+        $pageSelect =  trim($_GET['page']); 
+        
+        // 會員資料
+        $userName = $_SESSION['userName'];
+        $member = $_SESSION['member'];
+        
+		// 獎金設定
+        $prizeMoney = $this->model("prizeMoney");
+        
+        // 資料庫設定
+        $config = $this->model("config");
+        $db = $config->getDB();
+        
+        // 取得資料庫中的email
+        $getEmail = $this->model("getMemberEmail");
+        $email = $getEmail->checkMemberEmail($db,$userName,$member);
+        
+        // 取得資料庫中會員的發票
+        $getNumber = $this->model("getMemberNumber");
+        $showData = $getNumber->searchData($db,$dateSelect,$email,$pageSelect,$prizeMoney->aPrizeMoney);
+        
+        echo $showData;
+    }
+    
+    function getMemberNumberCount() {
+        // 選擇的期別
+        $dateSelect =  trim($_GET['date']); 
+        // 會員資料
+        $userName = $_SESSION['userName'];
+        $member = $_SESSION['member'];
+        
+        // 資料庫設定
+        $config = $this->model("config");
+        $db = $config->getDB();
+        
+        // 取得資料庫中的email
+        $getEmail = $this->model("getMemberEmail");
+        $email = $getEmail->checkMemberEmail($db,$userName,$member);
+        
+        // 取得資料庫中的email
+        $getCount = $this->model("getMemberNumberCount");
+        $count = $getCount->searchCount($db,$dateSelect,$email);
+        
+        echo $count;
     }
 }
 

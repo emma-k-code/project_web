@@ -1,35 +1,10 @@
 <?php
 ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../session'));
 session_start();
-if (isset($_POST['bLogin'])) {
-    login();
+if (isset($_SESSION['userName'])) {
     header("location: Home");
 }
-
-function login() {
-    // 取的資料庫中的會員資料
-    require "../signIn.php";
-    
-    $email = $_POST['username'];
-    $password = $_POST["password"];
-    
-    // 取得會員名稱及加密後的密碼
-    $user = signIn($email,$password);
-    
-    // 會員名稱
-    setcookie("userName",$user["username"],time()+3600, "/web1.0");
-    
-    // 會員資料 進行加密
-    $member = MD5($email).MD5($user["password"]);
-    setcookie("member",$member,time()+3600, "/web1.0");
-    
-    // 存SESSION
-    $_SESSION['userName'] = $user["username"];
-    $_SESSION['member'] = $member;
-    $_SESSION['login'] = "1";
-}
 ?>
-
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6 lt8"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7 lt8"> <![endif]-->
@@ -86,7 +61,7 @@ function login() {
             formData.append('email', $("#emailsignup").val());
             formData.append('password', $("#passwordsignup").val());
             $.ajax({
-                url: '../signUp.php', 
+                url: 'Data/signUp', 
                 contentType: false,
                 processData: false,
                 data: formData,                         
@@ -95,7 +70,8 @@ function login() {
                     if (php_script_response=="exist") {
                         alert("此Email已註冊過");
                     }else {
-                        document.location.href="login.php";
+                        alert("註冊成功");
+                        document.location.href="Login";
                     }
                 }
             });
@@ -132,7 +108,7 @@ function login() {
                     <a class="hiddenanchor" id="tologin"></a>
                     <div id="wrapper">
                         <div id="login" class="animate form">
-                            <form id="loginForm" method="POST" autocomplete="on">
+                            <form id="loginForm" method="POST" autocomplete="on" action="Data/signIn">
                                 <h1>Log in</h1>
                                 <p>
                                     <label for="username" class="uname" data-icon="u"> Your email </label>

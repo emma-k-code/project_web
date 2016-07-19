@@ -2,8 +2,8 @@
 
 class MemberController extends Controller {
     
-    function member() {
-        $this->view("member", $user);
+    function index() {
+        $this->view("member");
     }
     
 }

@@ -5,20 +5,10 @@ session_start();
 $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
 
 // 如果是剛登入
-if ($_SESSION['login']==1) {
+if ($_SESSION['login'] == "1") {
     unset($_SESSION['login']);
-    // 自動對獎
-    require "../autoCheckNumber.php";
-    
-    if (isset($showData)){
-        foreach ($showData as $value) {
-            foreach ($value as $data) {
-                $showText = $showText . $data['numDate']."-".$data['number']."-".$data['prize']."<br>";
-            }
-        }
-    }
+    header("location: Data/autoCheckNumber");
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -86,9 +76,11 @@ if ($_SESSION['login']==1) {
     function setLoginButton() {
         if ($("#sUserName").text()=="guset") {
             $("#bLog").text("Login");
+            $("#bLog").val("Login");
             return;
         }
         $("#bLog").text("Logout");
+        $("#bLog").val("Logout");
     }
     
     function getInvoiceDate() {
