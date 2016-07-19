@@ -93,7 +93,7 @@ if ($_SESSION['login']==1) {
     
     function getInvoiceDate() {
         $.ajax({
-            url: 'Home/getDate', 
+            url: 'Data/getDate', 
             async: false,
             contentType: false,
             processData: false,                   
@@ -130,10 +130,10 @@ if ($_SESSION['login']==1) {
     function setInvoice(date) {
         $("#dateLabel").text(date);
         $("#invoiceNumberContent").html("Loading...");
-        $.get("Home/setWinNumber?date=" + date, function(data){
+        $.get("Data/setWinNumber?date=" + date, function(data){
     		$("#invoiceNumberContent").html(data);
     	});
-    	$.get("../setWinPeriod.php?date=" + date, function(data){
+    	$.get("Data/setWinPeriod?date=" + date, function(data){
     		$("#invoiceContent").html(data);
     		changeButton();
     	});
@@ -145,7 +145,7 @@ if ($_SESSION['login']==1) {
         var formData = new FormData();                  
         formData.append('file', fileData);        
         $.ajax({
-            url: '../uploadNumberFile.php', 
+            url: 'Data/uploadNumberFile', 
             dataType: 'text', 
             contentType: false,
             processData: false,

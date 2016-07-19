@@ -2,7 +2,7 @@
 header("content-type: text/html; charset=utf-8");
 
 class setWinNumber {
-    function output($showData,$prizeItems) {
+    function output($showData,$aPrizeMoney) {
         
         if (!isset($showData)){
             echo "尚無資料";
