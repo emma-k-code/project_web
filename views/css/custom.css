@@ -78,3 +78,6 @@ th {
 .checkedNumberTable tbody tr:hover {
 	background-color: rgba(129, 208, 177, .3);
 }
+#autoCheckMessage{
+	display: none;
+}

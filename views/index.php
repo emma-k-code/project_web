@@ -4,11 +4,6 @@ session_start();
 
 $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
 
-// 如果是剛登入
-if ($_SESSION['login'] == "1") {
-    unset($_SESSION['login']);
-    header("location: Data/autoCheckNumber");
-}
 ?>
 
 <!DOCTYPE html>
@@ -61,13 +56,15 @@ if ($_SESSION['login'] == "1") {
     	$("#bCheckInvoiceNumber").click(checkButton);
     	// 選擇頁次
     	$("#checkNumberPage").on("click","li",changePage);
+    	// 關閉自動對獎結果
+    	$("#autoCheckMessage").on("click","a",closeAutoCheckMessage);
     	
     	// 取得下拉式選單中的期別
     	getInvoiceDate();
     	// 設置登入或登出按鈕
     	setLoginButton();
-    	// 設置自動對獎結果
-    	setAutoCheckMessage();
+    	// 自動對獎
+    	autoCheck();
     	
     	// 載入時先執行一次選擇期別
     	invoiceDateChange();
@@ -272,10 +269,6 @@ if ($_SESSION['login'] == "1") {
         $("#pWinning").toggle();
     }
     
-    function setAutoCheckMessage() {
-        if ($("#autoCheckMessage span").text()=="") $("#autoCheckMessage").hide();
-    }
-    
     function pringPage() {
         $("#checkNumberPage").html("");
         
@@ -297,6 +290,19 @@ if ($_SESSION['login'] == "1") {
         for (var i = start; i<= (start+10); i++) {
             $("#checkedNumber tr").eq(i).show();
         }
+    }
+    
+    function autoCheck() {
+        $.get("Data/autoCheckNumber", function(data){
+    		$("#autoCheckMessage span").html(data);
+    		if (data!="") {
+    		    $("#autoCheckMessage").show();
+    		}
+    	});
+    }
+    
+    function closeAutoCheckMessage() {
+        $("#autoCheckMessage").hide();
     }
 	
 </script>
@@ -328,7 +334,7 @@ if ($_SESSION['login'] == "1") {
         <div id="autoCheckMessage" class="alert alert-info">
           <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
           <strong>自動對獎結果：</strong> <br>
-          <span><?php echo $_GET['message']; ?></span>
+          <span></span>
         </div>
         <div class="row">
             <div class="col-lg-4">
@@ -395,7 +401,7 @@ if ($_SESSION['login'] == "1") {
                         <label for="comment">輸入發票:</label>
                         <textarea class="form-control" rows="5" id="enterNumber" placeholder="可在號碼間加入,或直接換行進行批次對獎"></textarea>
                         <div class="form-group col-lg-10">
-                            <input type="file" id="bUploadNumberFile">
+                            <input type="file" id="bUploadNumberFile" accept=".txt">
                         </div>
                         <div class="form-group col-lg-2">
                             <button type="button" id="bCheckInvoiceNumber" class="btn btn-default">送出</button>

@@ -33,7 +33,6 @@ class signIn {
     // 存SESSION
     $_SESSION['userName'] = $user["username"];
     $_SESSION['member'] = $member;
-    $_SESSION['login'] = "1";
     
     return "Home";
   }
