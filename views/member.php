@@ -83,6 +83,7 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
         for (var i = 0; i < selectData.length; i++ ) {
             $("#dateList").append("<a href='#' class='list-group-item'>" + selectData[i].dateYM + "</a>");
         }
+        $("#dateList").append("<a href='#' class='list-group-item'> 中獎發票 </a>");
     }
     
     function winningInfo() {
@@ -114,15 +115,15 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
     }
     
     function setMemberNumber(data) {
-        // 清空表格
-        $("#memberNumber").html("");
-        
         if (data == "尚無資料") {
             $("#memberNumber").html("尚無資料");
             return;
         }
+        
         var tableData = JSON.parse(data);
         
+        // 清空表格
+        $("#memberNumber").html("");
         for (var i = 0; i < tableData.length; i++ ) {
             var row = $("<tr>");
             row.append("<th>" + tableData[i].mDate + "</th>");
