@@ -4,6 +4,25 @@ session_start();
 
 class DataController extends Controller {
     
+    function getDatabaseConfig() {
+        // 資料庫設定
+        $config = $this->model("config");
+        return $config->getDB();
+    }
+    
+    function getMemberEmail() {
+        // 會員資料
+        $userName = $_SESSION['userName'];
+        $member = $_SESSION['member'];
+        
+        // 資料庫設定
+        $db = $this->getDatabaseConfig();
+        
+        // 取得資料庫中的email
+        $getEmail = $this->model("getMemberEmail");
+        return $getEmail->checkMemberEmail($db,$userName,$member);
+    }
+    
     function getDate() {
         $data = $this->model("setDate");
         echo $data->getData();
@@ -17,8 +36,7 @@ class DataController extends Controller {
         // 獎金設定
         $prizeMoney = $this->model("prizeMoney");
         // 資料庫設定
-        $config = $this->model("config");
-        $db = $config->getDB();
+        $db = $this->getDatabaseConfig();
         
         // 取得發票號碼
         $getNumber = $this->model("getWinNumber");
@@ -33,8 +51,7 @@ class DataController extends Controller {
         // 選擇的期別
         $dateSelect = trim($_GET['date']); 
         // 資料庫設定
-        $config = $this->model("config");
-        $db = $config->getDB();
+        $db = $this->getDatabaseConfig();
         
         // 輸出查詢結果
         $data = $this->model("setWinPeriod");
@@ -44,7 +61,7 @@ class DataController extends Controller {
     
     function uploadNumberFile() {
         // 選擇的檔案
-		$file = $_FILES ["file"];
+		$file = $_FILES["file"];
         
         // 輸出檔案內容
         $data = $this->model("uploadNumberFile");
@@ -60,8 +77,7 @@ class DataController extends Controller {
         $prizeMoney = $this->model("prizeMoney");
         
         // 資料庫設定
-        $config = $this->model("config");
-        $db = $config->getDB();
+        $db = $this->getDatabaseConfig();
         
         // 輸出比對結果
         $data = $this->model("checkNumber");
@@ -74,17 +90,12 @@ class DataController extends Controller {
         $date = $_POST['numDate'];
         $number = $_POST['number'];
         $prize = $_POST['prize'];
-        // 會員資料
-        $userName = $_SESSION['userName'];
-        $member = $_SESSION['member'];
         
         // 資料庫設定
-        $config = $this->model("config");
-        $db = $config->getDB();
+        $db = $this->getDatabaseConfig();
         
         // 取得資料庫中的email
-        $getEmail = $this->model("getMemberEmail");
-        $email = $getEmail->checkMemberEmail($db,$userName,$member);
+        $email = $this->getMemberEmail();
         
         // 輸出檔案內容
         $addNumber = $this->model("addMemberNumber");
@@ -108,8 +119,7 @@ class DataController extends Controller {
         $password = $_POST['password'];
         
         // 資料庫設定
-        $config = $this->model("config");
-        $db = $config->getDB();
+        $db = $this->getDatabaseConfig();
         
         // 寫入註冊資料
         $signUp = $this->model("signUp");
@@ -122,8 +132,7 @@ class DataController extends Controller {
         $password = $_POST["password"];
         
         // 資料庫設定
-        $config = $this->model("config");
-        $db = $config->getDB();
+        $db = $this->getDatabaseConfig();
         
         // 比對會員資料
         $signIn = $this->model("signIn");
@@ -132,22 +141,16 @@ class DataController extends Controller {
         
         header("location: ../$toPage");
     }
-    
-    // bug
+   
     function autoCheckNumber() {
-        // 會員資料
-        $userName = $_SESSION['userName'];
-        $member = $_SESSION['member'];
-        
         // 資料庫設定
-        $config = $this->model("config");
-        $db = $config->getDB();
+        $db = $this->getDatabaseConfig();
+        
         // 獎金設定
         $prizeMoney = $this->model("prizeMoney");
         
         // 取得資料庫中的email
-        $getEmail = $this->model("getMemberEmail");
-        $email = $getEmail->checkMemberEmail($db,$userName,$member);
+        $email = $this->getMemberEmail();
         
         // 取得資料庫中尚未對獎的發票
         $getNoCheckNumber = $this->model("getNoCheckNumber");
@@ -168,9 +171,11 @@ class DataController extends Controller {
                 }
             }
             
+        }
+        
+        if (isset($showData)) {
             $setShow = $this->model("setAutoCheck");
             $showText = $setShow->printResult($showData);
-            
         }
         
         echo $showText;
@@ -183,20 +188,14 @@ class DataController extends Controller {
         // 選擇的頁次
         $pageSelect =  trim($_GET['page']); 
         
-        // 會員資料
-        $userName = $_SESSION['userName'];
-        $member = $_SESSION['member'];
-        
 		// 獎金設定
         $prizeMoney = $this->model("prizeMoney");
         
         // 資料庫設定
-        $config = $this->model("config");
-        $db = $config->getDB();
+        $db = $this->getDatabaseConfig();
         
         // 取得資料庫中的email
-        $getEmail = $this->model("getMemberEmail");
-        $email = $getEmail->checkMemberEmail($db,$userName,$member);
+        $email = $this->getMemberEmail();
         
         // 取得資料庫中會員的發票
         $getNumber = $this->model("getMemberNumber");
@@ -208,19 +207,13 @@ class DataController extends Controller {
     function getMemberNumberCount() {
         // 選擇的期別
         $dateSelect =  trim($_GET['date']); 
-        // 會員資料
-        $userName = $_SESSION['userName'];
-        $member = $_SESSION['member'];
-        
         // 資料庫設定
-        $config = $this->model("config");
-        $db = $config->getDB();
+        $db = $this->getDatabaseConfig();
         
         // 取得資料庫中的email
-        $getEmail = $this->model("getMemberEmail");
-        $email = $getEmail->checkMemberEmail($db,$userName,$member);
+        $email = $this->getMemberEmail();
         
-        // 取得資料庫中的email
+        // 取得資料庫中的會員發票的數量
         $getCount = $this->model("getMemberNumberCount");
         $count = $getCount->searchCount($db,$dateSelect,$email);
         
