@@ -32,11 +32,11 @@ function getInvoiceDate() {
 function printInvoiceDate(data){
     var selectData = JSON.parse(data);
     
-    $("#dateList").append("<a href='#' class='list-group-item active'> 全部 </a>");
+    $("#dateList").append("<a style='cursor:pointer' class='list-group-item active'> 全部 </a>");
     for (var i = 0; i < selectData.length; i++ ) {
-        $("#dateList").append("<a href='#' class='list-group-item'>" + selectData[i].dateYM + "</a>");
+        $("#dateList").append("<a style='cursor:pointer' class='list-group-item'>" + selectData[i].dateYM + "</a>");
     }
-    $("#dateList").append("<a href='#' class='list-group-item'> 中獎發票 </a>");
+    $("#dateList").append("<a style='cursor:pointer' class='list-group-item'> 中獎發票 </a>");
 }
 
 function winningInfo() {
@@ -98,9 +98,9 @@ function getPage(date) {
 function pringPage(data) {
     $("#checkNumberPage").html("");
     
-    $("#checkNumberPage").append("<li class='active'><a href='#'>1</a></li>");
+    $("#checkNumberPage").append("<li class='active'><a style='cursor:pointer'>1</a></li>");
     for (var i = 2; i <= data; i++) {
-        $("#checkNumberPage").append("<li><a href='#'>" +i+ "</a></li>");
+        $("#checkNumberPage").append("<li><a style='cursor:pointer'>" +i+ "</a></li>");
     }
     
 }

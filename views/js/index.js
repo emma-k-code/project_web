@@ -249,9 +249,9 @@ function pringPage() {
     
     page = Math.ceil($("#checkedNumber tr").length / 10);
     
-    $("#checkNumberPage").append("<li class='active'><a href='#'>1</a></li>");
+    $("#checkNumberPage").append("<li class='active'><a style='cursor:pointer'>1</a></li>");
     for (var i = 2; i <= page; i++) {
-        $("#checkNumberPage").append("<li><a href='#'>" +i+ "</a></li>");
+        $("#checkNumberPage").append("<li><a style='cursor:pointer'>" +i+ "</a></li>");
     }
     
 }
@@ -259,10 +259,11 @@ function pringPage() {
 function changePage() {
     $("#checkNumberPage li").removeClass("active");
     var start = ($(this).text()*10) - 10;
+    
     $(this).addClass("active");
     $("#checkedNumber tr").hide();
     
-    for (var i = start; i<= (start+10); i++) {
+    for (var i = start; i< (start+10); i++) {
         $("#checkedNumber tr").eq(i).show();
     }
 }
