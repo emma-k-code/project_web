@@ -178,19 +178,33 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
     }
 
     function toCheck(number,date) {
-        var $url = "Data/checkNumber?number=" + number + "&date=" + date;
-        $.get($url, function(data){
-            if (data=="") {
-                alert("資料錯誤");
-                return;
+        $("#loading").show();
+        
+        var formData = new FormData();
+        formData.append('date', date);
+        formData.append('number', number);
+        
+        $.ajax({
+            url: 'Data/checkNumber',
+            contentType: false,
+            processData: false,
+            data: formData,                         
+            type: 'post',
+            success: function(php_script_response){
+                if (php_script_response=="") {
+                    alert("資料錯誤");
+                }
+                
+                // 儲存結果
+                saveCheckedNumber(php_script_response);
+                
+                // 繪出結果
+                printCheckNumberTable(php_script_response);
+                
+                $("#loading").hide();
             }
-            
-            // 繪出結果
-            printCheckNumberTable(data);
-            // 儲存結果
-            saveCheckedNumber(data);
-            
-    	});
+        });
+        
     }
     
     function printCheckNumberTable(data) {
@@ -226,6 +240,7 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
                 sendAddDate(formData);
             }
         }
+        saveSuccessShow();
     }
     
     function saveCheckedNumber(data) {
@@ -251,7 +266,7 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
             data: formData,                         
             type: 'post',
             success: function(php_script_response){
-                saveSuccessShow();
+                
             }
         });
     }
@@ -408,6 +423,9 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
                         </div>
                     </div>
                 </form>
+                <div id="loading" class="alert alert-info fade in col-lg-12">
+                    <strong>Loading...</strong>
+                </div>
                 <div id="saveMessage" class="alert alert-success fade in col-lg-12">
                     <strong>已儲存發票號碼</strong>
                 </div>

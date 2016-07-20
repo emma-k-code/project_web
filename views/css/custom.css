@@ -39,6 +39,9 @@ td,th {
 #saveMessage {
     display: none;
 }
+#loading {
+    display: none;
+}
 .checkedNumberTable {
 	border-collapse: collapse;
 	margin-bottom: 3em;

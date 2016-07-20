@@ -70,9 +70,9 @@ class DataController extends Controller {
     
     function checkNumber() {
         // 選擇的期別
-        $dateSelect = trim($_GET['date']); 
+        $dateSelect = trim($_POST['date']); 
         // 送出的號碼
-		$number = $_GET["number"];
+		$number = $_POST["number"];
 		// 獎金設定
         $prizeMoney = $this->model("prizeMoney");
         

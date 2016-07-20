@@ -26,10 +26,16 @@ class checkNumber {
         // 3. 處理查詢結果
         while ($row = $result->fetch()) {
             
+            // 要比對的資料
             foreach ($showData as $key=>$value) {
-                if ($showData[$key]["number"] == $row["winNumber"]) {
-                    $showData[$key]["prize"] = $row["winPrize"];
-                    $showData[$key]["money"] = $aPrizeMoney[$row["winPrize"]];
+                // 將號碼取號碼長度~3的長度依序比對
+                for ($i = strlen($showData[$key]["number"]); $i >=3 ; $i--){
+                    if ($showData[$key]["prize"]=="未中獎") {
+                        if (substr($showData[$key]["number"],-$i) == $row["winNumber"]) {
+                            $showData[$key]["prize"] = $row["winPrize"];
+                            $showData[$key]["money"] = $aPrizeMoney[$row["winPrize"]];
+                        }
+                    }
                 }
             }
         }
