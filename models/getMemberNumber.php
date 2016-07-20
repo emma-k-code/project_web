@@ -37,7 +37,6 @@
         
         // 4. 結束連線
         $db = null;
-        
         return json_encode($showData);
       }
       

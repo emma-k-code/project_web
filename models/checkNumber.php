@@ -19,7 +19,7 @@ class checkNumber {
         foreach ($enterNumber as $num) {
             // 判斷格式是否為數字 & 大於等於3碼 & 小於等於8碼
             if (is_numeric($num) & strlen($num)>=3 & strlen($num)<=8) {
-                $showData[] = array("number"=>$num,"numDate"=>$dateSelect,"prize"=>"未中獎","money"=>"0");
+                $showData[] = array("prize"=>"未中獎","number"=>$num,"numDate"=>$dateSelect,"money"=>"0");
             }
         }
         
@@ -42,7 +42,6 @@ class checkNumber {
           
         // 4. 結束連線
         $db = null;
-        
         return $showData;
         
     }

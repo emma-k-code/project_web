@@ -201,7 +201,6 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
                 // 繪出結果
                 printCheckNumberTable(php_script_response);
                 
-                $("#loading").hide();
             }
         });
         
@@ -210,22 +209,45 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
     function printCheckNumberTable(data) {
         var tableData = JSON.parse(data);
         
-        for (var i = 0; i < tableData.length; i++ ) {
-            var row = $("<tr>");
-            row.append("<th>" + tableData[i].numDate + "</th>");
-            row.append("<td>" + tableData[i].number + "</td>");
-            row.append("<td>" + tableData[i].prize + "</td>");
-            row.append("<td>" + tableData[i].money + "</td>");
-            row.append("</tr>");
+            $.ajax(this.href, {
+                success:function() {
+                    for (var i = 0; i < tableData.length; i++ ) {
+                        var row = $("<tr>");
+                        row.append("<th>" + tableData[i].numDate + "</th>");
+                        row.append("<td>" + tableData[i].number + "</td>");
+                        row.append("<td>" + tableData[i].prize + "</td>");
+                        row.append("<td>" + tableData[i].money + "</td>");
+                        row.append("</tr>");
+                        
+                        $("#checkedNumber").prepend(row);
+                        
+                        if ($("#checkedNumber tr").length > 10) {
+                            $("#checkedNumber tr").eq(10).hide();
+                        }
+                        pringPage();
+                    }
+                    
+                    $("#loading").hide();
+                }
+            });
+        
+        
+        // for (var i = 0; i < tableData.length; i++ ) {
+        //     var row = $("<tr>");
+        //     row.append("<th>" + tableData[i].numDate + "</th>");
+        //     row.append("<td>" + tableData[i].number + "</td>");
+        //     row.append("<td>" + tableData[i].prize + "</td>");
+        //     row.append("<td>" + tableData[i].money + "</td>");
+        //     row.append("</tr>");
             
-            $("#checkedNumber").prepend(row);
+        //     $("#checkedNumber").prepend(row);
             
-            if ($("#checkedNumber tr").length > 10) {
-                $("#checkedNumber tr").eq(10).hide();
-            }
+        //     if ($("#checkedNumber tr").length > 10) {
+        //         $("#checkedNumber tr").eq(10).hide();
+        //     }
             
-        }
-        pringPage();
+        // }
+        // pringPage();
     }
     
     function saveNumber(number) {
