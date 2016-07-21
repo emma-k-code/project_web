@@ -20,12 +20,12 @@ class getAllMoney {
             $total = $total + $change;
         }
         
-        // 將數字轉換成中文字
+        // 將數字增加,號
         return $this->getChineseNumber($total);
     }
     
     function getChineseNumber($total) {
-        $allMoney = ""; // 轉換完的中文字
+        $allMoney = ""; // 轉換完的字串
     
         // 大於1000
         if ($total >= 1000) {
@@ -35,18 +35,6 @@ class getAllMoney {
             }
             $allMoney = $total . $allMoney;
         }
-        // if (($total/10000) >= 1) {
-        //     $allMoney = floor($total/10000) . "萬";
-        //     $total = $total % 10000;
-        // }
-        // if (($total/1000) >= 1) {
-        //     $allMoney .= floor($total/1000) . "千";
-        //     $total = $total % 1000;
-        // }
-        // if (($total/100) >= 1) {
-        //     $allMoney .= floor($total/100) . "百";
-        // }
-        
         return $allMoney;
     }
     
