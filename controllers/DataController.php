@@ -219,6 +219,16 @@ class DataController extends Controller {
         
         echo $count;
     }
+    
+    function getAllNumber() {
+        // 要統計的金額
+        $money = $_POST['money']; 
+        $passMoney = $_POST['passMoney']; 
+        
+        // 取得資料庫中的會員發票的數量
+        $getTotal = $this->model("getAllMoney");
+        echo $getTotal->totalMoney($money,$passMoney);
+    }
 }
 
 ?>

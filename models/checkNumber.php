@@ -23,7 +23,7 @@ class checkNumber {
             }
         }
         
-        // 3. 處理查詢結果
+        // 處理查詢結果
         while ($row = $result->fetch()) {
             
             // 要比對的資料
@@ -40,7 +40,7 @@ class checkNumber {
             }
         }
           
-        // 4. 結束連線
+        // 結束連線
         $db = null;
         return $showData;
         

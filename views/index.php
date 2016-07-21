@@ -151,8 +151,15 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
                 <div id="saveMessage" class="alert alert-success fade in col-lg-12">
                     <strong>已儲存發票號碼</strong>
                 </div>
+                <div class="col-lg-12">
+                    <div class=" col-lg-4">
+                        <label><b>結果：</b></label>
+                    </div>
+                    <div class="col-lg-8">
+                        <span class="label label-success" id="showMoney">總金額：0</span>
+                    </div>
+                </div>
                 <table class="checkedNumberTable col-lg-12">
-                    <caption><b>結果：</b></caption>
                     <thead>
                         <tr>
                             <th>期別</th>

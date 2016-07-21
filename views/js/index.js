@@ -13,7 +13,6 @@ function init() {
 	$("#checkNumberPage").on("click","li",changePage);
 	// 關閉自動對獎結果
 	$("#autoCheckMessage").on("click","a",closeAutoCheckMessage);
-	
 	// 取得下拉式選單中的期別
 	getInvoiceDate();
 	// 設置登入或登出按鈕
@@ -166,6 +165,9 @@ function printCheckNumberTable(data) {
     
         $.ajax(this.href, {
             success:function() {
+                
+                money = "";
+                
                 for (var i = 0; i < tableData.length; i++ ) {
                     var row = $("<tr>");
                     row.append("<th>" + tableData[i].numDate + "</th>");
@@ -179,8 +181,13 @@ function printCheckNumberTable(data) {
                     if ($("#checkedNumber tr").length > 10) {
                         $("#checkedNumber tr").eq(10).hide();
                     }
-                    pringPage();
+                    
+                    money = money + "-" + $("#checkedNumber tr td").eq(2).text();
                 }
+                
+                // 計算總金額
+                getALLMoney(money);
+                pringPage();
                 
                 $("#loading").hide();
             }
@@ -279,4 +286,25 @@ function autoCheck() {
 
 function closeAutoCheckMessage() {
     $("#autoCheckMessage").hide();
+}
+
+function getALLMoney(money) {
+    var formData = new FormData();
+    formData.append('money', money);
+    formData.append('passMoney', $("#showMoney").text());
+    
+    $.ajax({
+        url: 'Data/getAllNumber',
+        contentType: false,
+        processData: false,
+        data: formData,                         
+        type: 'post',
+        success: function(php_script_response){
+            setALLMoney(php_script_response);
+        }
+    });
+}
+
+function setALLMoney(allMoney) {
+    $("#showMoney").text("總金額："+allMoney);
 }

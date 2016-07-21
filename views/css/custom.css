@@ -84,3 +84,7 @@ th {
 #autoCheckMessage{
 	display: none;
 }
+div #showMoney {
+	float: right;
+	font-size: 16px;
+}
