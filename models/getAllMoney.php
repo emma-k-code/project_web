@@ -34,7 +34,10 @@ class getAllMoney {
                 $total = floor($total/1000);
             }
             $allMoney = $total . $allMoney;
+        }else {
+            $allMoney = $total;
         }
+        
         return $allMoney;
     }
     

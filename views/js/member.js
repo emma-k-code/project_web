@@ -59,11 +59,19 @@ function sendData(date,page) {
     
     $("#memberNumber").html("Loading...");
     
+    // 取得會員發票號碼
     $.get("Data/setMemberNumber?date=" + date + "&page=" + page , function(data){
 		setMemberNumber(data);
 	});
+	
+	// 領獎期間
 	$.get("Data/setWinPeriod?date=" + date, function(data){
 		$("#invoiceContent").html(data);
+	});
+	
+	// 總計金額
+	$.get("Data/getMemberMoney?date=" + date , function(data){
+		setALLMoney(data);
 	});
 }
 
@@ -73,6 +81,7 @@ function setMemberNumber(data) {
         return;
     }
     
+    money = "";
     var tableData = JSON.parse(data);
     
     // 清空表格
@@ -86,7 +95,9 @@ function setMemberNumber(data) {
         row.append("</tr>");
         
         $("#memberNumber").prepend(row);
+        
     }
+    
 }
 
 function getPage(date) {
@@ -111,4 +122,8 @@ function changePage() {
     $(this).addClass("active");
     
     sendData($("#dateList .active").text(),page)
+}
+
+function setALLMoney(allMoney) {
+    $("#showMoney").html("總金額："+allMoney);
 }

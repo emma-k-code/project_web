@@ -225,9 +225,31 @@ class DataController extends Controller {
         $money = $_POST['money']; 
         $passMoney = $_POST['passMoney']; 
         
-        // 取得資料庫中的會員發票的數量
+        // 統計金額
         $getTotal = $this->model("getAllMoney");
         echo $getTotal->totalMoney($money,$passMoney);
+    }
+    
+    function getMemberMoney() {
+        // 選擇的期別
+        $dateSelect =  trim($_GET['date']); 
+        
+        // 獎金設定
+        $prizeMoney = $this->model("prizeMoney");
+        
+        // 資料庫設定
+        $db = $this->getDatabaseConfig();
+        
+        // 取得資料庫中的email
+        $email = $this->getMemberEmail();
+        
+        // 取得資料庫中會員的發票並計算總金額
+        $getMoney = $this->model("getMemberMoney");
+        $moneys = $getMoney->searchData($db,$dateSelect,$email,$prizeMoney->aPrizeMoney);
+        
+        // 統計金額
+        $getTotal = $this->model("getAllMoney");
+        echo $getTotal->totalMoney($moneys,"0");
     }
 }
 
