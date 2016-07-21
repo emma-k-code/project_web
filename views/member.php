@@ -103,6 +103,7 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
                             <th>發票號碼</th>
                             <th>結果</th>
                             <th>金額</th>
+                            <th>刪除</th>
                         </tr>
                     </thead>
                     <tbody id="memberNumber">

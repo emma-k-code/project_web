@@ -4,12 +4,14 @@ session_start();
 
 class DataController extends Controller {
     
+    // 取得資料庫連線
     function getDatabaseConfig() {
         // 資料庫設定
         $config = $this->model("config");
         return $config->getDB();
     }
     
+    // 取得會員的email
     function getMemberEmail() {
         // 會員資料
         $userName = $_SESSION['userName'];
@@ -23,11 +25,13 @@ class DataController extends Controller {
         return $getEmail->checkMemberEmail($db,$userName,$member);
     }
     
+    // 當月的前三個期別+當期 總共四期
     function getDate() {
         $data = $this->model("setDate");
         echo $data->getData();
     }
     
+    // 查詢資料庫中的開獎號碼
     function setWinNumber() {
         // 選擇的期別
         $dateSelect =  trim($_GET['date']); 
@@ -38,15 +42,16 @@ class DataController extends Controller {
         // 資料庫設定
         $db = $this->getDatabaseConfig();
         
-        // 取得發票號碼
+        // 取得查詢結果
         $getNumber = $this->model("getWinNumber");
         $showData = $getNumber->searchData($dateSelect,$db,$prizeItems->aprizeItems);
         
-        // 輸出查詢結果
+        // 將查詢結果輸出成表格樣式
         $data = $this->model("setWinNumber");
         echo $data->output($showData,$prizeMoney->aPrizeMoney);
     }
     
+    // 查詢資料庫中期別的領獎期限
     function setWinPeriod() {
         // 選擇的期別
         $dateSelect = trim($_GET['date']); 
@@ -201,7 +206,7 @@ class DataController extends Controller {
         $getNumber = $this->model("getMemberNumber");
         $showData = $getNumber->searchData($db,$dateSelect,$email,$pageSelect,$prizeMoney->aPrizeMoney);
         
-        echo $showData;
+        echo json_encode($showData);
     }
     
     function getMemberNumberCount() {
@@ -250,6 +255,19 @@ class DataController extends Controller {
         // 統計金額
         $getTotal = $this->model("getAllMoney");
         echo $getTotal->totalMoney($moneys,"0");
+    }
+    
+    function deleteMemberNumber() {
+        $id = $_GET['id'];
+        
+        // 資料庫設定
+        $db = $this->getDatabaseConfig();
+        // 取得資料庫中的email
+        $email = $this->getMemberEmail();
+        
+        // 刪除資料庫中會員的發票
+        $deleteNumber = $this->model("deleteMemberNumber");
+        echo $deleteNumber->deleteNumber($db,$email,$id);
     }
 }
 

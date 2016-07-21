@@ -7,6 +7,7 @@ function init() {
 	$("#dateList").on("click","a",setInvoice);
 	// 選擇頁次
 	$("#checkNumberPage").on("click","li",changePage);
+	$("#memberNumber").on("click","button",deleteNumber);
 	
 	// 取得期別
 	getInvoiceDate();
@@ -92,6 +93,7 @@ function setMemberNumber(data) {
         row.append("<td>" + tableData[i].mNumber + "</td>");
         row.append("<td>" + tableData[i].mResult + "</td>");
         row.append("<td>" + tableData[i].money + "</td>");
+        row.append("<td><button type='button' value='"+tableData[i].id+"' class='btn btn-default'>刪除</button></td>");
         row.append("</tr>");
         
         $("#memberNumber").prepend(row);
@@ -126,4 +128,18 @@ function changePage() {
 
 function setALLMoney(allMoney) {
     $("#showMoney").html("總金額："+allMoney);
+}
+
+function deleteNumber(){
+    id = $(this).val();
+    $(this).text("Loading");
+    $.get("Data/deleteMemberNumber?id=" + $(this).val(), function(data){
+        if (data){
+            alert("刪除成功");
+            sendData($("#dateList .active").text(),$("#checkNumberPage .active").text());
+        }else {
+            alert("刪除失敗");
+        }
+	});
+	$(this).val("刪除");
 }
