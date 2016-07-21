@@ -24,7 +24,7 @@
           return "尚無資料";
         }
 
-        // 3. 處理查詢結果
+        // 處理查詢結果
         while ($row = $result->fetch())
         {
           if ($row['mResult']=="未中獎") {
