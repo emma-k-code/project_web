@@ -13,6 +13,7 @@ function init() {
 	$("#checkNumberPage").on("click","li",changePage);
 	// 關閉自動對獎結果
 	$("#autoCheckMessage").on("click","a",closeAutoCheckMessage);
+	
 	// 取得下拉式選單中的期別
 	getInvoiceDate();
 	// 設置登入或登出按鈕
