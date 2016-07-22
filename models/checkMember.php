@@ -7,9 +7,6 @@ class checkMember {
         return "Login";
     }
     function Logout() {
-        // 刪除cookie
-        setcookie("userName",$userName,time()-3600);
-        setcookie("member",$member,time()-3600);
         // 刪除session
         session_destroy();
         

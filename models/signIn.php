@@ -23,12 +23,8 @@ class signIn {
     // 4. 結束連線
     $db = null;
     
-    // 會員名稱
-    setcookie("userName",$user["username"],time()+3600);
-    
     // 會員資料 進行加密
     $member = MD5($email).MD5($user["password"]);
-    setcookie("member",$member,time()+3600);
     
     // 存SESSION
     $_SESSION['userName'] = $user["username"];

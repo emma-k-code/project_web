@@ -4,20 +4,24 @@ session_start();
 
 class DataController extends Controller {
     
-    // 取得資料庫連線
+    // 取得資料庫連線 return(new PDO)
     function getDatabaseConfig() {
         // 資料庫設定
         $config = $this->model("config");
+        // 回傳資料庫連線
         return $config->getDB();
     }
     
-    // 取得會員的email
+    // 回傳資料庫中會員的email return(string)
+    /* 
+    需要 $userName->SESSION $member->SESSION $db->資料庫連線 
+    */
     function getMemberEmail() {
         // 會員資料
         $userName = $_SESSION['userName'];
         $member = $_SESSION['member'];
         
-        // 資料庫設定
+        // 資料庫連線
         $db = $this->getDatabaseConfig();
         
         // 取得資料庫中的email
@@ -25,13 +29,17 @@ class DataController extends Controller {
         return $getEmail->checkMemberEmail($db,$userName,$member);
     }
     
-    // 當月的前三個期別+當期 總共四期
+    // 顯示當月的前三個期別+當期 總共四期 echo(json)
     function getDate() {
         $data = $this->model("setDate");
         echo $data->getData();
     }
     
-    // 查詢資料庫中的開獎號碼
+    // 顯示資料庫中的開獎號碼 echo(string)
+    /* 
+    需要 $dateSelect->選擇的期別 $prizeItems->獎別設定 
+        $prizeMoney->獎金設定 $db->資料庫連線 
+    */
     function setWinNumber() {
         // 選擇的期別
         $dateSelect =  trim($_GET['date']); 
@@ -39,36 +47,40 @@ class DataController extends Controller {
         $prizeItems = $this->model("prizeItems");
         // 獎金設定
         $prizeMoney = $this->model("prizeMoney");
-        // 資料庫設定
+        // 資料庫連線
         $db = $this->getDatabaseConfig();
         
-        // 取得查詢結果
+        // 取得查詢結果 (array)
         $getNumber = $this->model("getWinNumber");
         $showData = $getNumber->searchData($dateSelect,$db,$prizeItems->aprizeItems);
         
         // 將查詢結果輸出成表格樣式
         $data = $this->model("setWinNumber");
-        echo $data->output($showData,$prizeMoney->aPrizeMoney);
+        $data->output($showData,$prizeMoney->aPrizeMoney);
     }
     
-    // 查詢資料庫中期別的領獎期限
+    // 顯示資料庫中期別的領獎期限 (json)
+    /* 
+    需要 $dateSelect->選擇的期別 $db->資料庫連線 
+    */
     function setWinPeriod() {
         // 選擇的期別
         $dateSelect = trim($_GET['date']); 
         // 資料庫設定
         $db = $this->getDatabaseConfig();
         
-        // 輸出查詢結果
+        // 回傳查詢結果
         $data = $this->model("setWinPeriod");
         echo $data->searchData($db,$dateSelect);
         
     }
     
+    // 顯示上傳的檔案內容
     function uploadNumberFile() {
         // 選擇的檔案
 		$file = $_FILES["file"];
         
-        // 輸出檔案內容
+        // 回傳檔案內容
         $data = $this->model("uploadNumberFile");
         echo $data->processFile($file);
     }
@@ -206,7 +218,7 @@ class DataController extends Controller {
         $getNumber = $this->model("getMemberNumber");
         $showData = $getNumber->searchData($db,$dateSelect,$email,$pageSelect,$prizeMoney->aPrizeMoney);
         
-        echo json_encode($showData);
+        echo $showData;
     }
     
     function getMemberNumberCount() {

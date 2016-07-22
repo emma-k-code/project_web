@@ -136,7 +136,7 @@ function deleteNumber(){
     $.get("Data/deleteMemberNumber?id=" + $(this).val(), function(data){
         if (data){
             alert("刪除成功");
-            sendData($("#dateList .active").text(),$("#checkNumberPage .active").text());
+            sendData($("#dateList .active").text(),	$("#checkNumberPage .active").text());
         }else {
             alert("刪除失敗");
         }

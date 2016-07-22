@@ -76,10 +76,6 @@ if (isset($_SESSION['userName'])) {
                                     <label for="password" class="youpasswd" data-icon="p"> Your password </label>
                                     <input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" />
                                 </p>
-                                <p class="keeplogin">
-                                    <input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping" />
-                                    <label for="loginkeeping">Keep me logged in</label>
-                                </p>
                                 <p class="login button">
                                     <input id="bLogin" name="bLogin" type="submit" value="Login" />
                                 </p>
