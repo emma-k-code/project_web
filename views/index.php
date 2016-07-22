@@ -74,7 +74,7 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
           <span></span>
         </div>
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-4 col-sm-3">
                 <h3>
                     <span class="label label-primary" id="dateLabel">
                     </span>
@@ -85,7 +85,7 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
             <form role="form">
                 <div class="date-select">
                     <div class="form-group date-form ">
-                        <div class="col-lg-2">
+                        <div class="col-lg-2 col-sm-3">
                             <select class="form-control" id="invoiceDate">
                             </select>
                         </div>
@@ -96,8 +96,8 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
         </div>
 
         <div class="row">
-            <div class="col-lg-6">
-                <table class="invoiceNumber col-lg-12">
+            <div class="col-xs-6">
+                <table class="invoiceNumber col-xs-12">
                     <thead>
                         <tr>
                             <th>獎別</th>
@@ -112,11 +112,11 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
                 <div class="text-center">
                     <h4 id="invoiceContent"></h4>
                 </div>
-                <div class="col-lg-12 text-right">
+                <div class="col-xs-12 text-right">
                     <span class="btn btn-link" id="bWinningInfo">領獎注意事項</span>
                 </div>
-                <div class="col-lg-12">
-                    <div class="panel panel-info col-lg-12" id="pWinning">
+                <div class="col-xs-12">
+                    <div class="panel panel-info col-xs-12" id="pWinning">
                       <div class="panel-body">
                        <p>
                         1.請於郵局公告之兌獎營業時間內辦理，中獎人填妥領獎收據並在收據上粘貼0.4%印花稅票【中五獎(含)以上者】，攜帶國民身分證（非本國國籍人士得以護照、居留證等文件替代）及中獎統一發票收執聯兌領獎金。中特別獎、特獎、頭獎者請向各直轄市及各縣、市經指定之郵局領取獎金；中二獎、三獎、四獎、五獎、六獎者請向各地郵局兌獎。（各地郵局延時營業窗口及夜間郵局均不辦理兌獎業務。）<br>
@@ -134,34 +134,34 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
                 </div>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-xs-6">
                 <form role="form">
-                    <div class="form-group col-lg-12">
+                    <div class="form-group col-xs-12">
                         <label for="comment">輸入發票:</label>
                         <textarea class="form-control" rows="5" id="enterNumber" placeholder="可在號碼間加入,或直接換行進行批次對獎"></textarea>
-                        <div class="form-group col-lg-10">
+                        <div class="form-group col-xs-10">
                             <input type="file" id="bUploadNumberFile" accept=".txt">
                         </div>
-                        <div class="form-group col-lg-2">
+                        <div class="form-group col-xs-2">
                             <button type="button" id="bCheckInvoiceNumber" class="btn btn-default">送出</button>
                         </div>
                     </div>
                 </form>
-                <div id="loading" class="alert alert-info fade in col-lg-12">
+                <div id="loading" class="alert alert-info fade in col-xs-12">
                     <strong>Loading...</strong>
                 </div>
-                <div id="saveMessage" class="alert alert-success fade in col-lg-12">
+                <div id="saveMessage" class="alert alert-success fade in col-xs-12">
                     <strong>已儲存發票號碼</strong>
                 </div>
-                <div class="col-lg-12">
-                    <div class=" col-lg-4">
+                <div class="col-xs-12">
+                    <div class=" col-xs-4">
                         <label><b>結果：</b></label>
                     </div>
-                    <div class="col-lg-8">
+                    <div class="col-xs-8">
                         <span class="label label-success" id="showMoney">總金額：0</span>
                     </div>
                 </div>
-                <table class="checkedNumberTable col-lg-12">
+                <table class="checkedNumberTable col-xs-12">
                     <thead>
                         <tr>
                             <th>期別</th>
@@ -173,16 +173,16 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
                     <tbody id="checkedNumber">
                     </tbody>
                 </table>
-                <div class="col-lg-12">
+                <div class="col-xs-12">
                     <div class="bs-example">
                         <ul class="pagination" id="checkNumberPage">
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-xs-6">
                     <button type="button" class="btn btn-link" onclick="self.location.href='Member'">已儲存發票號碼</button>
                 </div>
-                <div class="form-group col-lg-6 text-right">
+                <div class="form-group col-xs-6 text-right">
 
                     <form role="form" method="POST" action="Data/checkMember">
                         <button id="bLog" name="bLog" type="submit" class="btn btn-default">

@@ -27,6 +27,20 @@ class DataController extends Controller {
         return $getEmail->checkMemberEmail($db,$userName,$member);
     }
     
+    // 抓取財政部網頁資料存進資料庫
+    /* $prizeMoney->獎別設定 $db->資料庫連線 */
+    function catchWeb() {
+        // 資料庫連線
+        $db = $this->getDatabaseConfig();
+        
+        // 獎別設定
+        $prizeMoney = $this->model("prizeMoney");
+        
+        // 抓取財政部網頁資料
+        $catch = $this->model("catchWeb");
+        $catch->toCatch($db,$prizeMoney->aPrizeItems);
+    }
+    
     // 顯示當月的前三個期別+當期 總共四期 (json)
     function getDate() {
         $data = $this->model("setDate");

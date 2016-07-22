@@ -69,17 +69,17 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-3 text-center">
+            <div class="col-xs-3 text-center">
                 <div id="dateList" class="list-group">
                 </div>
-                <div class="col-lg-12">
+                <div class="col-xs-12">
                     <span class="label label-success" id="showMoney">總金額：0</span>
                 </div>
-                <div class="col-lg-12">
+                <div class="col-xs-12">
                     <span class="btn btn-link" id="bWinningInfo">領獎注意事項</span>
                 </div>
                 
-                <div class="panel panel-info col-lg-12" id="pWinning">
+                <div class="panel panel-info col-xs-12" id="pWinning">
                   <div class="panel-body">
                    <p>
                     1.請於郵局公告之兌獎營業時間內辦理，中獎人填妥領獎收據並在收據上粘貼0.4%印花稅票【中五獎(含)以上者】，攜帶國民身分證（非本國國籍人士得以護照、居留證等文件替代）及中獎統一發票收執聯兌領獎金。中特別獎、特獎、頭獎者請向各直轄市及各縣、市經指定之郵局領取獎金；中二獎、三獎、四獎、五獎、六獎者請向各地郵局兌獎。（各地郵局延時營業窗口及夜間郵局均不辦理兌獎業務。）<br>
@@ -95,8 +95,8 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
                 <h5>資料來源：<a href="http://invoice.etax.nat.gov.tw/" target="_blank">財政部</a></h5>
             </div>
 
-            <div class="col-lg-8">
-                <table class="invoiceNumber col-lg-12">
+            <div class="col-xs-8">
+                <table class="invoiceNumber col-xs-12">
                     <thead>
                         <tr>
                             <th>期別</th>
@@ -111,7 +111,7 @@ if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
                 </table>
                 <div class="text-center">
                     <h4 id="invoiceContent"></h4>
-                    <div class="bs-example col-lg-12 text-center">
+                    <div class="bs-example col-xs-12 text-center">
                         <ul class="pagination text-center" id="checkNumberPage">
                         </ul>
                     </div>

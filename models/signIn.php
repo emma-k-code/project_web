@@ -14,13 +14,13 @@ class signIn {
       return "Login";
     }
     
-    // 3. 處理查詢結果
+    // 處理查詢結果
     while ($row = $result->fetch())
     {
       $user = array("username"=>$row['memberName'],"password"=>$row['memberPW']);
     }
     
-    // 4. 結束連線
+    // 結束連線
     $db = null;
     
     // 會員資料 進行加密
