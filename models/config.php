@@ -18,11 +18,5 @@ class config {
         $db = null;
     }
 }
-    
-    
-    
-    
-    
-    
-    
+
 ?>

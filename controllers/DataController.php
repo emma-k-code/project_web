@@ -163,25 +163,6 @@ class DataController extends Controller {
         $signUp->insertMember($db,$userName,$email,$password);
     }
     
-    // 檢查登入資料 並往指定頁面
-    /* $userName->輸入的名稱 $email->輸入的Email
-        $password->輸入的密碼 $db->資料庫連線 */
-    function signIn() {
-        // 接收的登入資料
-        $email = $_POST['username'];
-        $password = $_POST["password"];
-        
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
-        
-        // 比對會員資料
-        $signIn = $this->model("signIn");
-        // 登入成功進入首頁 否則前往登入頁
-        $toPage = $signIn->check($db,$email,$password);
-        
-        header("location: ../$toPage");
-    }
-    
     // 顯示自動對獎結果並更新資料庫中的資料 (string)
     /* $prizeMoney->獎金設定 $email->資料庫中的email $db->資料庫連線 */
     function autoCheckNumber() {

@@ -11,7 +11,7 @@ class signIn {
     // 如果搜尋結果為0
     if ( $result->rowCount() == 0) {
       $db = null;
-      return "Login";
+      return "輸入帳號或密碼錯誤";
     }
     
     // 處理查詢結果
@@ -30,7 +30,7 @@ class signIn {
     $_SESSION['userName'] = $user["username"];
     $_SESSION['member'] = $member;
     
-    return "Home";
+    return "OK";
   }
 }
 

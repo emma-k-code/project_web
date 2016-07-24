@@ -1,10 +1,3 @@
-<?php
-ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../session'));
-session_start();
-if (isset($_SESSION['userName'])) {
-    header("location: Home");
-}
-?>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6 lt8"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7 lt8"> <![endif]-->
@@ -66,7 +59,7 @@ if (isset($_SESSION['userName'])) {
                     <a class="hiddenanchor" id="tologin"></a>
                     <div id="wrapper">
                         <div id="login" class="animate form">
-                            <form id="loginForm" method="POST" autocomplete="on" action="Data/signIn">
+                            <form id="loginForm" method="POST" autocomplete="on">
                                 <h1>Log in</h1>
                                 <p>
                                     <label for="username" class="uname" data-icon="u"> Your email </label>
@@ -76,6 +69,7 @@ if (isset($_SESSION['userName'])) {
                                     <label for="password" class="youpasswd" data-icon="p"> Your password </label>
                                     <input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" />
                                 </p>
+                                <?php echo $data;?>
                                 <p class="login button">
                                     <input id="bLogin" name="bLogin" type="submit" value="Login" />
                                 </p>
