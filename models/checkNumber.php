@@ -2,6 +2,8 @@
 header("content-type: text/html; charset=utf-8");
 
 class checkNumber {
+    
+    // 回傳比對結果(array)
      /* $dateSelect->選擇的期別 $number->輸入的號碼
         $prizeMoney->獎金設定 $db->資料庫連線 */
     function check($db,$number,$dateSelect,$aPrizeMoney) {
@@ -35,7 +37,7 @@ class checkNumber {
                 // 將號碼取號碼長度~3的長度依序比對
                 for ($i = strlen($showData[$key]["number"]); $i >=3 ; $i--){
                     if ($showData[$key]["prize"]=="未中獎") {
-                        // 如果號碼完全相等
+                        // 如果號碼完全相等 需將兩個號碼定為字串
                         if (strcmp(substr($showData[$key]["number"],-$i),"{$row["winNumber"]}") == 0) {
                             $showData[$key]["prize"] = $row["winPrize"];
                             $showData[$key]["money"] = $aPrizeMoney[$row["winPrize"]];

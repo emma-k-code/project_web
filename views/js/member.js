@@ -87,7 +87,7 @@ function setMemberNumber(data) {
     
     // 清空表格
     $("#memberNumber").html("");
-    for (var i = 0; i < tableData.length; i++ ) {
+    for (var i = tableData.length-1; i >= 0; i-- ) {
         var row = $("<tr>");
         row.append("<th>" + tableData[i].mDate + "</th>");
         row.append("<td>" + tableData[i].mNumber + "</td>");
