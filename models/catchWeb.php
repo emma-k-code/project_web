@@ -84,11 +84,11 @@ class catchWeb {
     // 將資料寫入資料庫 
     /* $db->資料庫連線 $data->要寫入的資料 */
     function insertDatabase($db,$data=array()) {
-        $insertData = $data[0];
-        $invoiceDate = $data[1];
-        $invoicePs = $data[2];
+        $insertData = $data[0]; // 中獎資料
+        $invoiceDate = $data[1];// 發票期別
+        $invoicePs = $data[2]; // 領獎期間
         
-        // 檢查資料庫中是否已有資料 true->return;
+        // 檢查資料庫中是否已有資料 true->return;離開function
         $sql = "select count(*) from winningPeriod where winDate ='$invoiceDate';";
         $sth = $db->prepare($sql);
         $sth->execute();
