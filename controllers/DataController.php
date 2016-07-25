@@ -34,11 +34,11 @@ class DataController extends Controller {
         $db = $this->getDatabaseConfig();
         
         // 獎別設定
-        $prizeMoney = $this->model("prizeMoney");
+        $prizeItems = $this->model("prizeItems");
         
         // 抓取財政部網頁資料
         $catch = $this->model("catchWeb");
-        $catch->toCatch($db,$prizeMoney->aPrizeItems);
+        $catch->toCatch($db,$prizeItems->aPrizeItems);
     }
     
     // 顯示當月的前三個期別+當期 總共四期 (json)
@@ -108,7 +108,7 @@ class DataController extends Controller {
         // 資料庫連線
         $db = $this->getDatabaseConfig();
         
-        // 輸出比對結果
+        // 比對發票號碼
         $data = $this->model("checkNumber");
         $show = $data->check($db,$number,$dateSelect,$prizeMoney->aPrizeMoney);
         echo json_encode($show);

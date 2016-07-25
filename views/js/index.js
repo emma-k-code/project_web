@@ -16,23 +16,11 @@ function init() {
 	
 	// 取得下拉式選單中的期別
 	getInvoiceDate();
-	// 設置登入或登出按鈕
-	setLoginButton();
 	// 自動對獎
 	autoCheck();
 	
 	// 載入時先執行一次選擇期別
 	invoiceDateChange();
-}
-
-function setLoginButton() {
-    if ($("#sUserName").text()=="guset") {
-        $("#bLog").text("Login");
-        $("#bLog").val("Login");
-        return;
-    }
-    $("#bLog").text("Logout");
-    $("#bLog").val("Logout");
 }
 
 function getInvoiceDate() {

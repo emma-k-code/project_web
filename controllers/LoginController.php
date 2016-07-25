@@ -4,7 +4,7 @@ session_start();
 
 class LoginController extends Controller {
     
-    // 進入登入頁面 如果按下登入按鈕檢查登入資料 並往指定頁面
+    // 進入登入頁面 如果按下登入按鈕檢查登入資料 並前往指定頁面
     /* $_POST['bLogin']->是否按下登入按鈕 $userName->輸入的名稱 $email->輸入的Email
         $password->輸入的密碼 $db->資料庫連線 */
     function index() {
@@ -17,8 +17,7 @@ class LoginController extends Controller {
         // 如果按下登入按鈕
         if (isset($_POST['bLogin'])) {
             // 接收的登入資料
-            addslashes();
-            $email = addslashes( $_POST['username']);
+            $email = addslashes($_POST['username']);
             $password = addslashes($_POST["password"]);
             
             // 資料庫連線

@@ -3,6 +3,7 @@ ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../s
 session_start();
 
 $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
+$bLog = (isset($_SESSION['userName']))? "Logout":"Login";
 
 ?>
 
@@ -185,8 +186,8 @@ $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
                 <div class="form-group col-xs-6 text-right">
 
                     <form role="form" method="POST" action="Data/checkMember">
-                        <button id="bLog" name="bLog" type="submit" class="btn btn-default">
-                        </button>
+                        <button id="bLog" name="bLog" type="submit" class="btn btn-default" value="<?php echo $bLog ;?>">
+                        <?php echo $bLog; ?></button>
                     </form>
                 </div>
 

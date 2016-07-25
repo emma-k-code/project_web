@@ -15,7 +15,7 @@
             $sth->bindParam(':mail',$userEmail);
             $sth->execute();
             
-            // 4. 結束連線
+            // 結束連線
             $db = null;
         }
         

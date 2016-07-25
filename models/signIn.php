@@ -4,6 +4,7 @@ session_start();
 header("content-type: text/html; charset=utf-8");
 
 class signIn {
+  
   function check($db,$email,$password) {
     // 搜尋並比對資料庫中的會員資料
     $result = $db->query("select * from members where memberEmail = '$email' AND memberPW = MD5('$password')");
@@ -23,10 +24,10 @@ class signIn {
     // 結束連線
     $db = null;
     
-    // 會員資料 進行加密
+    // 將 會員資料 進行加密
     $member = MD5($email).MD5($user["password"]);
     
-    // 存SESSION
+    // 將會員資料存成SESSION
     $_SESSION['userName'] = $user["username"];
     $_SESSION['member'] = $member;
     

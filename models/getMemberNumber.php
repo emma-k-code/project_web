@@ -3,9 +3,12 @@
 
     class getMemberNumber {
       public $showData;
-      
+      // 回傳會員發票號碼查詢結果 (json)
+      /* $dateSelect->選擇的期別 $pageSelect->選擇的頁次 $prizeMoney->獎金設定
+        $userEmail->會員的email $db->資料庫連線 */
       function searchData($db,$dateSelect,$userEmail,$pageSelect,$aPrizeMoney){
         
+        // 一頁10筆
         $limit = 10;
         $start = ($pageSelect * 10)  - $limit ;
         
@@ -18,6 +21,7 @@
           $result = $db->query("select mNumID,mDate,mNumber,mResult from membersNumbers where memberEmail = '$userEmail' AND mDate = '$dateSelect' LIMIT $start, $limit");
         }
         
+        // 搜尋結果為0
         if ( $result->rowCount() == 0) {
           // 結束連線
           $db = null;

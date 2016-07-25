@@ -93,11 +93,9 @@ class catchWeb {
         $sth = $db->prepare($sql);
         $sth->execute();
         // 如果已有資料就跳出
-        if (($sth->fetchAll())>1) {
+        if ($sth->fetch()['count(*)']>1) {
             return;
         }
-        
-        $sth = null;
         
         // 將資料寫入winningPeriod資料庫
         $sql = "INSERT INTO winningPeriod(winDate,winPs) VALUES ('$invoiceDate','$invoicePs');";
