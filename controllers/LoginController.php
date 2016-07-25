@@ -17,8 +17,9 @@ class LoginController extends Controller {
         // 如果按下登入按鈕
         if (isset($_POST['bLogin'])) {
             // 接收的登入資料
-            $email = $_POST['username'];
-            $password = $_POST["password"];
+            addslashes();
+            $email = addslashes( $_POST['username']);
+            $password = addslashes($_POST["password"]);
             
             // 資料庫連線
             $db = $this->getDatabaseConfig();
