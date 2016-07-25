@@ -11,3 +11,4 @@ HTML、CSS、Bootstrap、PHP、MySQL、jQuery、MVC
 5.註冊與登入會員<br>
 6.自動對獎<br>
 7.顯示會員儲存的發票號碼<br>
+8.刪除會員儲存的發票號碼<br>
