@@ -120,5 +120,180 @@ class aboutWin {
 		
 		return $text;
 	}
+	
+	// 回傳比對結果(array)
+    /* $dateSelect->選擇的期別 $number->輸入的號碼 $prizeMoney->獎金設定 $db->資料庫連線 */
+    function checkNumber($db,$number,$dateSelect,$aPrizeMoney) {
+        
+        // 將號碼依,分開
+        $enterNumber = explode(",",$number);
+        
+        // 搜尋winningNumbers中期別為$dateSelect的資料
+        $sql = "select winPrize,winNumber from winningNumbers where winDate = :date ";
+        $result = $db->prepare($sql);
+        $result->bindParam("date",$dateSelect);
+        $result->execute();
+        
+        // 搜尋結果為0直接結束function
+        if ( $result->rowCount() == 0) {
+          // 結束連線
+          $db = null;
+          return;
+        }
+        
+        // 將資料寫入$showData陣列 預設為未中獎
+        foreach ($enterNumber as $num) {
+            // 判斷格式是否為數字 & 大於等於3碼 & 小於等於8碼
+            if (is_numeric($num) & strlen($num)>=3 & strlen($num)<=8) {
+                $showData[] = array("prize"=>"未中獎","number"=>$num,"numDate"=>$dateSelect,"money"=>"0");
+            }
+        }
+        
+        // 處理查詢結果 從大獎比到小獎
+        while ($row = $result->fetch()) {
+            
+            // 要比對的資料
+            foreach ($showData as $key=>$value) {
+                // 將號碼取號碼長度~3的長度依序比對
+                for ($i = strlen($showData[$key]["number"]); $i >=3 ; $i--){
+                    if ($showData[$key]["prize"]=="未中獎") {
+                        // 如果號碼完全相等 需將兩個號碼定為字串
+                        if (strcmp(substr($showData[$key]["number"],-$i),"{$row["winNumber"]}") == 0) {
+                            $showData[$key]["prize"] = $row["winPrize"];
+                            $showData[$key]["money"] = $aPrizeMoney[$row["winPrize"]];
+                        }
+                    }
+                }
+                
+            }
+        }
+          
+        // 結束連線
+        $db = null;
+        return $showData;
+        
+    }
+    
+    function autoCheck($db,$email,$aPrizeMoney) {
+        // 取得資料庫中尚未對獎的發票
+        $noCheckNumber = $this->getNoCheckNumber($db,$email);
+        
+        // 如果有尚未對獎的號碼
+        if (isset($noCheckNumber)) {
+            foreach ($noCheckNumber as $key=>$value) {
+                $checkedData = $this->checkNumber($db,$value,$key,$aPrizeMoney); // 取得對獎結果
+                if ($checkedData!="") {
+                    // 進行資料庫資料更新
+                    $this->updateMemberNumber($db,$email,$checkedData);
+                    $showData[] = $checkedData;
+                }
+            }
+            
+        }
+        
+        // 如果有自動比對的結果 將結果轉為字串
+        if (isset($showData)) {
+            return $this->printResult($showData);
+        }
+    }
+    function getNoCheckNumber($db,$email) {
+        
+        // 查詢membersNumbers表中會員的未開獎號碼
+        $sql = "select mNumID,mDate,mNumber from membersNumbers where mResult = '未開獎' AND memberEmail = :email ";
+        $result = $db->prepare($sql);
+        $result->bindParam("email",$email);
+        $result->execute();
+        
+        if ( $result->rowCount() == 0) {
+          // 結束連線
+          $db = null;
+          return;
+        }
+      
+        // 處理查詢結果
+        while ($row = $result->fetch()) {
+            if (!isset($noCheckNumber[$row["mDate"]])) {
+                $noCheckNumber[$row["mDate"]] = $row["mNumber"];
+            }else {
+                $noCheckNumber[$row["mDate"]] .=  "," .$row["mNumber"];
+            }
+        }
+        // 結束連線
+        $db = null;
+        
+        return $noCheckNumber;
+        
+    }
+    
+    function updateMemberNumber($db,$email,$checkedData) {
+            
+        // // 更新membersNumbers資料庫的資料
+        $sql = "UPDATE membersNumbers SET mResult= :prize WHERE memberEmail= :email AND mDate= :date AND mNumber= :number";
+        $sth = $db->prepare($sql);
+        
+        foreach ($checkedData as $value)
+        {
+            $sth->bindParam("prize",$value["prize"]);
+            $sth->bindParam("email",$email);
+	        $sth->bindParam("date",$value["numDate"]);
+            $sth->bindParam("number",$value["number"]);
+            $sth->execute();
+        }
+        
+        // 結束連線
+        $db = null;
+        
+    }
+    
+    function printResult($showData){
+        
+        foreach ($showData as $value) {
+            foreach ($value as $data) {
+                $showText .= $data['numDate']."-".$data['number']."-".$data['prize']."<br>";
+            }
+        }
+        
+        return $showText;
+    }
+    
+    function totalMoney($getMoney,$passMoney) {
+        // 現有金額
+        $passMoney = str_replace("總金額：","",$passMoney);
+        // 新增的金額
+        $getMoney = str_replace(",","",$getMoney);
+        $money = explode("-",$getMoney);
+        
+        // 總計
+        $total = str_replace(",","",$passMoney);
+        
+        // 將中文字轉換成數字進行總計
+        foreach ($money as $value) {
+            $change = $value;
+            $change = str_replace("萬","0000",$change);
+            $change = str_replace("千","000",$change);
+            $change = str_replace("百","00",$change);
+            
+            $total = $total + $change;
+        }
+        
+        return $total;
+    }
+    
+    function changeNumberFormat($total) {
+        $allMoney = ""; // 轉換完的字串
+    
+        // 大於1000
+        if ($total >= 1000) {
+            while ($total>1000) {
+                $allMoney = "," . substr($total,-3) . $allMoney;
+                $total = floor($total/1000);
+            }
+            $allMoney = $total . $allMoney;
+        }else {
+            $allMoney = $total;
+        }
+        
+        return $allMoney;
+    }
 }
 ?>

@@ -31,9 +31,11 @@ function signUpUserData() {
         success: function(php_script_response){
             if (php_script_response=="exist") {
                 alert("此Email已註冊過");
-            }else {
+            }else if (php_script_response) {
                 alert("註冊成功");
                 document.location.href="Login";
+            }else {
+                alert("註冊失敗");
             }
         }
     });

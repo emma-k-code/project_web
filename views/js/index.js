@@ -285,7 +285,7 @@ function getALLMoney(money) {
     formData.append('passMoney', $("#showMoney").text());
     
     $.ajax({
-        url: 'Data/getAllNumber',
+        url: 'Data/getAllMoney',
         contentType: false,
         processData: false,
         data: formData,                         

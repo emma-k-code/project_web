@@ -104,16 +104,26 @@ function setMemberNumber(data) {
 
 function getPage(date) {
 	$.get("Data/getMemberNumberCount?date=" + date, function(data){
-		pringPage(Math.ceil(data/10));
+	    if ($("#checkNumberPage .active").text()==""){
+	        page = 1;
+	    }else {
+	        page = $("#checkNumberPage .active").text();
+	    }
+		pringPage(Math.ceil(data/10),page);
 	});
 }
 
-function pringPage(data) {
+function pringPage(data,page) {
     $("#checkNumberPage").html("");
+    if (page > data) 
+        page = 1;
     
-    $("#checkNumberPage").append("<li class='active'><a style='cursor:pointer'>1</a></li>");
-    for (var i = 2; i <= data; i++) {
-        $("#checkNumberPage").append("<li><a style='cursor:pointer'>" +i+ "</a></li>");
+    for (var i = 1; i <= data; i++) {
+        if (i==page) {
+            $("#checkNumberPage").append("<li class='active'><a style='cursor:pointer'>" +i+ "</a></li>");
+        }else {
+            $("#checkNumberPage").append("<li><a style='cursor:pointer'>" +i+ "</a></li>");
+        }
     }
     
 }
@@ -135,7 +145,7 @@ function deleteNumber(){
     $(this).text("Loading");
     $.get("Data/deleteMemberNumber?id=" + $(this).val(), function(data){
         if (data){
-            alert("刪除成功");
+            getPage($("#dateList .active").text());
             sendData($("#dateList .active").text(),	$("#checkNumberPage .active").text());
         }else {
             alert("刪除失敗");

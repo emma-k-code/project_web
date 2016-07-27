@@ -103,8 +103,8 @@ class DataController extends Controller {
         $db = $this->getDatabaseConfig();
         
         // 取得比對結果 (array)
-        $data = $this->model("checkNumber");
-        $show = $data->check($db,$number,$dateSelect,$prizeMoney->aPrizeMoney);
+        $data = $this->model("aboutWin");
+        $show = $data->checkNumber($db,$number,$dateSelect,$prizeMoney->aPrizeMoney);
         echo json_encode($show);
     }
     
@@ -124,31 +124,11 @@ class DataController extends Controller {
         $email = $this->getMemberEmail();
         
         // 新增至資料庫中
-        $addNumber = $this->model("addMemberNumber");
-        echo $addNumber->saveNumber($db,$email,$date,$number,$prize);
+        $addNumber = $this->model("aboutMember");
+        echo $addNumber->addMemberNumber($db,$email,$date,$number,$prize);
     }
     
-    // 依接收值判斷登出或登入 並前往指定頁面
-    /* $button->按下按鈕的值 */
-    function checkMember() {
-        // 按下按鈕的值
-		$button = $_POST['bLog'];
-		
-		// 登出 回傳登出成功 (string)
-        $data = $this->model("checkMember");
-		
-		if ($button=="Logout"){
-		    $data->logout();
-		    $page = "Home";
-		}else {
-		    $page = "Login";
-		}
-		
-        // 前往首頁或登入頁
-        header("location: ../$page");
-    }
-    
-    // 寫入註冊資料
+    // 顯示寫入註冊資料是否成成功 (string)
     /* $userName->輸入的名稱 $email->輸入的Email
         $password->輸入的密碼 $db->資料庫連線 */
     function signUp() {
@@ -161,8 +141,8 @@ class DataController extends Controller {
         $db = $this->getDatabaseConfig();
         
         // 寫入註冊資料
-        $signUp = $this->model("signUp");
-        $signUp->insertMember($db,$userName,$email,$password);
+        $signUp = $this->model("aboutMember");
+        echo $signUp->signUp($db,$userName,$email,$password);
     }
     
     // 顯示自動對獎結果並更新資料庫中的資料 (string)
@@ -178,10 +158,8 @@ class DataController extends Controller {
         $email = $this->getMemberEmail();
         
         // 比對發票
-        $check = $this->model("checkNumber");
-        
-        $autoCheck = $this->model("autoCheckNumber");
-        $showText = $autoCheck->autoCheck($db,$email,$check,$prizeMoney->aPrizeMoney);
+        $autoCheck = $this->model("aboutWin");
+        $showText = $autoCheck->autoCheck($db,$email,$prizeMoney->aPrizeMoney);
         
         echo $showText;
         
@@ -206,8 +184,8 @@ class DataController extends Controller {
         $email = $this->getMemberEmail();
         
         // 取得資料庫中會員的發票
-        $getNumber = $this->model("getMemberNumber");
-        $showData = $getNumber->searchData($db,$dateSelect,$email,$pageSelect,$prizeMoney->aPrizeMoney);
+        $getNumber = $this->model("aboutMember");
+        $showData = $getNumber->searchMemberNumber($db,$dateSelect,$email,$pageSelect,$prizeMoney->aPrizeMoney);
         
         echo json_encode($showData);
     }
@@ -223,23 +201,22 @@ class DataController extends Controller {
         // 取得資料庫中的email
         $email = $this->getMemberEmail();
         
-        // 取得資料庫中的會員發票的數量
-        $getCount = $this->model("getMemberNumberCount");
-        $count = $getCount->searchCount($db,$dateSelect,$email);
-        
-        echo $count;
+        // 取得資料庫中的會員發票的數量 (string)
+        $getCount = $this->model("aboutMember");
+        echo $getCount->searchNumberCount($db,$dateSelect,$email);
     }
     
     // 顯示統計金額-首頁 (string)
     /* $money->增加的金額 $passMoney->已統計的金額 */
-    function getAllNumber() {
+    function getAllMoney() {
         // 要統計的金額
         $money = $_POST['money']; 
         $passMoney = $_POST['passMoney']; 
         
         // 統計金額
-        $getTotal = $this->model("getAllMoney");
-        echo $getTotal->totalMoney($money,$passMoney);
+        $getTotal = $this->model("aboutWin");
+        $total = $getTotal->totalMoney($money,$passMoney);
+        echo $getTotal->changeNumberFormat($total);
     }
     
     // 顯示統計金額-會員頁 (string)
@@ -259,12 +236,13 @@ class DataController extends Controller {
         $email = $this->getMemberEmail();
         
         // 取得資料庫中會員的發票並計算總金額
-        $getMoney = $this->model("getMemberMoney");
-        $moneys = $getMoney->searchData($db,$dateSelect,$email,$prizeMoney->aPrizeMoney);
+        $getMoney = $this->model("aboutMember");
+        $moneys = $getMoney->getMemberMoney($db,$dateSelect,$email,$prizeMoney->aPrizeMoney);
         
         // 統計金額
-        $getTotal = $this->model("getAllMoney");
-        echo $getTotal->totalMoney($moneys,"0");
+        $getTotal = $this->model("aboutWin");
+        $total = $getTotal->totalMoney($moneys,"0");
+        echo $getTotal->changeNumberFormat($total);
     }
     
     // 刪除會員發票號碼並顯示成功與否 (string)
@@ -279,8 +257,8 @@ class DataController extends Controller {
         $email = $this->getMemberEmail();
         
         // 刪除資料庫中會員的發票
-        $deleteNumber = $this->model("deleteMemberNumber");
-        echo $deleteNumber->deleteNumber($db,$email,$id);
+        $deleteNumber = $this->model("aboutMember");
+        echo $deleteNumber->deleteMemberNumber($db,$email,$id);
     }
 }
 

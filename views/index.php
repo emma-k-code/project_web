@@ -185,7 +185,7 @@ $bLog = (isset($_SESSION['userName']))? "Logout":"Login";
                 </div>
                 <div class="form-group col-xs-6 text-right">
 
-                    <form role="form" method="POST" action="Data/checkMember">
+                    <form role="form" method="POST" action="Login">
                         <button id="bLog" name="bLog" type="submit" class="btn btn-default" value="<?php echo $bLog ;?>">
                         <?php echo $bLog; ?></button>
                     </form>

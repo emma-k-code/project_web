@@ -1,4 +1,7 @@
 <?php
+ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../session'));
+session_start();
+
 class aboutMember {
     
     function getMemberEmail($db,$userName,$member){
@@ -23,5 +26,203 @@ class aboutMember {
         $db = null;
         
     }
+    
+    function addMemberNumber($db,$userEmail,$date,$number,$prize) {
+            
+        // 將資料寫入membersNumbers資料庫
+        $sql = "INSERT INTO membersNumbers(mDate,mNumber,mResult,memberEmail) VALUES (:date,:number,:prize,:mail)";
+        $sth = $db->prepare($sql);
+        
+        $sth->bindParam(':date',$date);
+        $sth->bindParam(':number',$number);
+        $sth->bindParam(':prize',$prize);
+        $sth->bindParam(':mail',$userEmail);
+        return $sth->execute();
+        
+        // 結束連線
+        $db = null;
+    }
+    
+    function logout() {
+        // 刪除session
+        session_destroy();
+        
+        return "登出成功";
+    }
+    
+    function login($db,$email,$password) {
+        // 搜尋並比對資料庫中的會員資料
+        $result = $db->query("select * from members where memberEmail = '$email' AND memberPW = MD5('$password')");
+        
+        // 如果搜尋結果為0
+        if ( $result->rowCount() == 0) {
+            $db = null;
+            return "輸入帳號或密碼錯誤";
+        }
+        
+        // 處理查詢結果
+        while ($row = $result->fetch())
+        {
+            $user = array("username"=>$row['memberName'],"password"=>$row['memberPW']);
+        }
+        
+        // 結束連線
+        $db = null;
+        
+        // 將 會員資料 進行加密
+        $member = MD5($email).MD5($user["password"]);
+        
+        // 將會員資料存成SESSION
+        $_SESSION['userName'] = $user["username"];
+        $_SESSION['member'] = $member;
+        
+        return "OK";
+    }
+    
+    function signUp($db,$userName,$email,$password) {
+        // 搜尋資料庫中email是否已經存在
+        $sql = "select * from members where memberEmail = :email ";
+        $result = $db->prepare($sql);
+        $result->bindParam("email",$email);
+        $result->execute();
+        
+        // 如果email已存在
+        if ( $result->rowCount() != 0) {
+            // 結束連線
+            $db = null;
+            return "exist";
+        }
+        
+        // 將資料寫入members資料庫
+        $sql = "INSERT INTO members(memberName,memberPW,memberEmail) VALUES (:username,MD5(:password),:email);";
+        $sth = $db->prepare($sql);
+        $sth->bindParam("username",$userName);
+        $sth->bindParam("password",$password);
+        $sth->bindParam("email",$email);
+        
+        return $sth->execute();
+        
+        // 結束連線
+        $db = null;
+    }
+    
+    // 回傳會員發票號碼查詢結果 (array)
+    /* $dateSelect->選擇的期別 $pageSelect->選擇的頁次 $prizeMoney->獎金設定
+        $userEmail->會員的email $db->資料庫連線 */
+    function searchMemberNumber($db,$dateSelect,$userEmail,$pageSelect,$aPrizeMoney){
+        // 一頁10筆
+        $limit = 10;
+        $start = ($pageSelect * 10)  - $limit ;
+        
+        // 搜尋membersNumbers中的資料
+        if ($dateSelect=="全部") {
+            $sql = "select mNumID,mDate,mNumber,mResult from membersNumbers where memberEmail = :email ORDER BY substring(mDate,1,3) DESC,substring(mDate,5,2) DESC LIMIT $start, $limit";
+            $result = $db->prepare($sql);
+        }elseif ($dateSelect=="中獎發票") {
+            $sql = "select mNumID,mDate,mNumber,mResult from membersNumbers where memberEmail = :email AND (mResult = '特別獎' OR mResult = '特獎' OR mResult = '頭獎' OR mResult = '二獎' OR mResult = '三獎' OR mResult = '四獎' OR mResult = '五獎' OR mResult = '六獎' OR mResult = '增開六獎') ORDER BY substring(mDate,1,3) DESC,substring(mDate,5,2) DESC LIMIT $start, $limit";
+            $result = $db->prepare($sql);
+        }else{
+            $sql = "select mNumID,mDate,mNumber,mResult from membersNumbers where memberEmail = :email AND mDate = :date LIMIT $start, $limit";
+            $result = $db->prepare($sql);
+            $result->bindParam("date",$dateSelect);
+        }
+        
+        $result->bindParam("email",$userEmail);
+        $result->execute();
+        
+        // 搜尋結果為0
+        if ( $result->rowCount() == 0) {
+            // 結束連線
+            $db = null;
+            return "尚無資料";
+        }
+        
+        // 處理查詢結果
+        while ($row = $result->fetch())
+        {
+        if ($row['mResult']=="未中獎") {
+            $mMoney = "0";
+        }elseif($row['mResult']=="未開獎") {
+            $mMoney = "";
+        }else{
+            $mMoney = $aPrizeMoney[$row['mResult']];
+        }
+            $showData[] = array("id"=>$row['mNumID'],"mDate"=>$row['mDate'],"mNumber"=>$row['mNumber'],"mResult"=>$row['mResult'],"money"=>$mMoney);
+        }
+        
+        // 結束連線
+        $db = null;
+        return $showData;
+    }
+    
+    function searchNumber($db,$dateSelect,$userEmail){
+        // 搜尋membersNumbers中的資料筆數
+        if ($dateSelect=="全部") {
+            $sql = "select * from membersNumbers where memberEmail = :email";
+            $result = $db->prepare($sql);
+        }elseif ($dateSelect=="中獎發票") {
+            $sql = "select * from membersNumbers where memberEmail = :email AND (mResult = '特別獎' OR mResult = '特獎' OR mResult = '頭獎' OR mResult = '二獎' OR mResult = '三獎' OR mResult = '四獎' OR mResult = '五獎' OR mResult = '六獎' OR mResult = '增開六獎')";
+            $result = $db->prepare($sql);
+        }else {
+            $sql = "select * from membersNumbers where memberEmail = :email AND mDate = :date ";
+            $result = $db->prepare($sql);
+            $result->bindParam("date",$dateSelect);
+        }
+        
+        $result->bindParam("email",$userEmail);
+        $result->execute();
+        
+        return $result;
+    
+    }
+    
+    function searchNumberCount($db,$dateSelect,$userEmail){
+        $result = $this->searchNumber($db,$dateSelect,$userEmail);
+        
+        return $result->rowCount();
+        
+        // 結束連線
+        $db = null;
+    
+    }
+    
+    // 回傳資料庫中會員中獎號碼金額 (string)
+    function getMemberMoney($db,$dateSelect,$userEmail,$aPrizeMoney){
+        $result = $this->searchNumber($db,$dateSelect,$userEmail);
+        
+        if ( $result->rowCount() == 0) {
+            // 結束連線
+            $db = null;
+            return "0";
+        }
+        
+        $moneys = "";
+        
+        // 處理查詢結果
+        while ($row = $result->fetch()) {
+            if ($row['mResult']=="未中獎") {
+                $mMoney = "0";
+            }elseif($row['mResult']=="未開獎") {
+                $mMoney = "";
+            }else{
+                $mMoney = $aPrizeMoney[$row['mResult']];
+            }
+            $moneys .= "-".$mMoney;
+        }
+        // 結束連線
+        $db = null;
+        
+        return $moneys;
+    }
+    
+    function deleteMemberNumber($db,$email,$id) {
+        $sql = "DELETE FROM membersNumbers where memberEmail = :email AND mNumID = :id ";
+        $sth = $db->prepare($sql);
+        $sth->bindParam("email",$email);
+        $sth->bindParam("id",$id);
+        
+        return $sth->execute();
+    }
+
 }
 ?>

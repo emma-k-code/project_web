@@ -8,8 +8,10 @@ class LoginController extends Controller {
     /* $_POST['bLogin']->是否按下登入按鈕 $userName->輸入的名稱 $email->輸入的Email
         $password->輸入的密碼 $db->資料庫連線 */
     function index() {
-        // 如果已經登入 則前往首頁
-        if (isset($_SESSION['userName'])) {
+        // 如果已經登入 則進行登出並前往首頁
+        if (isset($_SESSION['userName'])&&isset($_SESSION['member'])) {
+            $logout = $this->model("aboutMember");
+            $logout->logout();
             header("location: Home");
             return;
         }
@@ -24,9 +26,9 @@ class LoginController extends Controller {
             $db = $this->getDatabaseConfig();
             
             // 比對會員資料
-            $signIn = $this->model("signIn");
+            $login = $this->model("aboutMember");
             // 判斷登入成功與否
-            $checkLogin = $signIn->check($db,$email,$password);
+            $checkLogin = $login->login($db,$email,$password);
             
             // 登入成功進入首頁
             if ($checkLogin=="OK") {
