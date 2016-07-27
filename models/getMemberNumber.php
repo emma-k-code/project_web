@@ -12,18 +12,18 @@ class getMemberNumber {
       
       // 搜尋membersNumbers中的資料
       if ($dateSelect=="全部") {
-        $sql = "select mNumID,mDate,mNumber,mResult from membersNumbers where memberEmail = :email ORDER BY substring(mDate,1,3) DESC,substring(mDate,5,2) DESC LIMIT :start, :limit";
+        $sql = "select mNumID,mDate,mNumber,mResult from membersNumbers where memberEmail = :email ORDER BY substring(mDate,1,3) DESC,substring(mDate,5,2) DESC LIMIT $start, $limit";
+        $result = $db->prepare($sql);
       }elseif ($dateSelect=="中獎發票") {
-        $sql = "select mNumID,mDate,mNumber,mResult from membersNumbers where memberEmail = :email AND (mResult = '特別獎' OR mResult = '特獎' OR mResult = '頭獎' OR mResult = '二獎' OR mResult = '三獎' OR mResult = '四獎' OR mResult = '五獎' OR mResult = '六獎' OR mResult = '增開六獎') ORDER BY substring(mDate,1,3) DESC,substring(mDate,5,2) DESC LIMIT :start, :limit";
+        $sql = "select mNumID,mDate,mNumber,mResult from membersNumbers where memberEmail = :email AND (mResult = '特別獎' OR mResult = '特獎' OR mResult = '頭獎' OR mResult = '二獎' OR mResult = '三獎' OR mResult = '四獎' OR mResult = '五獎' OR mResult = '六獎' OR mResult = '增開六獎') ORDER BY substring(mDate,1,3) DESC,substring(mDate,5,2) DESC LIMIT $start, $limit";
+        $result = $db->prepare($sql);
       }else{
-        $sql = "select mNumID,mDate,mNumber,mResult from membersNumbers where memberEmail = :email AND mDate = :date LIMIT :start, :limit";
+        $sql = "select mNumID,mDate,mNumber,mResult from membersNumbers where memberEmail = :email AND mDate = :date LIMIT $start, $limit";
+        $result = $db->prepare($sql);
+        $result->bindParam("date",$dateSelect);
       }
       
-      $result = $db->prepare($sql);
       $result->bindParam("email",$userEmail);
-      $result->bindParam("start",$start);
-      $result->bindParam("limit",$limit);
-      $result->bindParam("date",$dateSelect);
       $result->execute();
       
       // 搜尋結果為0

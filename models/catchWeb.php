@@ -2,13 +2,17 @@
 header("content-type: text/html; charset=utf-8");
 
 class catchWeb {
+    public $aPrizeItems = array("特別獎"=>array(),"特獎"=>array(),
+                        "頭獎"=>array(),"二獎"=>array(),
+                        "三獎"=>array(),"四獎"=>array(),
+                        "五獎"=>array(),"六獎"=>array(),"增開六獎"=>array());
     
     /* $db->資料庫連線 $aPrizeItems->獎別設定 */
-    function toCatch($db,$aPrizeItems) {
+    function toCatch($db) {
         // 取得網站資料
         $catchData = $this->catchWeb();
         // 取得中獎號碼 期別 領獎期間 (array)
-        $resolveData = $this->resolveData($catchData,$aPrizeItems); 
+        $resolveData = $this->resolveData($catchData); 
         // 將資料寫入資料庫
         $this->insertDatabase($db,$resolveData);
     }
@@ -35,8 +39,8 @@ class catchWeb {
     }
     
     // 解析網站資料 回傳中獎的號碼 期別 領獎期間 (array)
-    /* $data->要解析的資料 $insertData->獎別設定 */
-    function resolveData($data,$insertData) {
+    /* $data->要解析的資料  */
+    function resolveData($data) {
         // 解析資料
         $doc = new DOMDocument();
         libxml_use_internal_errors(true);
@@ -56,19 +60,19 @@ class catchWeb {
             if (isset($prize)) {
                 if (isset($winNumber)) {
                     $number = explode("、",$winNumber);
-                    $insertData[$prize] = $number;
+                    $aPrizeItems[$prize] = $number;
                 }
             }
         }
         
         // 取得二到六獎的號碼
-        foreach ($insertData["頭獎"] as $value)
+        foreach ($aPrizeItems["頭獎"] as $value)
         {
-            $insertData["二獎"][] = substr($value,1,7);
-            $insertData["三獎"][] = substr($value,2,6);
-            $insertData["四獎"][] = substr($value,3,5);
-            $insertData["五獎"][] = substr($value,4,4);
-            $insertData["六獎"][] = substr($value,5,3);
+            $aPrizeItems["二獎"][] = substr($value,1,7);
+            $aPrizeItems["三獎"][] = substr($value,2,6);
+            $aPrizeItems["四獎"][] = substr($value,3,5);
+            $aPrizeItems["五獎"][] = substr($value,4,4);
+            $aPrizeItems["六獎"][] = substr($value,5,3);
         }
         
         // 發票期別
@@ -77,7 +81,7 @@ class catchWeb {
         $invoicePs = $xpath->query("//*[@id='area1']/p")->item(0)->nodeValue;
         
         // 回傳中獎的號碼 期別 領獎期間
-        return array($insertData,$invoiceDate,$invoicePs);
+        return array($aPrizeItems,$invoiceDate,$invoicePs);
         
     }
     

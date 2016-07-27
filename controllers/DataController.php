@@ -23,8 +23,8 @@ class DataController extends Controller {
         $db = $this->getDatabaseConfig();
         
         // 取得資料庫中的email
-        $getEmail = $this->model("getMemberEmail");
-        return $getEmail->checkMemberEmail($db,$userName,$member);
+        $getEmail = $this->model("aboutMember");
+        return $getEmail->getMemberEmail($db,$userName,$member);
     }
     
     // 抓取財政部網頁資料存進資料庫
@@ -33,40 +33,34 @@ class DataController extends Controller {
         // 資料庫連線
         $db = $this->getDatabaseConfig();
         
-        // 獎別設定
-        $prizeItems = $this->model("prizeItems");
-        
         // 抓取財政部網頁資料
         $catch = $this->model("catchWeb");
-        $catch->toCatch($db,$prizeItems->aPrizeItems);
+        $catch->toCatch($db);
     }
     
     // 顯示當月的前三個期別+當期 總共四期 (json)
     function getDate() {
         // 取得期別 (array)
-        $data = $this->model("setDate");
+        $data = $this->model("aboutWin");
         echo json_encode($data->getData());
     }
     
     // 顯示資料庫中的開獎號碼 (string)
-    /* $dateSelect->選擇的期別 $prizeItems->獎別設定 
-        $prizeMoney->獎金設定 $db->資料庫連線 */
+    /* $dateSelect->選擇的期別 $prizeMoney->獎金設定 $db->資料庫連線 */
     function setWinNumber() {
         // 選擇的期別
-        $dateSelect =  trim($_GET['date']); 
-        // 獎別設定
-        $prizeItems = $this->model("prizeItems");
+        $dateSelect =  trim($_GET['date']);
         // 獎金設定
         $prizeMoney = $this->model("prizeMoney");
         // 資料庫連線
         $db = $this->getDatabaseConfig();
         
         // 取得查詢結果 (array)
-        $getNumber = $this->model("getWinNumber");
-        $showData = $getNumber->searchData($dateSelect,$db,$prizeItems->aprizeItems);
+        $getNumber = $this->model("aboutWin");
+        $showData = $getNumber->searchWinNumber($dateSelect,$db);
         
         // 將查詢結果輸出成表格樣式
-        echo $getNumber->output($showData,$prizeMoney->aPrizeMoney);
+        echo $getNumber->outputWinTable($showData,$prizeMoney->aPrizeMoney);
     }
     
     // 顯示資料庫中期別的領獎期限 (string)
@@ -78,8 +72,8 @@ class DataController extends Controller {
         $db = $this->getDatabaseConfig();
         
         // 回傳查詢結果
-        $data = $this->model("setWinPeriod");
-        echo $data->searchData($db,$dateSelect);
+        $data = $this->model("aboutWin");
+        echo $data->searchWinPeriod($db,$dateSelect);
         
     }
     
@@ -90,8 +84,8 @@ class DataController extends Controller {
 		$file = $_FILES["file"];
         
         // 回傳檔案內容
-        $getFileContent = $this->model("uploadNumberFile");
-        echo $getFileContent->processFile($file);
+        $getFileContent = $this->model("aboutWin");
+        echo $getFileContent->processNumberFile($file);
     }
     
     // 顯示比對結果 (json)
