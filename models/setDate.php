@@ -27,7 +27,7 @@
                 
             }
             
-            return json_encode($setDate);
+            return $setDate;
         }
     }
     

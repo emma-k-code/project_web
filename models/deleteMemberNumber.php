@@ -1,8 +1,12 @@
 <?php
 class deleteMemberNumber {
     function deleteNumber($db,$email,$id) {
-        $result = $db->prepare("DELETE FROM membersNumbers where memberEmail = '$email' AND mNumID = '$id' ");
-        return $result->execute();
+        $sql = "DELETE FROM membersNumbers where memberEmail = :email AND mNumID = :id ";
+        $sth = $db->prepare($sql);
+        $sth->bindParam("email",$email);
+        $sth->bindParam("id",$id);
+        
+        return $sth->execute();
     }
 }
 

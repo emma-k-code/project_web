@@ -3,8 +3,12 @@ header("content-type: text/html; charset=utf-8");
 
 class setWinPeriod {
     function searchData($db,$dateSelect) {
-        // 執行 SQL 敘述
-        $result = $db->query("select winPs from winningPeriod where winDate = '$dateSelect'");
+        
+        // 依期別查詢winningPeriod表中的領獎期間
+        $sql = "select winPs from winningPeriod where winDate = :date ";
+        $result = $db->prepare($sql);
+        $result->bindParam("date",$dateSelect);
+        $result->execute();
         
         // 處理查詢結果
         while ($row = $result->fetch())

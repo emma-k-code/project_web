@@ -3,14 +3,13 @@ ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../s
 session_start();
 
 class checkMember {
-    function Login() {
-        return "Login";
+    function login() {
     }
-    function Logout() {
+    function logout() {
         // 刪除session
         session_destroy();
         
-        return "Home";
+        return "登出成功";
     }
 }
 ?>

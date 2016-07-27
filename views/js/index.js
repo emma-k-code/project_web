@@ -196,7 +196,6 @@ function saveNumber(number) {
             sendAddDate(formData);
         }
     }
-    saveSuccessShow();
 }
 
 function saveCheckedNumber(data) {
@@ -222,15 +221,18 @@ function sendAddDate(formData) {
         data: formData,                         
         type: 'post',
         success: function(php_script_response){
-            
+            if (php_script_response) {
+                var showMessage = "已儲存發票號碼";
+            }else {
+                var showMessage = "儲存發票號碼失敗";
+            }
+            saveSuccessShow(showMessage);
         }
     });
 }
 
-function saveSuccessShow() {
-    if ($("#sUserName").text()=="guset") {
-        return;
-    }
+function saveSuccessShow(showMessage) {
+    $("#saveMessage strong").text(showMessage);
     $("#saveMessage").fadeTo(1000, 500).slideUp(500, function(){
         $("#saveMessage").hide();
     });

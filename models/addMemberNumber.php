@@ -13,7 +13,7 @@
             $sth->bindParam(':number',$number);
             $sth->bindParam(':prize',$prize);
             $sth->bindParam(':mail',$userEmail);
-            $sth->execute();
+            return $sth->execute();
             
             // 結束連線
             $db = null;

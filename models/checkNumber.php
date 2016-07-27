@@ -12,7 +12,10 @@ class checkNumber {
         $enterNumber = explode(",",$number);
         
         // 搜尋winningNumbers中期別為$dateSelect的資料
-        $result = $db->query("select winPrize,winNumber from winningNumbers where winDate = '$dateSelect'");
+        $sql = "select winPrize,winNumber from winningNumbers where winDate = :date ";
+        $result = $db->prepare($sql);
+        $result->bindParam("date",$dateSelect);
+        $result->execute();
         
         // 搜尋結果為0直接結束function
         if ( $result->rowCount() == 0) {

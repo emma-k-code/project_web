@@ -98,8 +98,11 @@ class catchWeb {
         }
         
         // 將資料寫入winningPeriod資料庫
-        $sql = "INSERT INTO winningPeriod(winDate,winPs) VALUES ('$invoiceDate','$invoicePs');";
+        $sql = "INSERT INTO winningPeriod(winDate,winPs) VALUES (:date,:ps);";
         $sth = $db->prepare($sql);
+        $sth->bindParam('data',$invoiceDate); // 期別
+        $sth->bindParam('ps',$invoicePs); // 獎別
+        $sth->execute();
         
         // 將資料寫入winningNumbers資料庫
         $sql = 'INSERT INTO winningNumbers(winDate,winPrize,winNumber) VALUES (:data,:prize,:number);';
@@ -109,9 +112,9 @@ class catchWeb {
         {
             foreach ($pNumbers as $num)
             {
-    	        $sth->bindParam(':data',$invoiceDate); // 期別
-                $sth->bindParam(':prize',$key); // 獎別
-                $sth->bindParam(':number',$num); // 號碼
+    	        $sth->bindParam('data',$invoiceDate); // 期別
+                $sth->bindParam('prize',$key); // 獎別
+                $sth->bindParam('number',$num); // 號碼
                 $sth->execute();
             }
         }

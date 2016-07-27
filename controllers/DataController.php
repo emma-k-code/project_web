@@ -43,8 +43,9 @@ class DataController extends Controller {
     
     // 顯示當月的前三個期別+當期 總共四期 (json)
     function getDate() {
+        // 取得期別 (array)
         $data = $this->model("setDate");
-        echo $data->getData();
+        echo json_encode($data->getData());
     }
     
     // 顯示資料庫中的開獎號碼 (string)
@@ -65,8 +66,7 @@ class DataController extends Controller {
         $showData = $getNumber->searchData($dateSelect,$db,$prizeItems->aprizeItems);
         
         // 將查詢結果輸出成表格樣式
-        $data = $this->model("setWinNumber");
-        $data->output($showData,$prizeMoney->aPrizeMoney);
+        echo $getNumber->output($showData,$prizeMoney->aPrizeMoney);
     }
     
     // 顯示資料庫中期別的領獎期限 (string)
@@ -108,7 +108,7 @@ class DataController extends Controller {
         // 資料庫連線
         $db = $this->getDatabaseConfig();
         
-        // 比對發票號碼
+        // 取得比對結果 (array)
         $data = $this->model("checkNumber");
         $show = $data->check($db,$number,$dateSelect,$prizeMoney->aPrizeMoney);
         echo json_encode($show);
@@ -131,7 +131,7 @@ class DataController extends Controller {
         
         // 新增至資料庫中
         $addNumber = $this->model("addMemberNumber");
-        $addNumber->saveNumber($db,$email,$date,$number,$prize);
+        echo $addNumber->saveNumber($db,$email,$date,$number,$prize);
     }
     
     // 依接收值判斷登出或登入 並前往指定頁面
@@ -139,11 +139,19 @@ class DataController extends Controller {
     function checkMember() {
         // 按下按鈕的值
 		$button = $_POST['bLog'];
-        
-        // 登出或登入 回傳要前往的網址 (string)
+		
+		// 登出 回傳登出成功 (string)
         $data = $this->model("checkMember");
+		
+		if ($button=="Logout"){
+		    $data->logout();
+		    $page = "Home";
+		}else {
+		    $page = "Login";
+		}
+		
         // 前往首頁或登入頁
-        header("location: ../{$data->$button()}");
+        header("location: ../$page");
     }
     
     // 寫入註冊資料
@@ -175,31 +183,11 @@ class DataController extends Controller {
         // 取得資料庫中的email
         $email = $this->getMemberEmail();
         
-        // 取得資料庫中尚未對獎的發票
-        $getNoCheckNumber = $this->model("getNoCheckNumber");
-        $noCheckNumber = $getNoCheckNumber->check($db,$email);
+        // 比對發票
+        $check = $this->model("checkNumber");
         
-        if (isset($noCheckNumber)) {
-            // 比對發票
-            $check = $this->model("checkNumber");
-            // 更新資料庫中的會員發票
-            $update = $this->model("updateMemberNumber");
-            
-            foreach ($noCheckNumber as $key=>$value) {
-                $checkedData = $check->check($db,$value,$key,$prizeMoney->aPrizeMoney); // 取得對獎結果
-                if ($checkedData!="") {
-                    // 進行資料庫資料更新
-                    $update->update($db,$email,$checkedData);
-                    $showData[] = $checkedData;
-                }
-            }
-            
-        }
-        
-        if (isset($showData)) {
-            $setShow = $this->model("setAutoCheck");
-            $showText = $setShow->printResult($showData);
-        }
+        $autoCheck = $this->model("autoCheckNumber");
+        $showText = $autoCheck->autoCheck($db,$email,$check,$prizeMoney->aPrizeMoney);
         
         echo $showText;
         
@@ -227,7 +215,7 @@ class DataController extends Controller {
         $getNumber = $this->model("getMemberNumber");
         $showData = $getNumber->searchData($db,$dateSelect,$email,$pageSelect,$prizeMoney->aPrizeMoney);
         
-        echo $showData;
+        echo json_encode($showData);
     }
     
     // 顯示資料庫中會員的發票號碼數量 (string)
