@@ -1,7 +1,4 @@
 <?php
-ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../session'));
-session_start();
-
 class DataController extends Controller {
     
     // 取得資料庫連線 (PDO)
@@ -13,18 +10,14 @@ class DataController extends Controller {
     }
     
     // 回傳資料庫中會員的email (string)
-    /* $userName->SESSION $member->SESSION $db->資料庫連線 */
+    /* $db->資料庫連線 */
     function getMemberEmail() {
-        // 會員資料
-        $userName = $_SESSION['userName'];
-        $member = $_SESSION['member'];
-        
         // 資料庫連線
         $db = $this->getDatabaseConfig();
         
         // 取得資料庫中的email
         $getEmail = $this->model("aboutMember");
-        return $getEmail->getMemberEmail($db,$userName,$member);
+        return $getEmail->getMemberEmail($db);
     }
     
     // 抓取財政部網頁資料存進資料庫

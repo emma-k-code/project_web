@@ -4,7 +4,10 @@ session_start();
 
 class aboutMember {
     
-    function getMemberEmail($db,$userName,$member){
+    function getMemberEmail($db){
+        // 會員資料
+        $userName = $_SESSION['userName'];
+        $member = $_SESSION['member'];
     
         // 搜尋members資料庫中的資料
         $sql = "select memberEmail,memberPW from members where memberName = :username";
@@ -134,7 +137,7 @@ class aboutMember {
         if ( $result->rowCount() == 0) {
             // 結束連線
             $db = null;
-            return "尚無資料";
+            return;
         }
         
         // 處理查詢結果

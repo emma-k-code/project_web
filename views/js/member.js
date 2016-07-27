@@ -45,21 +45,22 @@ function winningInfo() {
 }
 
 function setInvoice() {
-    removeListActive();
+    removeActive();
     var date = $(this).text();
     $(this).addClass("active");
     sendData(date,"1");
     getPage(date);
 }
 
-function removeListActive() {
+function removeActive() {
     $("#dateList a").removeClass("active");
+    $("#checkNumberPage li").removeClass("active");
 }
 
 function sendData(date,page) {
     
     $("#memberNumber").html("Loading...");
-    
+
     // 取得會員發票號碼
     $.get("Data/setMemberNumber?date=" + date + "&page=" + page , function(data){
 		setMemberNumber(data);
@@ -77,13 +78,14 @@ function sendData(date,page) {
 }
 
 function setMemberNumber(data) {
-    if (data == "尚無資料") {
+    var tableData = JSON.parse(data);
+    
+    if (tableData == "") {
         $("#memberNumber").html("尚無資料");
         return;
     }
     
     money = "";
-    var tableData = JSON.parse(data);
     
     // 清空表格
     $("#memberNumber").html("");
