@@ -3,7 +3,7 @@ ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../s
 session_start();
 
 class aboutMember {
-    
+    // 取得會員資料庫中的email
     function getMemberEmail($db){
         // 會員資料
         $userName = $_SESSION['userName'];
@@ -29,7 +29,7 @@ class aboutMember {
         $db = null;
         
     }
-    
+    // 新增會員的發票號碼
     function addMemberNumber($db,$userEmail,$date,$number,$prize) {
             
         // 將資料寫入membersNumbers資料庫
@@ -103,6 +103,7 @@ class aboutMember {
         $sth->bindParam("password",$password);
         $sth->bindParam("email",$email);
         
+        // 回傳是否成功
         return $sth->execute();
         
         // 結束連線
@@ -112,10 +113,9 @@ class aboutMember {
     // 回傳會員發票號碼查詢結果 (array)
     /* $dateSelect->選擇的期別 $pageSelect->選擇的頁次 $prizeMoney->獎金設定
         $userEmail->會員的email $db->資料庫連線 */
-    function searchMemberNumber($db,$dateSelect,$userEmail,$pageSelect,$aPrizeMoney){
-        // 一頁10筆
-        $limit = 10;
-        $start = ($pageSelect * 10)  - $limit ;
+    function getMemberNumber($db,$dateSelect,$userEmail,$pageSelect,$aPrizeMoney){
+        $limit = 10; // 一頁10筆
+        $start = ($pageSelect * 10)  - $limit ; 
         
         // 搜尋membersNumbers中的資料
         if ($dateSelect=="全部") {
@@ -157,9 +157,9 @@ class aboutMember {
         $db = null;
         return $showData;
     }
-    
+    // 搜尋會員發票
     function searchNumber($db,$dateSelect,$userEmail){
-        // 搜尋membersNumbers中的資料筆數
+        // 搜尋membersNumbers中的資料
         if ($dateSelect=="全部") {
             $sql = "select * from membersNumbers where memberEmail = :email";
             $result = $db->prepare($sql);
@@ -178,10 +178,9 @@ class aboutMember {
         return $result;
     
     }
-    
+    // 回傳資料庫中的會員發票筆數
     function searchNumberCount($db,$dateSelect,$userEmail){
         $result = $this->searchNumber($db,$dateSelect,$userEmail);
-        
         return $result->rowCount();
         
         // 結束連線
@@ -217,7 +216,7 @@ class aboutMember {
         
         return $moneys;
     }
-    
+    // 刪除會員的發票號碼
     function deleteMemberNumber($db,$email,$id) {
         $sql = "DELETE FROM membersNumbers where memberEmail = :email AND mNumID = :id ";
         $sth = $db->prepare($sql);
@@ -225,6 +224,90 @@ class aboutMember {
         $sth->bindParam("id",$id);
         
         return $sth->execute();
+    }
+    // 回傳自動對獎結果
+    function autoCheck($db,$email,$check,$aPrizeMoney) {
+        // 取得資料庫中尚未對獎的發票
+        $noCheckNumber = $this->getNoCheckNumber($db,$email);
+        
+        // 如果有尚未對獎的號碼
+        if (isset($noCheckNumber)) {
+            foreach ($noCheckNumber as $key=>$value) {
+                $checkedData = $check->checkNumber($db,$value["number"],$key,$aPrizeMoney); // 取得對獎結果
+                if ($checkedData!="") {
+                    // 進行資料庫資料更新
+                    $this->updateMemberNumber($db,$email,$value["id"],$checkedData);
+                    $showData[] = $checkedData;
+                }
+            }
+            
+        }
+        
+        // 如果有自動比對的結果 將結果轉為字串
+        if (isset($showData)) {
+            return $this->printResult($showData);
+        }
+    }
+    // 回傳資料庫中尚未對獎的發票號碼與id (array)
+    function getNoCheckNumber($db,$email) {
+        
+        // 查詢membersNumbers表中會員的未開獎號碼
+        $sql = "select mNumID,mDate,mNumber from membersNumbers where mResult = '未開獎' AND memberEmail = :email ";
+        $result = $db->prepare($sql);
+        $result->bindParam("email",$email);
+        $result->execute();
+        
+        if ( $result->rowCount() == 0) {
+          // 結束連線
+          $db = null;
+          return;
+        }
+      
+        // 處理查詢結果
+        while ($row = $result->fetch()) {
+            if (!isset($noCheckNumber[$row["mDate"]])) {
+                $noCheckNumber[$row["mDate"]]["number"] = $row["mNumber"];
+                $noCheckNumber[$row["mDate"]]["id"] = $row["mNumID"];
+            }else {
+                $noCheckNumber[$row["mDate"]]["number"] .=  "," .$row["mNumber"];
+                $noCheckNumber[$row["mDate"]]["id"] .=  "," .$row["mNumID"];
+            }
+        }
+        // 結束連線
+        $db = null;
+        
+        return $noCheckNumber;
+        
+    }
+    // 更新資料庫中的會員發票
+    function updateMemberNumber($db,$email,$id,$checkedData) {
+            
+        // 更新membersNumbers資料庫的資料
+        $sql = "UPDATE membersNumbers SET mResult= :prize WHERE memberEmail= :email AND mNumID= :id";
+        $sth = $db->prepare($sql);
+        
+        foreach ($checkedData as $value)
+        {
+            $sth->bindParam("prize",$value["prize"]);
+            $sth->bindParam("email",$email);
+            $sth->bindParam("id",$id);
+            $sth->execute();
+        }
+        
+        // 結束連線
+        $db = null;
+        
+    }
+    // 將自動對獎結果轉回為字串
+    function printResult($showData){
+        
+        foreach ($showData as $value) {
+            foreach ($value as $data) {
+                $showText .= $data['numDate']."-".$data['number']."-".$data['prize']."<br>";
+            }
+        }
+        
+        return $showText;
     }
 
 }

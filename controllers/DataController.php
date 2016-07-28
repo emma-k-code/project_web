@@ -138,7 +138,7 @@ class DataController extends Controller {
         echo $signUp->signUp($db,$userName,$email,$password);
     }
     
-    // 顯示自動對獎結果並更新資料庫中的資料 (string)
+    // 如果有登入顯示自動對獎結果並更新資料庫中的資料 (string)
     /* $prizeMoney->獎金設定 $email->資料庫中的email $db->資料庫連線 */
     function autoCheckNumber() {
         // 資料庫連線
@@ -150,11 +150,14 @@ class DataController extends Controller {
         // 取得資料庫中的email
         $email = $this->getMemberEmail();
         
-        // 比對發票
-        $autoCheck = $this->model("aboutWin");
-        $showText = $autoCheck->autoCheck($db,$email,$prizeMoney->aPrizeMoney);
-        
-        echo $showText;
+        if (isset($email)) {
+            // 比對發票
+            $check = $this->model("aboutWin");
+            // 自動比對
+            $autoCheck = $this->model("aboutMember");
+            $showText = $autoCheck->autoCheck($db,$email,$check,$prizeMoney->aPrizeMoney);
+            echo $showText;
+        }
         
     }
     
@@ -178,7 +181,7 @@ class DataController extends Controller {
         
         // 取得資料庫中會員的發票
         $getNumber = $this->model("aboutMember");
-        $showData = $getNumber->searchMemberNumber($db,$dateSelect,$email,$pageSelect,$prizeMoney->aPrizeMoney);
+        $showData = $getNumber->getMemberNumber($db,$dateSelect,$email,$pageSelect,$prizeMoney->aPrizeMoney);
         
         echo json_encode($showData);
     }
