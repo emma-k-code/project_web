@@ -80,15 +80,15 @@ function sendData(date,page) {
 function setMemberNumber(data) {
     var tableData = JSON.parse(data);
     
-    if (tableData == "") {
-        $("#memberNumber").html("尚無資料");
+    // 清空表格
+    $("#memberNumber").html("");
+    
+    if (tableData == null) {
+        $("#memberNumber").prepend("尚無資料");
         return;
     }
     
     money = "";
-    
-    // 清空表格
-    $("#memberNumber").html("");
     for (var i = tableData.length-1; i >= 0; i-- ) {
         var row = $("<tr>");
         row.append("<th>" + tableData[i].mDate + "</th>");
