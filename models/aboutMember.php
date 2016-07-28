@@ -243,10 +243,8 @@ class aboutMember {
             
         }
         
-        // 如果有自動比對的結果 將結果轉為字串
-        if (isset($showData)) {
-            return $this->printResult($showData);
-        }
+        return $showData;
+        
     }
     // 回傳資料庫中尚未對獎的發票號碼與id (array)
     function getNoCheckNumber($db,$email) {

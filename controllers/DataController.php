@@ -155,8 +155,9 @@ class DataController extends Controller {
             $check = $this->model("aboutWin");
             // 自動比對
             $autoCheck = $this->model("aboutMember");
-            $showText = $autoCheck->autoCheck($db,$email,$check,$prizeMoney->aPrizeMoney);
-            echo $showText;
+            $show = $autoCheck->autoCheck($db,$email,$check,$prizeMoney->aPrizeMoney);
+            // 以字串輸出
+            echo $autoCheck->printResult($show);
         }
         
     }
