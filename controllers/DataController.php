@@ -42,6 +42,7 @@ class DataController extends Controller {
     // 顯示資料庫中的開獎號碼 (string)
     /* $dateSelect->選擇的期別 $prizeMoney->獎金設定 $db->資料庫連線 */
     function setWinNumber($dateSelect) {
+        $dateSelect = addslashes($dateSelect);
         // 獎金設定
         $prizeMoney = $this->model("prizeMoney");
         // 資料庫連線
@@ -59,6 +60,7 @@ class DataController extends Controller {
     // 顯示資料庫中期別的領獎期限 (string)
     /* $dateSelect->選擇的期別 $db->資料庫連線 */
     function setWinPeriod($dateSelect) {
+        $dateSelect = addslashes($dateSelect);
         // 資料庫連線
         $db = $this->getDatabaseConfig();
         
@@ -83,9 +85,9 @@ class DataController extends Controller {
         $prizeMoney->獎金設定 $db->資料庫連線 */
     function checkNumber() {
         // 選擇的期別
-        $dateSelect = trim($_POST['date']); 
+        $dateSelect = addslashes(trim($_POST['date']));
         // 輸入的號碼
-		$number = $_POST["number"];
+		$number = addslashes($_POST["number"]);
 		// 獎金設定
         $prizeMoney = $this->model("prizeMoney");
         
@@ -103,9 +105,9 @@ class DataController extends Controller {
         $email->資料庫中的email $db->資料庫連線 */
     function addMemberNumber() {
         // 接收的資料
-        $date = $_POST['numDate'];
-        $number = $_POST['number'];
-        $prize = $_POST['prize'];
+        $date = addslashes($_POST['numDate']);
+        $number = addslashes($_POST['number']);
+        $prize = addslashes($_POST['prize']);
         
         // 資料庫連線
         $db = $this->getDatabaseConfig();
@@ -124,9 +126,9 @@ class DataController extends Controller {
         $password->輸入的密碼 $db->資料庫連線 */
     function signUp() {
         // 接收的註冊資料
-        $userName = $_POST['userName'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $userName = addslashes($_POST['userName']);
+        $email = addslashes($_POST['email']);
+        $password = addslashes($_POST['password']);
         
         // 資料庫連線
         $db = $this->getDatabaseConfig();
@@ -166,9 +168,9 @@ class DataController extends Controller {
         $email->資料庫中的email $db->資料庫連線 */
     function setMemberNumber($dateSelect,$pageSelect) {
         // 選擇的期別
-        $dateSelect =  trim($dateSelect); 
+        $dateSelect =  addslashes(trim($dateSelect)); 
         // 選擇的頁次
-        $pageSelect =  trim($pageSelect); 
+        $pageSelect =  addslashes(trim($pageSelect)); 
         
 		// 獎金設定
         $prizeMoney = $this->model("prizeMoney");
@@ -190,7 +192,7 @@ class DataController extends Controller {
     /* $dateSelect->選擇的期別 $email->資料庫中的email $db->資料庫連線 */
     function getMemberNumberCount($dateSelect) {
         // 選擇的期別
-        $dateSelect =  trim($dateSelect); 
+        $dateSelect =  addslashes(trim($dateSelect)); 
         // 資料庫連線
         $db = $this->getDatabaseConfig();
         
@@ -207,8 +209,8 @@ class DataController extends Controller {
     /* $money->增加的金額 $passMoney->已統計的金額 */
     function getAllMoney() {
         // 要統計的金額
-        $money = $_POST['money']; 
-        $passMoney = $_POST['passMoney']; 
+        $money = addslashes($_POST['money']); 
+        $passMoney = addslashes($_POST['passMoney']); 
         
         // 統計金額
         $getTotal = $this->model("aboutWin");
@@ -222,7 +224,7 @@ class DataController extends Controller {
         $email->資料庫中的email $db->資料庫連線 */
     function getMemberMoney($dateSelect) {
         // 選擇的期別
-        $dateSelect =  trim($dateSelect); 
+        $dateSelect =  addslashes(trim($dateSelect)); 
         
         // 獎金設定
         $prizeMoney = $this->model("prizeMoney");
