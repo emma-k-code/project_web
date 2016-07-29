@@ -62,10 +62,10 @@ function setInvoiceDate(date) {
 function setInvoice(date) {
     $("#dateLabel").text(date);
     $("#invoiceNumberContent").html("Loading...");
-    $.get("Data/setWinNumber?date=" + date, function(data){
+    $.get("Data/setWinNumber/" + date, function(data){
 		$("#invoiceNumberContent").html(data);
 	});
-	$.get("Data/setWinPeriod?date=" + date, function(data){
+	$.get("Data/setWinPeriod/" + date, function(data){
 		$("#invoiceContent").html(data);
 		changeButton();
 	});

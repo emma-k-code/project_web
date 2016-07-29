@@ -54,32 +54,7 @@ class aboutWin {
     return $showData;
     }
   
-    function outputWinTable($showData,$aPrizeMoney) {
-        
-        if (!isset($showData)){
-            return "尚無資料";
-        }
-        
-        $winTable = ""; // 以html格式輸出
-        
-        foreach ($showData as $value) {
-            $winTable .= "<tr>";
-            $winTable .= "<th>" . array_search($value,$showData) . "</th>";
-            $winTable .= "<td>";
-        foreach ($value as $num) {
-            $winTable .= $num . "<br>";
-        }
-            $winTable .= "</td>";
-            $winTable .= "<td>" . $aPrizeMoney[array_search($value,$showData)] . "</td>";
-            $winTable .= "</tr>";
-        }
-        
-        return $winTable;
-        
-    }
-  
     function searchWinPeriod($db,$dateSelect) {
-        
         // 依期別查詢winningPeriod表中的領獎期間
         $sql = "SELECT `winPs` FROM `winningPeriod` WHERE `winDate` = :date ";
         $result = $db->prepare($sql);

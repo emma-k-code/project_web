@@ -62,17 +62,17 @@ function sendData(date,page) {
     $("#memberNumber").html("Loading...");
 
     // 取得會員發票號碼
-    $.get("Data/setMemberNumber?date=" + date + "&page=" + page , function(data){
+    $.get("Data/setMemberNumber/" + date + "/" + page , function(data){
 		setMemberNumber(data);
 	});
 	
 	// 領獎期間
-	$.get("Data/setWinPeriod?date=" + date, function(data){
+	$.get("Data/setWinPeriod/" + date, function(data){
 		$("#invoiceContent").html(data);
 	});
 	
 	// 總計金額
-	$.get("Data/getMemberMoney?date=" + date , function(data){
+	$.get("Data/getMemberMoney/" + date , function(data){
 		setALLMoney(data);
 	});
 }
@@ -105,7 +105,7 @@ function setMemberNumber(data) {
 }
 
 function getPage(date) {
-	$.get("Data/getMemberNumberCount?date=" + date, function(data){
+	$.get("Data/getMemberNumberCount/" + date, function(data){
 	    if ($("#checkNumberPage .active").text()==""){
 	        page = 1;
 	    }else {
@@ -145,7 +145,7 @@ function setALLMoney(allMoney) {
 function deleteNumber(){
     id = $(this).val();
     $(this).text("Loading");
-    $.get("Data/deleteMemberNumber?id=" + $(this).val(), function(data){
+    $.get("Data/deleteMemberNumber/" + $(this).val(), function(data){
         if (data){
             getPage($("#dateList .active").text());
             sendData($("#dateList .active").text(),	$("#checkNumberPage .active").text());

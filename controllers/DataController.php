@@ -40,9 +40,7 @@ class DataController extends Controller {
     
     // 顯示資料庫中的開獎號碼 (string)
     /* $dateSelect->選擇的期別 $prizeMoney->獎金設定 $db->資料庫連線 */
-    function setWinNumber() {
-        // 選擇的期別
-        $dateSelect =  trim($_GET['date']);
+    function setWinNumber($dateSelect) {
         // 獎金設定
         $prizeMoney = $this->model("prizeMoney");
         // 資料庫連線
@@ -53,14 +51,13 @@ class DataController extends Controller {
         $showData = $getNumber->searchWinNumber($dateSelect,$db);
         
         // 將查詢結果輸出成表格樣式
-        echo $getNumber->outputWinTable($showData,$prizeMoney->aPrizeMoney);
+        $this->view("winTable",array($showData,$prizeMoney->aPrizeMoney));
+        
     }
     
     // 顯示資料庫中期別的領獎期限 (string)
     /* $dateSelect->選擇的期別 $db->資料庫連線 */
-    function setWinPeriod() {
-        // 選擇的期別
-        $dateSelect = trim($_GET['date']); 
+    function setWinPeriod($dateSelect) {
         // 資料庫連線
         $db = $this->getDatabaseConfig();
         
@@ -165,11 +162,11 @@ class DataController extends Controller {
     // 顯示資料庫中會員的發票號碼 (json)
     /* $dateSelect->選擇的期別 $pageSelect->選擇的頁次 $prizeMoney->獎金設定
         $email->資料庫中的email $db->資料庫連線 */
-    function setMemberNumber() {
+    function setMemberNumber($dateSelect,$pageSelect) {
         // 選擇的期別
-        $dateSelect =  trim($_GET['date']); 
+        $dateSelect =  trim($dateSelect); 
         // 選擇的頁次
-        $pageSelect =  trim($_GET['page']); 
+        $pageSelect =  trim($pageSelect); 
         
 		// 獎金設定
         $prizeMoney = $this->model("prizeMoney");
@@ -189,9 +186,9 @@ class DataController extends Controller {
     
     // 顯示資料庫中會員的發票號碼數量 (string)
     /* $dateSelect->選擇的期別 $email->資料庫中的email $db->資料庫連線 */
-    function getMemberNumberCount() {
+    function getMemberNumberCount($dateSelect) {
         // 選擇的期別
-        $dateSelect =  trim($_GET['date']); 
+        $dateSelect =  trim($dateSelect); 
         // 資料庫連線
         $db = $this->getDatabaseConfig();
         
@@ -219,9 +216,9 @@ class DataController extends Controller {
     // 顯示統計金額-會員頁 (string)
     /* $dateSelect->選擇的期別 $prizeMoney->獎金設定 
         $email->資料庫中的email $db->資料庫連線 */
-    function getMemberMoney() {
+    function getMemberMoney($dateSelect) {
         // 選擇的期別
-        $dateSelect =  trim($_GET['date']); 
+        $dateSelect =  trim($dateSelect); 
         
         // 獎金設定
         $prizeMoney = $this->model("prizeMoney");
@@ -244,10 +241,7 @@ class DataController extends Controller {
     
     // 刪除會員發票號碼並顯示成功與否 (string)
     /* $id->要刪除的發票號碼id $email->資料庫中的email $db->資料庫連線 */
-    function deleteMemberNumber() {
-        // 要刪除的發票號碼id
-        $id = $_GET['id'];
-        
+    function deleteMemberNumber($id) {
         // 資料庫連線
         $db = $this->getDatabaseConfig();
         // 取得資料庫中的email
