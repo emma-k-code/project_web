@@ -12,9 +12,9 @@ class catchWeb {
         // 取得網站資料
         $catchData = $this->catchWeb();
         // 取得中獎號碼 期別 領獎期間 (array)
-        $resolveData = $this->resolveData($catchData); 
+        echo $resolveData = $this->resolveData($catchData); 
         // 將資料寫入資料庫
-        $this->insertDatabase($db,$resolveData);
+        // $this->insertDatabase($db,$resolveData);
     }
     
     // 回傳抓取到的網站資料

@@ -1,5 +1,4 @@
 <?php
-
 class aboutWin {
     
     function getData() {
@@ -32,7 +31,7 @@ class aboutWin {
     function searchWinNumber($dateSelect,$db){
     
     // 依期別查詢winningNumbers表中的中獎號碼
-    $sql = "select winPrize,winNumber from winningNumbers where winDate = :date ";
+    $sql = "SELECT `winPrize`,`winNumber` FROM `winningNumbers` WHERE `winDate` = :date ";
     $result = $db->prepare($sql);
     $result->bindParam("date",$dateSelect);
     $result->execute();
@@ -82,7 +81,7 @@ class aboutWin {
     function searchWinPeriod($db,$dateSelect) {
         
         // 依期別查詢winningPeriod表中的領獎期間
-        $sql = "select winPs from winningPeriod where winDate = :date ";
+        $sql = "SELECT `winPs` FROM `winningPeriod` WHERE `winDate` = :date ";
         $result = $db->prepare($sql);
         $result->bindParam("date",$dateSelect);
         $result->execute();
@@ -129,7 +128,7 @@ class aboutWin {
         $enterNumber = explode(",",$number);
         
         // 搜尋winningNumbers中期別為$dateSelect的資料
-        $sql = "select winPrize,winNumber from winningNumbers where winDate = :date ";
+        $sql = "SELECT `winPrize`,`winNumber` FROM `winningNumbers` WHERE `winDate` = :date ";
         $result = $db->prepare($sql);
         $result->bindParam("date",$dateSelect);
         $result->execute();

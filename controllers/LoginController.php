@@ -1,7 +1,4 @@
 <?php
-ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../session'));
-session_start();
-
 class LoginController extends Controller {
     
     // 進入登入頁面 如果按下登入按鈕檢查登入資料 並前往指定頁面

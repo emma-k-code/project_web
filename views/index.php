@@ -1,7 +1,4 @@
 <?php
-ini_set('session.save_path',realpath(dirname($_SERVER['DOCUMENT_ROOT']) . '/../session'));
-session_start();
-
 $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
 $bLog = (isset($_SESSION['userName']))? "Logout":"Login";
 
