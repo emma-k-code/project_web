@@ -12,9 +12,9 @@ class catchWeb {
         // 取得網站資料
         $catchData = $this->catchWeb();
         // 取得中獎號碼 期別 領獎期間 (array)
-        echo $resolveData = $this->resolveData($catchData); 
+        $resolveData = $this->resolveData($catchData); 
         // 將資料寫入資料庫
-        // $this->insertDatabase($db,$resolveData);
+        return $this->insertDatabase($db,$resolveData);
     }
     
     // 回傳抓取到的網站資料
@@ -98,7 +98,7 @@ class catchWeb {
         $sth->execute();
         // 如果已有資料就跳出
         if ($sth->fetch()['count(*)']>1) {
-            return;
+            return "haved";
         }
         
         // 將資料寫入winningPeriod資料庫
@@ -119,7 +119,7 @@ class catchWeb {
     	        $sth->bindParam('data',$invoiceDate); // 期別
                 $sth->bindParam('prize',$key); // 獎別
                 $sth->bindParam('number',$num); // 號碼
-                $sth->execute();
+                return $sth->execute();
             }
         }
         
