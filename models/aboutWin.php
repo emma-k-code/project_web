@@ -7,6 +7,7 @@ class aboutWin extends Database {
                     "三獎"=>"1萬","四獎"=>"4千",
                     "五獎"=>"1千","六獎"=>"2百","增開六獎"=>"2百");
     
+    /* @return array */  
     function getData() {
         // 期別固定設為四個
         if (date("m")%2 == 0) {
@@ -40,29 +41,28 @@ class aboutWin extends Database {
         
         return $setDate;
     }
-    
+    /* @return array */  
     function searchWinNumber($dateSelect){
-    
-    // 依期別查詢winningNumbers表中的中獎號碼
-    $sql = "SELECT `winPrize`,`winNumber` FROM `winningNumbers` WHERE `winDate` = :date ";
-    $result = $this->prepare($sql);
-    $result->bindParam("date",$dateSelect);
-    $result->execute();
-    
-    if ( $result->rowCount() == 0) {
-      return $showData=null;
+        // 依期別查詢winningNumbers表中的中獎號碼
+        $sql = "SELECT `winPrize`,`winNumber` FROM `winningNumbers` WHERE `winDate` = :date ";
+        $result = $this->prepare($sql);
+        $result->bindParam("date",$dateSelect);
+        $result->execute();
+        
+        if ( $result->rowCount() == 0) {
+          return;
+        }
+        
+        // 處理查詢結果
+        while ($row = $result->fetch())
+        {
+          $showData[$row['winPrize']]['number'][] = $row['winNumber'];
+          $showData[$row['winPrize']]['money'] = $this->aPrizeMoney[$row["winPrize"]];
+        }
+        
+        return $showData;
     }
-    
-    // 處理查詢結果
-    while ($row = $result->fetch())
-    {
-      $showData[$row['winPrize']]['number'][] = $row['winNumber'];
-      $showData[$row['winPrize']]['money'] = $this->aPrizeMoney[$row["winPrize"]];
-    }
-    
-    return $showData;
-    }
-  
+    /* @return string */  
     function searchWinPeriod($dateSelect) {
         // 依期別查詢winningPeriod表中的領獎期間
         $sql = "SELECT `winPs` FROM `winningPeriod` WHERE `winDate` = :date ";
@@ -78,7 +78,7 @@ class aboutWin extends Database {
         
         return $showPeriod;
     }
-    
+    /* @return string */  
     function processNumberFile($objFile) {
 		if ($objFile["error"] != 0) {
 			return;
@@ -101,10 +101,8 @@ class aboutWin extends Database {
 		return $text;
 	}
 	
-	// 回傳比對結果(array)
-    /* $dateSelect->選擇的期別 $number->輸入的號碼*/
+	/* @return array */  
     function checkNumber($number,$dateSelect) {
-        
         // 將號碼依,分開
         $enterNumber = explode(",",$number);
         
@@ -149,7 +147,7 @@ class aboutWin extends Database {
         return $showData;
         
     }
-    
+    /* @return string */  
     function totalMoney($getMoney,$passMoney) {
         // 現有金額
         $passMoney = str_replace("總金額：","",$passMoney);
@@ -172,7 +170,7 @@ class aboutWin extends Database {
         
         return $total;
     }
-    
+    /* @return string */  
     function changeNumberFormat($total) {
         $allMoney = ""; // 轉換完的字串
     

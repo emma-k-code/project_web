@@ -7,14 +7,15 @@ class aboutMember extends Database {
                     "三獎"=>"1萬","四獎"=>"4千",
                     "五獎"=>"1千","六獎"=>"2百","增開六獎"=>"2百");
                     
+    /* @return string */                
     function getUserName() {
         return $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
     }
-    
+    /* @return string */  
     function getLoginButton() {
         return $bLog = (isset($_SESSION['userName']))? "Logout":"Login";
     }
-    
+    /* @return bool */  
     function checkLogin() {
         if (isset($_SESSION['userName'])&&isset($_SESSION['member'])) {
             return true;
@@ -22,8 +23,7 @@ class aboutMember extends Database {
             return false;
         }
     }
-    
-    // 取得會員資料庫中的email
+    /* @return string */  
     function getMemberEmail(){
         // 會員資料
         $userName = $_SESSION['userName'];
@@ -47,7 +47,7 @@ class aboutMember extends Database {
         }
         
     }
-    // 新增會員的發票號碼
+    /* @return bool */  
     function addMemberNumber($userEmail,$date,$number,$prize) {
             
         // 將資料寫入membersNumbers資料庫
@@ -61,14 +61,14 @@ class aboutMember extends Database {
         return $sth->execute();
         
     }
-    
+    /* @return string */  
     function logout() {
         // 刪除session
         session_destroy();
         
         return "登出成功";
     }
-    
+    /* @return string */  
     function login($email,$password) {
         // 搜尋並比對資料庫中的會員資料
         $sql = "SELECT * FROM `members` WHERE `memberEmail` = :email AND `memberPW` = MD5(:password)";
@@ -98,7 +98,7 @@ class aboutMember extends Database {
         
         return "OK";
     }
-    
+    /* @return bool */  
     function signUp($userName,$email,$password) {
         // 搜尋資料庫中email是否已經存在
         $sql = "SELECT * FROM `members` WHERE `memberEmail` = :email ";
@@ -123,8 +123,7 @@ class aboutMember extends Database {
         
     }
     
-    // 回傳會員發票號碼查詢結果 (array)
-    /* $dateSelect->選擇的期別 $pageSelect->選擇的頁次 $userEmail->會員的email*/
+    /* @return array */  
     function getMemberNumber($dateSelect,$userEmail,$pageSelect){
         $limit = 10; // 一頁10筆
         $start = ($pageSelect * 10)  - $limit ; 
@@ -165,7 +164,7 @@ class aboutMember extends Database {
         
         return $showData;
     }
-    // 搜尋會員發票
+    /* @return object */  
     function searchNumber($dateSelect,$userEmail){
         // 搜尋membersNumbers中的資料
         if ($dateSelect=="全部") {
@@ -186,13 +185,12 @@ class aboutMember extends Database {
         return $result;
     
     }
-    // 回傳資料庫中的會員發票筆數
+    /* @return int */  
     function searchNumberCount($dateSelect,$userEmail){
         $result = $this->searchNumber($dateSelect,$userEmail);
         return $result->rowCount();
     }
-    
-    // 回傳資料庫中會員中獎號碼金額 (string)
+    /* @return string */  
     function getMemberMoney($dateSelect,$userEmail){
         $result = $this->searchNumber($dateSelect,$userEmail);
         
@@ -216,7 +214,7 @@ class aboutMember extends Database {
         
         return $moneys;
     }
-    // 刪除會員的發票號碼
+    /* @return bool */  
     function deleteMemberNumber($email,$id) {
         $sql = "DELETE FROM `membersNumbers` WHERE `memberEmail` = :email AND `mNumID` = :id ";
         $sth = $this->prepare($sql);
@@ -225,7 +223,7 @@ class aboutMember extends Database {
         
         return $sth->execute();
     }
-    // 回傳自動對獎結果
+    /* @return array */  
     function autoCheck($email,$check) {
         // 取得資料庫中尚未對獎的發票
         $noCheckNumber = $this->getNoCheckNumber($email);
@@ -246,7 +244,7 @@ class aboutMember extends Database {
         return $showData;
         
     }
-    // 回傳資料庫中尚未對獎的發票號碼與id (array)
+    /* @return array */  
     function getNoCheckNumber($email) {
         
         // 查詢membersNumbers表中會員的未開獎號碼
@@ -289,7 +287,8 @@ class aboutMember extends Database {
         }
         
     }
-    // 將自動對獎結果轉回為字串
+    // 將自動對獎結果轉為字串
+    /* @return string */  
     function printResult($showData){
         if (!isset($showData)) {
             return;

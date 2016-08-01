@@ -21,7 +21,7 @@ class Database {
      * Execute any SQL query
      *
      * @param   string  SQL query
-     * @return  int     number of affected rows
+     * @return  object  
      */
     public function prepare($sql)
     {
