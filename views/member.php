@@ -1,4 +1,6 @@
-
+<?php
+$userName = $data;
+?>
 <!DOCTYPE html>
 <html>
 
@@ -54,7 +56,7 @@
                 </button>
                 <a class="navbar-brand" href="Home">發票對獎網站</a>
             </div>
-            <span id="sUserName" class="nav navbar-brand navbar-right"><?php echo $_SESSION['userName']; ?></span>
+            <span id="sUserName" class="nav navbar-brand navbar-right"><?php echo $userName; ?></span>
         </div>
         <!-- /.container -->
     </nav>

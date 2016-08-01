@@ -1,7 +1,6 @@
 <?php
-$userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
-$bLog = (isset($_SESSION['userName']))? "Logout":"Login";
-
+$userName = $data[0];
+$bLog = $data[1];
 ?>
 
 <!DOCTYPE html>

@@ -3,7 +3,9 @@
 class HomeController extends Controller {
     
     function index() {
-        $this->view("index");
+        $user = $this->model("aboutMember");
+        $indexData = array($user->getUserName(),$user->getLoginButton());
+        $this->view("index",$indexData);
     }
     
 }

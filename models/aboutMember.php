@@ -1,5 +1,21 @@
 <?php
 class aboutMember {
+    function getUserName() {
+        return $userName = (isset($_SESSION['userName']))? $_SESSION['userName']:"guset";
+    }
+    
+    function getLoginButton() {
+        return $bLog = (isset($_SESSION['userName']))? "Logout":"Login";
+    }
+    
+    function checkLogin() {
+        if (isset($_SESSION['userName'])&&isset($_SESSION['member'])) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+    
     // 取得會員資料庫中的email
     function getMemberEmail($db){
         // 會員資料

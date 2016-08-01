@@ -3,10 +3,14 @@
 class MemberController extends Controller {
     
     function index() {
-        if (!(isset($_SESSION['userName']) & isset($_SESSION['member']))) {
-            header("location: Login");
+        $user = $this->model("aboutMember");
+        if (!$user->checkLogin()) {
+            header("location: Home");
+            return;
         }
-        $this->view("member");
+        
+        $userName = $user->getUserName();
+        $this->view("member",$userName);
     }
     
 }

@@ -1,7 +1,7 @@
 <?php
-
 class config {
-    public $db;
+    private $db = null;
+    
     function getDB() {
         $dbConnect = "mysql:host=localhost;dbname=project;port=443";
         $dbUser = "root";
@@ -11,11 +11,6 @@ class config {
         $db = new PDO($dbConnect, $dbUser, $dbPw);
         $db->exec("set names utf8");
         return $db;
-    }
-    
-    function __destruct() {
-        // 關閉資料庫
-        $db = null;
     }
 }
 

@@ -5,8 +5,9 @@ class LoginController extends Controller {
     /* $_POST['bLogin']->是否按下登入按鈕 $userName->輸入的名稱 $email->輸入的Email
         $password->輸入的密碼 $db->資料庫連線 */
     function index() {
+        $user = $this->model("aboutMember");
         // 如果已經登入 則進行登出並前往首頁
-        if (isset($_SESSION['userName'])&&isset($_SESSION['member'])) {
+        if ($user->checkLogin()) {
             $logout = $this->model("aboutMember");
             $logout->logout();
             header("location: Home");
