@@ -1,15 +1,28 @@
 <?php
-class aboutWin {
+require_once "../InvoiceWeb/models/Database.php";
+
+class aboutWin extends Database {
+    public $aPrizeMoney = array("特別獎"=>"1,000萬","特獎"=>"200萬",
+                    "頭獎"=>"20萬","二獎"=>"4萬",
+                    "三獎"=>"1萬","四獎"=>"4千",
+                    "五獎"=>"1千","六獎"=>"2百","增開六獎"=>"2百");
     
     function getData() {
         // 期別固定設為四個
-        $date[] = date("Y-m",strtotime($today."-5 month"));
-        $date[] = date("Y-m",strtotime($today."-3 month"));
-        $date[] = date("Y-m",strtotime($today."-1 month"));
-        $date[] = date("Y-m");
+        if (date("m")%2 == 0) {
+            $date[] = date("Y-m",strtotime($today."-6 month"));
+            $date[] = date("Y-m",strtotime($today."-4 month"));
+            $date[] = date("Y-m",strtotime($today."-2 month"));
+            $date[] = date("Y-m");
+        }else {
+            $date[] = date("Y-m",strtotime($today."-5 month"));
+            $date[] = date("Y-m",strtotime($today."-3 month"));
+            $date[] = date("Y-m",strtotime($today."-1 month"));
+            $date[] = date("Y-m");
+        }
         
-        $dateYear = Array();
-        $dateMonth = Array();
+        $dateYear = array();
+        $dateMonth = array();
         
         foreach ($date as $value) {
             $dateYM = explode("-",$value);
@@ -28,36 +41,32 @@ class aboutWin {
         return $setDate;
     }
     
-    function searchWinNumber($dateSelect,$db){
+    function searchWinNumber($dateSelect){
     
     // 依期別查詢winningNumbers表中的中獎號碼
     $sql = "SELECT `winPrize`,`winNumber` FROM `winningNumbers` WHERE `winDate` = :date ";
-    $result = $db->prepare($sql);
+    $result = $this->prepare($sql);
     $result->bindParam("date",$dateSelect);
     $result->execute();
     
     if ( $result->rowCount() == 0) {
-      // 結束連線
-      $db = null;
       return $showData=null;
     }
     
     // 處理查詢結果
     while ($row = $result->fetch())
     {
-      $showData[$row['winPrize']][] = $row['winNumber'];
+      $showData[$row['winPrize']]['number'][] = $row['winNumber'];
+      $showData[$row['winPrize']]['money'] = $this->aPrizeMoney[$row["winPrize"]];
     }
-    
-    // 結束連線
-    $db = null;
     
     return $showData;
     }
   
-    function searchWinPeriod($db,$dateSelect) {
+    function searchWinPeriod($dateSelect) {
         // 依期別查詢winningPeriod表中的領獎期間
         $sql = "SELECT `winPs` FROM `winningPeriod` WHERE `winDate` = :date ";
-        $result = $db->prepare($sql);
+        $result = $this->prepare($sql);
         $result->bindParam("date",$dateSelect);
         $result->execute();
         
@@ -66,9 +75,6 @@ class aboutWin {
         {
           $showPeriod = $row['winPs'];
         }
-        
-        // 結束連線
-        $db = null;
         
         return $showPeriod;
     }
@@ -96,22 +102,20 @@ class aboutWin {
 	}
 	
 	// 回傳比對結果(array)
-    /* $dateSelect->選擇的期別 $number->輸入的號碼 $prizeMoney->獎金設定 $db->資料庫連線 */
-    function checkNumber($db,$number,$dateSelect,$aPrizeMoney) {
+    /* $dateSelect->選擇的期別 $number->輸入的號碼*/
+    function checkNumber($number,$dateSelect) {
         
         // 將號碼依,分開
         $enterNumber = explode(",",$number);
         
         // 搜尋winningNumbers中期別為$dateSelect的資料
         $sql = "SELECT `winPrize`,`winNumber` FROM `winningNumbers` WHERE `winDate` = :date ";
-        $result = $db->prepare($sql);
+        $result = $this->prepare($sql);
         $result->bindParam("date",$dateSelect);
         $result->execute();
         
         // 搜尋結果為0直接結束function
         if ( $result->rowCount() == 0) {
-          // 結束連線
-          $db = null;
           return;
         }
         
@@ -134,7 +138,7 @@ class aboutWin {
                         // 如果號碼完全相等 需將兩個號碼定為字串
                         if (strcmp(substr($showData[$key]["number"],-$i),"{$row["winNumber"]}") == 0) {
                             $showData[$key]["prize"] = $row["winPrize"];
-                            $showData[$key]["money"] = $aPrizeMoney[$row["winPrize"]];
+                            $showData[$key]["money"] = $this->aPrizeMoney[$row["winPrize"]];
                         }
                     }
                 }
@@ -142,8 +146,6 @@ class aboutWin {
             }
         }
           
-        // 結束連線
-        $db = null;
         return $showData;
         
     }

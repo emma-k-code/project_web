@@ -1,35 +1,19 @@
 <?php
 class DataController extends Controller {
     
-    // 取得資料庫連線 (PDO)
-    function getDatabaseConfig() {
-        // 資料庫設定
-        $config = $this->model("config");
-        // 回傳資料庫連線
-        return $config->getDB();
-    }
-    
     // 回傳資料庫中會員的email (string)
-    /* $db->資料庫連線 */
     function getMemberEmail() {
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
-        
         // 取得資料庫中的email
         $getEmail = $this->model("aboutMember");
-        return $getEmail->getMemberEmail($db);
+        return $getEmail->getMemberEmail();
     }
     
     // 抓取財政部網頁資料存進資料庫
-    /* $prizeMoney->獎別設定 $db->資料庫連線 */
     function catchWeb() {
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
-        
         // 抓取財政部網頁資料
         $catch = $this->model("catchWeb");
         // 回傳是否成功寫入資料庫
-        $catch->toCatch($db);
+        $catch->toCatch();
     }
     
     // 顯示當月的前三個期別+當期 總共四期 (json)
@@ -40,33 +24,26 @@ class DataController extends Controller {
     }
     
     // 顯示資料庫中的開獎號碼 (string)
-    /* $dateSelect->選擇的期別 $prizeMoney->獎金設定 $db->資料庫連線 */
+    /* $dateSelect->選擇的期別 */
     function setWinNumber($dateSelect) {
         $dateSelect = addslashes($dateSelect);
-        // 獎金設定
-        $prizeMoney = $this->model("prizeMoney");
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
         
         // 取得查詢結果 (array)
         $getNumber = $this->model("aboutWin");
-        $showData = $getNumber->searchWinNumber($dateSelect,$db);
+        $showData = $getNumber->searchWinNumber($dateSelect);
         
         // 將查詢結果輸出成表格樣式
-        $this->view("winTable",array($showData,$prizeMoney->aPrizeMoney));
+        $this->view("winTable",$showData);
         
     }
     
     // 顯示資料庫中期別的領獎期限 (string)
-    /* $dateSelect->選擇的期別 $db->資料庫連線 */
+    /* $dateSelect->選擇的期別  */
     function setWinPeriod($dateSelect) {
         $dateSelect = addslashes($dateSelect);
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
-        
         // 回傳查詢結果
         $data = $this->model("aboutWin");
-        $this->view("showData",$data->searchWinPeriod($db,$dateSelect));
+        $this->view("showData",$data->searchWinPeriod($dateSelect));
     }
     
     // 顯示上傳的檔案內容 (string)
@@ -81,73 +58,53 @@ class DataController extends Controller {
     }
     
     // 顯示比對結果 (json)
-    /* $dateSelect->選擇的期別 $number->輸入的號碼 
-        $prizeMoney->獎金設定 $db->資料庫連線 */
+    /* $dateSelect->選擇的期別 $number->輸入的號碼 */
     function checkNumber() {
         // 選擇的期別
         $dateSelect = addslashes(trim($_POST['date']));
         // 輸入的號碼
 		$number = addslashes($_POST["number"]);
-		// 獎金設定
-        $prizeMoney = $this->model("prizeMoney");
-        
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
         
         // 取得比對結果 (array)
         $data = $this->model("aboutWin");
-        $show = $data->checkNumber($db,$number,$dateSelect,$prizeMoney->aPrizeMoney);
+        $show = $data->checkNumber($number,$dateSelect);
         $this->view("showData",json_encode($show));
     }
     
     // 顯示新增會員的發票號碼至資料庫是否成功 (true or false)
-    /* $date->期別 $number->號碼 $prize->中獎結果 
-        $email->資料庫中的email $db->資料庫連線 */
+    /* $date->期別 $number->號碼 $prize->中獎結果 $email->資料庫中的email  */
     function addMemberNumber() {
         // 接收的資料
         $date = addslashes($_POST['numDate']);
         $number = addslashes($_POST['number']);
         $prize = addslashes($_POST['prize']);
         
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
-        
         // 取得資料庫中的email
         $email = $this->getMemberEmail();
         
         // 新增至資料庫中
         $addNumber = $this->model("aboutMember");
-        $result = $addNumber->addMemberNumber($db,$email,$date,$number,$prize);
+        $result = $addNumber->addMemberNumber($email,$date,$number,$prize);
         $this->view("showData",$result);
     }
     
     // 顯示寫入註冊資料是否成成功 (string)
-    /* $userName->輸入的名稱 $email->輸入的Email
-        $password->輸入的密碼 $db->資料庫連線 */
+    /* $userName->輸入的名稱 $email->輸入的Email $password->輸入的密碼  */
     function signUp() {
         // 接收的註冊資料
         $userName = addslashes($_POST['userName']);
         $email = addslashes($_POST['email']);
         $password = addslashes($_POST['password']);
         
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
-        
         // 寫入註冊資料
         $signUp = $this->model("aboutMember");
-        $result = $signUp->signUp($db,$userName,$email,$password);
+        $result = $signUp->signUp($userName,$email,$password);
         $this->view("showData",$result);
     }
     
     // 如果有登入顯示自動對獎結果並更新資料庫中的資料 (string)
-    /* $prizeMoney->獎金設定 $email->資料庫中的email $db->資料庫連線 */
+    /* $email->資料庫中的email  */
     function autoCheckNumber() {
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
-        
-        // 獎金設定
-        $prizeMoney = $this->model("prizeMoney");
-        
         // 取得資料庫中的email
         $email = $this->getMemberEmail();
         
@@ -156,7 +113,7 @@ class DataController extends Controller {
             $check = $this->model("aboutWin");
             // 自動比對
             $autoCheck = $this->model("aboutMember");
-            $show = $autoCheck->autoCheck($db,$email,$check,$prizeMoney->aPrizeMoney);
+            $show = $autoCheck->autoCheck($email,$check);
             // 以字串輸出
             $this->view("showData",$autoCheck->printResult($show));
         }
@@ -164,44 +121,35 @@ class DataController extends Controller {
     }
     
     // 顯示資料庫中會員的發票號碼 (json)
-    /* $dateSelect->選擇的期別 $pageSelect->選擇的頁次 $prizeMoney->獎金設定
-        $email->資料庫中的email $db->資料庫連線 */
+    /* $dateSelect->選擇的期別 $pageSelect->選擇的頁次 $email->資料庫中的email */
     function setMemberNumber($dateSelect,$pageSelect) {
         // 選擇的期別
         $dateSelect =  addslashes(trim($dateSelect)); 
         // 選擇的頁次
         $pageSelect =  addslashes(trim($pageSelect)); 
         
-		// 獎金設定
-        $prizeMoney = $this->model("prizeMoney");
-        
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
-        
         // 取得資料庫中的email
         $email = $this->getMemberEmail();
         
         // 取得資料庫中會員的發票
         $getNumber = $this->model("aboutMember");
-        $showData = $getNumber->getMemberNumber($db,$dateSelect,$email,$pageSelect,$prizeMoney->aPrizeMoney);
+        $showData = $getNumber->getMemberNumber($dateSelect,$email,$pageSelect);
         
         $this->view("showData",json_encode($showData));
     }
     
     // 顯示資料庫中會員的發票號碼數量 (string)
-    /* $dateSelect->選擇的期別 $email->資料庫中的email $db->資料庫連線 */
+    /* $dateSelect->選擇的期別 $email->資料庫中的email */
     function getMemberNumberCount($dateSelect) {
         // 選擇的期別
         $dateSelect =  addslashes(trim($dateSelect)); 
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
         
         // 取得資料庫中的email
         $email = $this->getMemberEmail();
         
         // 取得資料庫中的會員發票的數量 (string)
         $getCount = $this->model("aboutMember");
-        $count = $getCount->searchNumberCount($db,$dateSelect,$email);
+        $count = $getCount->searchNumberCount($dateSelect,$email);
         $this->view("showData",$count);
     }
     
@@ -220,24 +168,17 @@ class DataController extends Controller {
     }
     
     // 顯示統計金額-會員頁 (string)
-    /* $dateSelect->選擇的期別 $prizeMoney->獎金設定 
-        $email->資料庫中的email $db->資料庫連線 */
+    /* $dateSelect->選擇的期別 email->資料庫中的email  */
     function getMemberMoney($dateSelect) {
         // 選擇的期別
         $dateSelect =  addslashes(trim($dateSelect)); 
-        
-        // 獎金設定
-        $prizeMoney = $this->model("prizeMoney");
-        
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
         
         // 取得資料庫中的email
         $email = $this->getMemberEmail();
         
         // 取得資料庫中會員的發票並計算總金額
         $getMoney = $this->model("aboutMember");
-        $moneys = $getMoney->getMemberMoney($db,$dateSelect,$email,$prizeMoney->aPrizeMoney);
+        $moneys = $getMoney->getMemberMoney($dateSelect,$email);
         
         // 統計金額
         $getTotal = $this->model("aboutWin");
@@ -247,16 +188,14 @@ class DataController extends Controller {
     }
     
     // 刪除會員發票號碼並顯示成功與否 (string)
-    /* $id->要刪除的發票號碼id $email->資料庫中的email $db->資料庫連線 */
+    /* $id->要刪除的發票號碼id $email->資料庫中的email */
     function deleteMemberNumber($id) {
-        // 資料庫連線
-        $db = $this->getDatabaseConfig();
         // 取得資料庫中的email
         $email = $this->getMemberEmail();
         
         // 刪除資料庫中會員的發票
         $deleteNumber = $this->model("aboutMember");
-        $result = $deleteNumber->deleteMemberNumber($db,$email,$id);
+        $result = $deleteNumber->deleteMemberNumber($email,$id);
         $this->view("showData",$result);
     }
 }

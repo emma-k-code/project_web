@@ -1,20 +1,24 @@
 <?php
-$showData = $data[0];
-$aPrizeMoney = $data[1];
+$showData = $data;
 if (!isset($showData)){
     echo "尚無資料";
     return;
 }
 
-foreach ($showData as $key=>$value) {
+foreach ($showData as $key=>$content) {
     echo "<tr>";
     echo "<th>" . $key . "</th>";
     echo "<td>";
-foreach ($value as $num) {
-    echo $num . "<br>";
-}
-    echo "</td>";
-    echo "<td>" . $aPrizeMoney[$key] . "</td>";
+    foreach ($content as $cKey=>$value) {
+        if ($cKey == "number")  {
+            foreach ($value as $num) {
+                echo $num . "<br>";
+            }
+        }else {
+            echo "</td>";
+            echo "<td>" .$value. "</td>";
+        }
+    }
     echo "</tr>";
 }
 ?>
