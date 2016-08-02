@@ -8,8 +8,7 @@ class LoginController extends Controller {
         $user = $this->model("aboutMember");
         // 如果已經登入 則進行登出並前往首頁
         if ($user->checkLogin()) {
-            $logout = $this->model("aboutMember");
-            $logout->logout();
+            $user->logout();
             header("location: Home");
             return;
         }
@@ -20,10 +19,8 @@ class LoginController extends Controller {
             $email = addslashes($_POST['username']);
             $password = addslashes($_POST["password"]);
             
-            // 比對會員資料
-            $login = $this->model("aboutMember");
             // 判斷登入成功與否
-            $checkLogin = $login->login($email,$password);
+            $checkLogin = $user->login($email,$password);
             
             // 登入成功進入首頁
             if ($checkLogin=="OK") {
